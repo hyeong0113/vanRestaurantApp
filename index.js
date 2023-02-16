@@ -2,11 +2,10 @@ var express = require('express');
 var axios = require('axios');
 var bodyParser = require('body-parser');
 var app = express();
+require('dotenv').config()
 
 const hostname = '127.0.0.1';
 const port = 8080;
-
-// AIzaSyAt3MM77NlV_PDgfy_CA4SYmc65-sBOCK8
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -22,7 +21,7 @@ app.get('/location', async (req, res) => {
       input: 'Museum of Contemporary Art Australia',
       inputtype: 'textquery',
       fields: 'formatted_address,name,rating,opening_hours,geometry',
-      key: 'AIzaSyAt3MM77NlV_PDgfy_CA4SYmc65-sBOCK8'
+      key: process.env.API_KEY
     }
   });
 
