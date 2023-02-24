@@ -11,7 +11,6 @@ const database = process.env.MONGO_URL;
 const hostname = '127.0.0.1';
 const port = process.env.PORT || 8080;
 
-console.log(database);
 mongoose.connect(database, {useUnifiedTopology: true, useNewUrlParser: true })
 .then(() => console.log('e don connect'))
 .catch(err => console.log(err));
@@ -20,7 +19,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
   origin: '*'
 }));
-
 
 app.use('/', require('./routes/location'));
 
