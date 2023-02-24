@@ -1,18 +1,26 @@
-var express = require('express');
-var axios = require('axios');
-var bodyParser = require('body-parser');
-var app = express();
-require('dotenv').config()
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const app = express();
+require('dotenv').config();
+
 
 const cors = require('cors');
+const database = process.env.MONGO_URL;
 
 const hostname = '127.0.0.1';
 const port = process.env.PORT || 8080;
+
+console.log(database);
+mongoose.connect(database, {useUnifiedTopology: true, useNewUrlParser: true })
+.then(() => console.log('e don connect'))
+.catch(err => console.log(err));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
   origin: '*'
 }));
+
 
 app.use('/', require('./routes/location'));
 
