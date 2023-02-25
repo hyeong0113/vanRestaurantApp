@@ -16,7 +16,18 @@ require('dotenv').config()
 const test = (req, res) => {
     res.send('Hello world!');
 }
-  
+
+const geoLocation = async (req, res) => {
+    const geoRes = await axios.post('https://www.googleapis.com/geolocation/v1/geolocate', {},
+    {
+        params:
+        {
+            key: process.env.API_KEY
+        }
+    })
+    res.send(JSON.stringify(geoRes.data));
+}
+
 const location = async (req, res) => {
     const mapRes = await axios.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json',
     {
@@ -28,11 +39,11 @@ const location = async (req, res) => {
             key: process.env.API_KEY
         }
     });
-    console.log(JSON.stringify(mapRes.data));
     res.send(JSON.stringify(mapRes.data));
 }
 
 module.exports = {
     test,
+    geoLocation,
     location
 }

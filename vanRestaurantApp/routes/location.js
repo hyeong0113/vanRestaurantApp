@@ -1,8 +1,8 @@
 var express = require('express');
-const { test, location } = require('../controllers/locationController');
+const { test, geoLocation, location } = require('../controllers/locationController');
 const router = express.Router();
 
-router.get('/', test);
 router.get('/location', location);
+router.get('/geo', geoLocation);
 
 module.exports = router;
