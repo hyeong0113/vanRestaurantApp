@@ -1,8 +1,8 @@
 var express = require('express');
-const { test, geoLocation, restaurants } = require('../controllers/locationController');
+const { test, geoLocation, restaurantsWithLocation } = require('../controllers/locationController');
 const router = express.Router();
 
-router.get('/restaurants/:location', restaurants);
+router.get('/restaurants/lat/:lat/long/:long', restaurantsWithLocation);
 router.get('/geo', geoLocation);
 
 module.exports = router;

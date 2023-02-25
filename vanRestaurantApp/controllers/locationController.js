@@ -1,22 +1,26 @@
-// Create a node.js (Express) API getting top 20 rated restaurants
-// nearby
-// geolocation - current location
-// (lat, long) or location name (eg. Lougheed)
-// (lat, long) = location(ex location=-33.8670522%2C151.1957362)
-// location name = keyword
-// radius
-// through Google API.
-
+// comment
 // - Create basic authentication of each requests
 // - Create a validator on the requests, to validate parameters and payload properly
 // - Create and save top 1 restaurant searched from above to MongoDB
 var axios = require('axios');
 require('dotenv').config()
+const Restaurant = require("../models/restaurantResponse");
 
-const test = (req, res) => {
-    res.send('Hello world!');
-}
-
+/*
+* @title:
+*              Get geometric inforamtion of current location where api is called
+* @pre-condition:
+*              none
+* @post-condition:
+*              Google Map API response object
+* @description:
+*              Call the Google Map API with API key(in env).
+*              Respond with a result received from the Google API
+* @param:
+*              none
+* @return:
+*              JSON
+*/
 const geoLocation = async (req, res) => {
     const geoRes = await axios.post('https://www.googleapis.com/geolocation/v1/geolocate', {},
     {
@@ -28,24 +32,66 @@ const geoLocation = async (req, res) => {
     res.send(JSON.stringify(geoRes.data));
 }
 
-const restaurants = async (req, res) => {
-    console.log("req param: " + req.params.location);
-
+/*
+* @title:
+*              Get list of restaurant searched by a name of location
+* @pre-condition:
+*              parameters: {
+*                   lat: float,
+*                   long: float
+*              }
+* @post-condition:
+*              Google Map API response object
+* @description:
+*              Get latitude and longitude from the request paramters.
+*              Call the Google Map API with location(latitude, longitude), radius(fixed to 1500m), type(fixed to restaurant), and API key(in env).
+*              Respond with a result received from the Google API
+* @param:
+*              lat: float
+*              long: float
+* @return:
+*              JSON
+*/
+const restaurantsWithLocation = async (req, res) => {
+    const {lat, long} = req.params;
     const mapRes = await axios.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json',
     {
         params: 
         {
-            location: req.params.location,
+            location: `${lat},${long}`,
             radius: 1500,
             type: 'restaurant',
             key: process.env.API_KEY
         }
     });
-    res.send(JSON.stringify(mapRes.data));
+    const { results } = mapRes.data;
+    const mappedResults = results.map(x => new Restaurant({
+        business_status: x.business_status,
+        location: {
+            lat: x.geometry.location.lat,
+            lng: x.geometry.location.lng
+        },
+        name: x.name,
+        opening_hours: x.opening_hours,
+        photos: x.photos,
+        rating: x.rating
+    },
+    console.log(x.rating)));
+
+
+    // results.sort(mappedResults);
+
+    
+
+
+    res.send(JSON.stringify(mappedResults));
 }
 
+function compareRating(a, b) {
+    return b.rating - a.rating;
+  }
+
 module.exports = {
-    test,
-    geoLocation,
-    restaurants
+    restaurantsWithLocation,
+    geoLocation
 }
