@@ -75,14 +75,9 @@ const restaurantsWithLocation = async (req, res) => {
         opening_hours: x.opening_hours,
         photos: x.photos,
         rating: x.rating
-    },
-    console.log(x.rating)));
+    }));
 
-
-    // results.sort(mappedResults);
-
-    
-
+    mappedResults.sort(compareRating);
 
     res.send(JSON.stringify(mappedResults));
 }
