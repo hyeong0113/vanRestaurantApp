@@ -28,14 +28,16 @@ const geoLocation = async (req, res) => {
     res.send(JSON.stringify(geoRes.data));
 }
 
-const location = async (req, res) => {
+const restaurants = async (req, res) => {
+    console.log("req param: " + req.params.location);
+
     const mapRes = await axios.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json',
     {
         params: 
         {
-            location: '-33.8670522,151.1957362',
+            location: req.params.location,
             radius: 1500,
-            keyword: 'cruise',
+            type: 'restaurant',
             key: process.env.API_KEY
         }
     });
@@ -45,5 +47,5 @@ const location = async (req, res) => {
 module.exports = {
     test,
     geoLocation,
-    location
+    restaurants
 }
