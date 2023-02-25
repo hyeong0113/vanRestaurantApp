@@ -18,7 +18,7 @@ const RestaurantResponseSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    opening_hours: {     
+    open_now: {     
         type: Boolean
     },
     photos: [],

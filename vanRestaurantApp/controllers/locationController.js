@@ -72,13 +72,13 @@ const restaurantsWithLocation = async (req, res) => {
             lng: x.geometry.location.lng
         },
         name: x.name,
-        opening_hours: x.opening_hours,
+        open_now: x.opening_hours.open_now,
         photos: x.photos,
         rating: x.rating
     }));
 
     mappedResults.sort(compareRating);
-
+    mappedResults[0].save().catch((err) => console.log(err));
     res.send(JSON.stringify(mappedResults));
 }
 
