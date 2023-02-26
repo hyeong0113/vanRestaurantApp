@@ -21,7 +21,6 @@ function GeoLocation() {
         if(data == null) {
             return;
         }
-
         fetch(`http://127.0.0.1:8080/restaurants/lat/${data.location.lat}/long/${data.location.lng}`)
         .then(res => res.json())
         .then(

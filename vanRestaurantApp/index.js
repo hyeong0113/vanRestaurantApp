@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const app = express();
 require('dotenv').config();
 
-
 const cors = require('cors');
 const database = process.env.MONGO_URL;
 
@@ -17,7 +16,7 @@ mongoose.connect(database, {useUnifiedTopology: true, useNewUrlParser: true })
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
-  origin: '*'
+  origin: 'http://localhost:3000'
 }));
 
 app.use('/', require('./routes/location'));
