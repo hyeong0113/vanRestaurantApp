@@ -1,13 +1,18 @@
 // comment
 // - Create basic authentication of each requests
-// - Create a validator on the requests, to validate parameters and payload properly
-// - Create and save top 1 restaurant searched from above to MongoDB
+// - Create a validator on the requests, to validate parameters and payload properly v
+// - Create and save top 1 restaurant searched from above to MongoDB v
 const axios = require('axios');
 const joi = require('joi');
 
 require('dotenv').config()
 const Restaurant = require("../models/restaurantResponse");
 
+
+const auth = {
+    username: 'juneKwak',
+    password: 'qwe123'
+}
 /*
 * @title:
 *              Validate data with given schema inside.
@@ -54,7 +59,9 @@ function validateLocationParameter(data) {
 *              JSON
 */
 const geoLocation = async (req, res) => {
-    const geoRes = await axios.post('https://www.googleapis.com/geolocation/v1/geolocate', {},
+    const geoRes = await axios.post('https://www.googleapis.com/geolocation/v1/geolocate', {
+        auth
+    },
     {
         params:
         {
@@ -121,12 +128,10 @@ const restaurantsWithLocation = async (req, res) => {
         photos: x.photos,
         rating: x.rating
     }));
-
     mappedResults.sort(compareRating);
     mappedResults[0].save().catch((err) => console.log(err));
     res.send(JSON.stringify(mappedResults));
 }
-
 
 /*
 * @title:

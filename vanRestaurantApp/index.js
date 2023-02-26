@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
+const basicAuth = require('express-basic-auth');
+
 require('dotenv').config();
 
 const cors = require('cors');
@@ -20,6 +22,11 @@ app.use(cors({
 }));
 
 app.use('/', require('./routes/location'));
+
+app.use(basicAuth({
+  users: { 'juneKwak':'qwe123' },
+  challenge: true
+}));
 
 var server = app.listen(port, hostname, function () {
   var host = server.address().address
