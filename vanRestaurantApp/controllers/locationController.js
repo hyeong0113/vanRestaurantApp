@@ -3,7 +3,6 @@
 // - Create a validator on the requests, to validate parameters and payload properly v
 // - Create and save top 1 restaurant searched from above to MongoDB v
 const axios = require('axios');
-const joi = require('joi');
 
 require('dotenv').config()
 const Restaurant = require("../models/restaurantResponse");
@@ -12,35 +11,6 @@ const Restaurant = require("../models/restaurantResponse");
 const auth = {
     username: 'juneKwak',
     password: 'qwe123'
-}
-/*
-* @title:
-*              Validate data with given schema inside.
-* @pre-condition:
-*              data: {
-*                   lat: float,
-*                   long: float
-*              }
-* @post-condition:
-*              joi.ValidationError
-* @description:
-*              Create object schema to restrict lat and long.
-*              Receive error if received data object is invalid. If no errors, return validated values.
-* @param:
-*              data: object
-* @return:
-*              Validated value when the values are valid.
-*              Error when the values are not valid.
-*              Warning if exists.
-*/
-function validateLocationParameter(data) {
-    const schema = joi.object({
-        lat: joi.string().pattern(/[+-]?([0-9]*[.])?[0-9]+$/).required().error(() => new Error('latitude should be number', 'lat')),
-        long: joi.string().pattern(/[+-]?([0-9]*[.])?[0-9]+$/).required().error(() => new Error('longitude should be number', 'long'))
-    });
-
-    const { error } = schema.validate(data);
-    return error;
 }
 
 /*
@@ -59,9 +29,7 @@ function validateLocationParameter(data) {
 *              JSON
 */
 const geoLocation = async (req, res) => {
-    const geoRes = await axios.post('https://www.googleapis.com/geolocation/v1/geolocate', {
-        auth
-    },
+    const geoRes = await axios.post('https://www.googleapis.com/geolocation/v1/geolocate', { },
     {
         params:
         {
@@ -95,15 +63,14 @@ const geoLocation = async (req, res) => {
 */
 const restaurantsWithLocation = async (req, res) => {
     const {lat, long} = req.params;
-    const validationError = validateLocationParameter(
-        {
-            lat,
-            long
-        }
-    );
+    if (!lat) {
+        res.status(400).send("latitude is undefined.");
+        return;
+    }
 
-    if (validationError) {
-      throw new Error(validationError.details[0].message);
+    if (!long) {
+        res.status(400).send("longitude is undefined.");
+        return;
     }
 
     const mapRes = await axios.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json',
@@ -128,8 +95,11 @@ const restaurantsWithLocation = async (req, res) => {
         photos: x.photos,
         rating: x.rating
     }));
+    // Not need to sort, just save top rated restaurant
     mappedResults.sort(compareRating);
     mappedResults[0].save().catch((err) => console.log(err));
+    // Able to send object instead of json object
+    // send Status code
     res.send(JSON.stringify(mappedResults));
 }
 

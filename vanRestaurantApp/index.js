@@ -13,7 +13,7 @@ const hostname = '127.0.0.1';
 const port = process.env.PORT || 8080;
 
 mongoose.connect(database, {useUnifiedTopology: true, useNewUrlParser: true })
-.then(() => console.log('e don connect'))
+.then(() => console.log('Mongo DB connected'))
 .catch(err => console.log(err));
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,12 +21,16 @@ app.use(cors({
   origin: 'http://localhost:3000'
 }));
 
-app.use('/', require('./routes/location'));
+const userName = process.env.USERNAME;
+const password = process.env.PASSWORD;
 
-app.use(basicAuth({
-  users: { 'juneKwak':'qwe123' },
+const basic = basicAuth({
+  users: { 'juneKwak' : 'qwe123' },
   challenge: true
-}));
+});
+
+// Aple to register different authentication on each route, before using requre()
+app.use('/', basic, require('./routes/location'));
 
 var server = app.listen(port, hostname, function () {
   var host = server.address().address
