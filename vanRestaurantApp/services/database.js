@@ -27,8 +27,6 @@ async function saveObjectToDB(data) {
         return data.id;
 }
 
-// use place_id
-
 module.exports = {
     checkObjectExistsById,
     saveObjectToDB

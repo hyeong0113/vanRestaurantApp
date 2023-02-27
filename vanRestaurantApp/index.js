@@ -25,7 +25,7 @@ const userName = process.env.USERNAME;
 const password = process.env.PASSWORD;
 
 const basic = basicAuth({
-  users: { 'juneKwak' : 'qwe123' },
+  users: { [userName] : password },
   challenge: true
 });
 

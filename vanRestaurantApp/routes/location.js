@@ -7,7 +7,7 @@ router.get('/geo', geoLocation);
 
 router.get('/restaurants/lat/:lat/long/:long', (req, res) => {
     const {lat, long} = req.params;
-    const { error, value } = locationValidator.getRestaurants.validate(
+    const { error } = locationValidator.getRestaurants.validate(
         {
             lat, long
         }

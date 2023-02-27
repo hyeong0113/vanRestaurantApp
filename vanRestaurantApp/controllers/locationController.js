@@ -110,9 +110,7 @@ const getTopRestaurant = async (req, res) => {
     const topRestaurant = await checkObjectExistsById(id);
     if(!topRestaurant)
     {
-        const error = new Error('Invalid id, object not found');
-        error.status = 400;
-        throw error;
+        res.status(400).send("Invalid id, object not found.");
     }
     res.status(200).json(topRestaurant);
 }
