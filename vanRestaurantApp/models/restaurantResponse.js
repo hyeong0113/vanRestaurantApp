@@ -24,7 +24,12 @@ const RestaurantResponseSchema = new mongoose.Schema({
     open_now: {     
         type: Boolean
     },
-    photos: [],
+    // photos: [{
+    //     name: { type: String, required: true },
+    //     data: { type: Buffer, required: true },
+    //     contentType: { type: String, required: true }
+    // }],
+    photos: [],    
     rating: {
         type: Number
     }

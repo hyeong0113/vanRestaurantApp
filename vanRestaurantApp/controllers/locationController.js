@@ -1,16 +1,7 @@
-// comment
-// - Create basic authentication of each requests
-// - Create a validator on the requests, to validate parameters and payload properly v
-// - Create and save top 1 restaurant searched from above to MongoDB v
 const axios = require('axios');
 const { saveObjectToDB, checkObjectExistsById } = require('../services/database');
 const { convertToRestaurantSchemaList } = require('../services/schema');
 require('dotenv').config()
-
-const auth = {
-    username: 'juneKwak',
-    password: 'qwe123'
-}
 
 /*
 * @title:
@@ -53,11 +44,11 @@ const geoLocation = async (req, res) => {
 *              Validate latitude and longitude whether their value exist or not.
 *              If not, throw error.
 *              Call the Google Map API with location(latitude, longitude), radius(fixed to 1500m), type(fixed to restaurant), and API key(in env).
-*              Convert the result to Restaurant schema
-*              Get the highest rate restaurant
+*              Convert the result to Restaurant schema.
+*              Get the highest rate restaurant.
 *              Cehck whether the highest rate restaurant in MongoDB.
-*                   if exist, display "Object exists"
-*                   if not, save it to MongoDB
+*                   if exist, display "Object exists".
+*                   if not, save it to MongoDB.
 *              Remove the highest rate restaurant from the result.
 *              Respond with the result received from the Google API and id of the top rated restaurant.
 * @param:
@@ -105,6 +96,25 @@ const restaurantsWithLocation = async (req, res) => {
     );
 }
 
+/*
+* @title:
+*              Get a stored top restaurant from Mongo DB.
+* @pre-condition:
+*              parameters: {
+*                   id: string
+*              }
+* @post-condition:
+*              Google Map API response object
+* @description:
+*              Get id from the request paramters.
+*              Call checkObjectExistsById(id) to get the top rated restaurant from Mongo DB.
+*              If the restaurant does not exist, send error message with status 400.
+*              If exists, send the response with status 200.
+* @param:
+*              id: string
+* @return:
+*              JSON with status 200
+*/
 const getTopRestaurant = async (req, res) => {
     const { id } = req.params;
     const topRestaurant = await checkObjectExistsById(id);
@@ -115,8 +125,38 @@ const getTopRestaurant = async (req, res) => {
     res.status(200).json(topRestaurant);
 }
 
+// const geoLocation = async (reference) => {
+//     const photo = await axios.get('https://maps.googleapis.com/maps/api/place/photo', {},
+//     {
+//         params:
+//         {
+//             photo_reference: reference,
+//             maxwidth: 400,
+//             key: process.env.API_KEY
+//         }
+//     })
+//     return photo;
+// }
+
+const getPhotoByReference = async (req, res) => {
+    const { reference } = req.params;
+    const photo = await axios.get('https://maps.googleapis.com/maps/api/place/photo',
+    {
+        responseType: 'arraybuffer',
+        params:
+        {
+            photo_reference: reference,
+            maxwidth: 400,
+            key: process.env.API_KEY
+        }
+    })
+
+    res.set('Content-Type', photo.headers['content-type']);
+    res.send(Buffer.from(photo.data));
+}
 module.exports = {
     restaurantsWithLocation,
     geoLocation,
-    getTopRestaurant
+    getTopRestaurant,
+    getPhotoByReference
 }

@@ -1,5 +1,5 @@
 var express = require('express');
-const { geoLocation, restaurantsWithLocation, getTopRestaurant } = require('../controllers/locationController');
+const { geoLocation, restaurantsWithLocation, getTopRestaurant, getPhotoByReference } = require('../controllers/locationController');
 const locationValidator = require('../validators/locationValidator');
 const router = express.Router();
 
@@ -21,5 +21,5 @@ router.get('/restaurants/lat/:lat/long/:long', (req, res) => {
 });
 
 router.get('/restaurant/top/:id', getTopRestaurant);
-
+router.get('/photo/:reference', getPhotoByReference)
 module.exports = router;
