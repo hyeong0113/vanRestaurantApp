@@ -59,7 +59,7 @@ const geoLocation = async (req, res) => {
 *                   if exist, display "Object exists"
 *                   if not, save it to MongoDB
 *              Remove the highest rate restaurant from the result.
-*              Respond with the result received from the Google API.
+*              Respond with the result received from the Google API and id of the top rated restaurant.
 * @param:
 *              lat: float
 *              long: float
@@ -97,7 +97,6 @@ const restaurantsWithLocation = async (req, res) => {
     const topdId = await saveObjectToDB(topRatedRestaurant);
     const filteredResults = mappedResults.filter(obj => obj !== topRatedRestaurant);
 
-    // maby save id of top rated restaurant or send it to frontend to get top rated restaurant api
     res.status(200).json(
         {
             topId: topdId,
@@ -109,6 +108,12 @@ const restaurantsWithLocation = async (req, res) => {
 const getTopRestaurant = async (req, res) => {
     const { id } = req.params;
     const topRestaurant = await checkObjectExistsById(id);
+    if(!topRestaurant)
+    {
+        const error = new Error('Invalid id, object not found');
+        error.status = 400;
+        throw error;
+    }
     res.status(200).json(topRestaurant);
 }
 
