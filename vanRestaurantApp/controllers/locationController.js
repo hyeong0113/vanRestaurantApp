@@ -3,10 +3,9 @@
 // - Create a validator on the requests, to validate parameters and payload properly v
 // - Create and save top 1 restaurant searched from above to MongoDB v
 const axios = require('axios');
-const { checkObjectExists } = require('../services/database');
+const { saveObjectToDB, checkObjectExistsById } = require('../services/database');
+const { convertToRestaurantSchemaList } = require('../services/schema');
 require('dotenv').config()
-const Restaurant = require("../models/restaurantResponse");
-
 
 const auth = {
     username: 'juneKwak',
@@ -26,10 +25,10 @@ const auth = {
 * @param:
 *              none
 * @return:
-*              JSON
+*              JSON with status 200
 */
 const geoLocation = async (req, res) => {
-    const geoRes = await axios.post('https://www.googleapis.com/geolocation/v1/geolocate', { },
+    const geoRes = await axios.post('https://www.googleapis.com/geolocation/v1/geolocate', {},
     {
         params:
         {
@@ -51,15 +50,21 @@ const geoLocation = async (req, res) => {
 *              Google Map API response object
 * @description:
 *              Get latitude and longitude from the request paramters.
-*              Validate latitude and longitude whether they are float or not.
+*              Validate latitude and longitude whether their value exist or not.
 *              If not, throw error.
 *              Call the Google Map API with location(latitude, longitude), radius(fixed to 1500m), type(fixed to restaurant), and API key(in env).
-*              Respond with a result received from the Google API.
+*              Convert the result to Restaurant schema
+*              Get the highest rate restaurant
+*              Cehck whether the highest rate restaurant in MongoDB.
+*                   if exist, display "Object exists"
+*                   if not, save it to MongoDB
+*              Remove the highest rate restaurant from the result.
+*              Respond with the result received from the Google API.
 * @param:
 *              lat: float
 *              long: float
 * @return:
-*              JSON
+*              JSON with status 200
 */
 const restaurantsWithLocation = async (req, res) => {
     const {lat, long} = req.params;
@@ -84,42 +89,31 @@ const restaurantsWithLocation = async (req, res) => {
         }
     });
     const { results } = mapRes.data;
-    const mappedResults = results.map(x => new Restaurant({
-        id: x.place_id,
-        business_status: x.business_status,
-        location: {
-            lat: x.geometry.location.lat,
-            lng: x.geometry.location.lng
-        },
-        name: x.name,
-        open_now: x.opening_hours.open_now,
-        photos: x.photos,
-        rating: x.rating
-    }));
-    // Not need to sort, just save top rated restaurant
+    const mappedResults = convertToRestaurantSchemaList(results);
     const topRatedRestaurant = mappedResults.reduce((max, obj) => {
         return obj.rating > max.rating ? obj : max;
     });
 
-    checkObjectExists(topRatedRestaurant)
-        .then((result) => {
-            if (result) {
-                console.log('Object exists');
-            } else {
-                topRatedRestaurant.save().catch((err) => console.log(err));
-            }
-        })
-        .catch((err) => {
-            console.error(err);
-        });
-
+    const topdId = await saveObjectToDB(topRatedRestaurant);
     const filteredResults = mappedResults.filter(obj => obj !== topRatedRestaurant);
-    // Able to send object instead of json object
-    // send Status code
-    res.send(JSON.stringify(filteredResults));
+
+    // maby save id of top rated restaurant or send it to frontend to get top rated restaurant api
+    res.status(200).json(
+        {
+            topId: topdId,
+            results: filteredResults
+        }
+    );
+}
+
+const getTopRestaurant = async (req, res) => {
+    const { id } = req.params;
+    const topRestaurant = await checkObjectExistsById(id);
+    res.status(200).json(topRestaurant);
 }
 
 module.exports = {
     restaurantsWithLocation,
-    geoLocation
+    geoLocation,
+    getTopRestaurant
 }

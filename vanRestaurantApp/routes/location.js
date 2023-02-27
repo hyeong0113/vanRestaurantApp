@@ -1,7 +1,9 @@
 var express = require('express');
-const { geoLocation, restaurantsWithLocation } = require('../controllers/locationController');
+const { geoLocation, restaurantsWithLocation, getTopRestaurant } = require('../controllers/locationController');
 const locationValidator = require('../validators/locationValidator');
 const router = express.Router();
+
+router.get('/geo', geoLocation);
 
 router.get('/restaurants/lat/:lat/long/:long', (req, res) => {
     const {lat, long} = req.params;
@@ -18,6 +20,6 @@ router.get('/restaurants/lat/:lat/long/:long', (req, res) => {
     }
 });
 
-router.get('/geo', geoLocation);
+router.get('/restaurant/top/:id', getTopRestaurant);
 
 module.exports = router;
