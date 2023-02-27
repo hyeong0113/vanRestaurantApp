@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 const RestaurantResponseSchema = new mongoose.Schema({
+    id: {
+        type: String
+    },
     business_status: {
         type: String,
         required: true,

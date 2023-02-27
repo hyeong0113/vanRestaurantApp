@@ -3,7 +3,7 @@
 // - Create a validator on the requests, to validate parameters and payload properly v
 // - Create and save top 1 restaurant searched from above to MongoDB v
 const axios = require('axios');
-
+const { checkObjectExists } = require('../services/database');
 require('dotenv').config()
 const Restaurant = require("../models/restaurantResponse");
 
@@ -85,6 +85,7 @@ const restaurantsWithLocation = async (req, res) => {
     });
     const { results } = mapRes.data;
     const mappedResults = results.map(x => new Restaurant({
+        id: x.place_id,
         business_status: x.business_status,
         location: {
             lat: x.geometry.location.lat,
@@ -96,34 +97,26 @@ const restaurantsWithLocation = async (req, res) => {
         rating: x.rating
     }));
     // Not need to sort, just save top rated restaurant
-    mappedResults.sort(compareRating);
-    mappedResults[0].save().catch((err) => console.log(err));
+    const topRatedRestaurant = mappedResults.reduce((max, obj) => {
+        return obj.rating > max.rating ? obj : max;
+    });
+
+    checkObjectExists(topRatedRestaurant)
+        .then((result) => {
+            if (result) {
+                console.log('Object exists');
+            } else {
+                topRatedRestaurant.save().catch((err) => console.log(err));
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+
+    const filteredResults = mappedResults.filter(obj => obj !== topRatedRestaurant);
     // Able to send object instead of json object
     // send Status code
-    res.send(JSON.stringify(mappedResults));
-}
-
-/*
-* @title:
-*              Compare ratings of two restaurants and decide which rating is greater.
-* @pre-condition:
-*              Two Restaurant objects should be passed.
-* @post-condition:
-*              Return 0 when ratings of both restaurants are same.
-*              Return negative when a rating of restaurant a is greater.
-*              Return positive when a rating of restaurant b is greater.
-* @description:
-*              Receive two variables a, b (Restaurant objects).
-*              Subtract rating of a from rating of b.
-*              Return the result.
-* @param:
-*              a: Restaurant object
-*              b: Restaurant object
-* @return:
-*              float
-*/
-function compareRating(a, b) {
-    return b.rating - a.rating;
+    res.send(JSON.stringify(filteredResults));
 }
 
 module.exports = {
