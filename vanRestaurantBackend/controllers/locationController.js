@@ -80,7 +80,7 @@ const restaurantsWithLocation = async (req, res) => {
         }
     });
     const { results } = mapRes.data;
-    const mappedResults = convertToRestaurantSchemaList(results);
+    const mappedResults = await convertToRestaurantSchemaList(results);
     const topRatedRestaurant = mappedResults.reduce((max, obj) => {
         return obj.rating > max.rating ? obj : max;
     });
@@ -125,38 +125,8 @@ const getTopRestaurant = async (req, res) => {
     res.status(200).json(topRestaurant);
 }
 
-// const geoLocation = async (reference) => {
-//     const photo = await axios.get('https://maps.googleapis.com/maps/api/place/photo', {},
-//     {
-//         params:
-//         {
-//             photo_reference: reference,
-//             maxwidth: 400,
-//             key: process.env.API_KEY
-//         }
-//     })
-//     return photo;
-// }
-
-const getPhotoByReference = async (req, res) => {
-    const { reference } = req.params;
-    const photo = await axios.get('https://maps.googleapis.com/maps/api/place/photo',
-    {
-        responseType: 'arraybuffer',
-        params:
-        {
-            photo_reference: reference,
-            maxwidth: 400,
-            key: process.env.API_KEY
-        }
-    })
-
-    res.set('Content-Type', photo.headers['content-type']);
-    res.send(Buffer.from(photo.data));
-}
 module.exports = {
     restaurantsWithLocation,
     geoLocation,
-    getTopRestaurant,
-    getPhotoByReference
+    getTopRestaurant
 }

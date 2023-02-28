@@ -21,5 +21,4 @@ router.get('/restaurants/lat/:lat/long/:long', (req, res) => {
 });
 
 router.get('/restaurant/top/:id', getTopRestaurant);
-router.get('/photo/:reference', getPhotoByReference)
 module.exports = router;

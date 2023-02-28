@@ -29,7 +29,9 @@ const Restaurantschema = new mongoose.Schema({
     //     data: { type: Buffer, required: true },
     //     contentType: { type: String, required: true }
     // }],
-    photos: [],    
+    photo: {
+        type: String
+    },    
     rating: {
         type: Number
     }
