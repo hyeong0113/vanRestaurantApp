@@ -30,7 +30,7 @@ const basic = basicAuth({
 });
 
 // Aple to register different authentication on each route, before using requre()
-app.use('/', basic, require('./routes/location'));
+app.use('/', basic, require('./routes/locationRoute'));
 
 var server = app.listen(port, hostname, function () {
   var host = server.address().address

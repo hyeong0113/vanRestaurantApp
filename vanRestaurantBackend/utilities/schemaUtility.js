@@ -1,4 +1,4 @@
-const Restaurant = require("../models/restaurantResponse");
+const Restaurant = require("../models/restaurantschema");
 
 function convertToRestaurantSchemaList(results)
 {

@@ -1,6 +1,6 @@
 const axios = require('axios');
-const { saveObjectToDB, checkObjectExistsById } = require('../services/database');
-const { convertToRestaurantSchemaList } = require('../services/schema');
+const { saveObjectToDB, checkObjectExistsById } = require('../utilities/databaseUtility');
+const { convertToRestaurantSchemaList } = require('../utilities/schemaUtility');
 require('dotenv').config()
 
 /*
