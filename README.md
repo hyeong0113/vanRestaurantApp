@@ -10,6 +10,7 @@ Extension & Platform used:
 - axios
 - MongoDB
 - joi
+- Material UI React js
 
 vanRestaurantApp recommends 19 restaurants and the top rated restaurant nearby your location.
 There are nothing to do! Just open the application and wait for the result.
