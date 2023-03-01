@@ -12,3 +12,22 @@
     size: 16px;
     color: #ffffff;
 }
+
+.card-header { 
+    display: 'flex';
+    align-items: 'center';
+}
+
+.rating {
+    padding-left: 110px;
+}
+
+.name {
+    padding-right: 100px;
+    padding-top: 25px;
+}
+
+.status {
+    padding-right: 155px;
+    padding-top: 25px;
+}
