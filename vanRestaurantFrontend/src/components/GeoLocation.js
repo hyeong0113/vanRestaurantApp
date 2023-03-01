@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import RestaurantCard from './RestaurantCard';
 const username = 'juneKwak';
 const password = 'qwe123';
 
@@ -47,6 +48,7 @@ function GeoLocation() {
   return (
     <div>
         {data != null ? <p>{data.location.lat}</p> : null}
+        <RestaurantCard />
     </div>
   );
 }

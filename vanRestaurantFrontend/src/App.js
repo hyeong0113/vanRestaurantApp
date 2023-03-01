@@ -1,5 +1,5 @@
 import './App.css';
-import GeoLocation from './GeoLocation';
+import GeoLocation from './components/GeoLocation';
 
 function App() {
   return (

@@ -1,0 +1,9 @@
+.restaurant-card {
+    width: 550px;
+    height: 180px;
+    border-radius: 25px !important;
+
+    /* This is for testing */
+    margin-top: 150px;
+    margin-left: 150px;
+}
