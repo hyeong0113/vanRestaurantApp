@@ -13,9 +13,8 @@ const CardHeaderDiv = styled.div`
     align-items: center;
 `
 
-function RestaurantCard() {
-    // const theme = useTheme();
-    // console.log(theme);
+const RestaurantCard = (props) => {
+    const { restaurant } = props;
     return(
         <Card className="restaurant-card" variant="outlined" sx={{ border: 1 }}>
             <Box display="flex">
@@ -31,18 +30,18 @@ function RestaurantCard() {
                     <CardHeaderDiv>
                         <Chip label={
                             <Typography className="chip-font">
-                                OPEN
+                                {restaurant.open_now ? "OPEN" : "CLOSED"}
                             </Typography>
                         } color="primary" />
                         <Typography className="rating" variant="body1">
-                            Rating: 4.8
+                            Rating: {restaurant.rating}
                         </Typography>
                     </CardHeaderDiv>
                     <Typography className="name" variant="h5">
-                        Restaurant title
+                        {restaurant.name}
                     </Typography>
                     <Typography className="status" variant="h6" color="textSecondary">
-                        Operational
+                        {restaurant.business_status}
                     </Typography>
                 </CardContent>
             </Box>
