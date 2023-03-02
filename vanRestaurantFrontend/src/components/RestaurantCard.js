@@ -42,12 +42,14 @@ const useStyles = makeStyles((theme) => ({
     name: {
         whiteSpace: 'nowrap',
         paddingTop: '25px',
-        textAlign: 'left'
+        textAlign: 'left',
+        fontSize: '17px'
     },
     status: {
         paddingRight: '155px',
         paddingTop: '25px',
-        textAlign: 'left'
+        textAlign: 'left',
+        fontSize: '14px'
     }
 }));
   
@@ -64,7 +66,7 @@ const RestaurantCard = (props) => {
                     component="img"
                     src={`data:image/png;base64,${restaurant.photo}`}
                     height="180 !important"
-                    width="220 !important"
+                    width="255 !important"
                 />
                 <Divider className={classes.divider} orientation="vertical" />
             </Box>
@@ -86,7 +88,7 @@ const RestaurantCard = (props) => {
                 <Typography className={classes.name}>
                     {restaurant.name}
                 </Typography>
-                <Typography className={classes.status} variant="h6" color="textSecondary">
+                <Typography className={classes.status}color="textSecondary">
                     {restaurant.business_status}
                 </Typography>
             </CardContent>
