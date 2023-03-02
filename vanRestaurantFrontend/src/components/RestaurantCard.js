@@ -20,10 +20,10 @@ const RestaurantCard = (props) => {
             <Box display="flex">
                 <CardMedia
                     component="img"
-                    height="180"
-                    width="200"
-                    image="https://example.com/example.jpg"
-                    alt="Example Photo"
+                    height="212"
+                    width="232"
+                    src={`data:image/png;base64,${restaurant.photo}`}
+                    alt="restaurant image"
                 />
                 <Box borderLeft={1} borderColor="grey.500" pl={1} />
                 <CardContent>
