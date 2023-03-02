@@ -2,10 +2,6 @@
     width: 550px;
     height: 180px;
     border-radius: 25px !important;
-
-    /* This is for testing */
-    margin-top: 150px;
-    margin-left: 150px;
 }
 
 .chip-font {
@@ -23,11 +19,13 @@
 }
 
 .name {
-    padding-right: 165px;
+    white-space: nowrap;
     padding-top: 25px;
+    text-align: left;
 }
 
 .status {
     padding-right: 155px;
     padding-top: 25px;
+    text-align: left;
 }

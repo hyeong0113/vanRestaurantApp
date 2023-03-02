@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
 import RestaurantCard from './RestaurantCard';
+
+import '../styles/mainPage.css';
 
 const username = 'juneKwak';
 const password = 'qwe123';
@@ -13,7 +16,7 @@ const requestOptions = {
     }
 };
 
-function GeoLocation() {
+function MainPage() {
     const [geoData, setGeoData] = useState(null);
     const [restaurants, setRestaurants] = useState(null);
     const [topRestaurant, settopRestaurant] = useState(null);
@@ -98,21 +101,24 @@ function GeoLocation() {
     }
 
     return (
-        <div>
-            {/* {restaurants.results !== undefined && restaurants.results !== null ? 
-                <RestaurantCard restaurant={restaurants.results[0]} />
-                : null
-            } */}
+        <div className="main-page">
             {restaurants !== null ? 
-                <RestaurantCard restaurant={restaurants.results[0]} />
+                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 2, md: 9 }} justify="center">
+                    {restaurants.results.map((restaurant, index) => (
+                        <Grid item xs={2} sm={4} md={4} key={index}>
+                            <RestaurantCard restaurant={restaurant} />
+                        </Grid>
+                    ))}
+                </Grid>                    
                 : null
             }
             {topRestaurant !== null ?
 
                 console.log(topRestaurant) : null
             }
+        
         </div>
     );
 }
 
-export default GeoLocation;
+export default MainPage;

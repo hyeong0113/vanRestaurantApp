@@ -24,11 +24,6 @@ const Restaurantschema = new mongoose.Schema({
     open_now: {     
         type: Boolean
     },
-    // photos: [{
-    //     name: { type: String, required: true },
-    //     data: { type: Buffer, required: true },
-    //     contentType: { type: String, required: true }
-    // }],
     photo: {
         type: String
     },    

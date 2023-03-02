@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import styled from 'styled-components';
 
-import '../styles/RestaurantCard.css';
+import '../styles/restaurantCard.css';
 
 const CardHeaderDiv = styled.div`
     display: flex;
@@ -37,7 +37,7 @@ const RestaurantCard = (props) => {
                             Rating: {restaurant.rating}
                         </Typography>
                     </CardHeaderDiv>
-                    <Typography className="name" variant="h5">
+                    <Typography className="name">
                         {restaurant.name}
                     </Typography>
                     <Typography className="status" variant="h6" color="textSecondary">
