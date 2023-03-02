@@ -5,47 +5,92 @@ import CardMedia from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import styled from 'styled-components';
-
-import '../styles/restaurantCard.css';
+import Divider from '@mui/material/Divider';
+import { makeStyles } from '@mui/styles';
 
 const CardHeaderDiv = styled.div`
     display: flex;
     align-items: center;
 `
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width:'550px',
+        height: '180px',
+        borderRadius: '25px !important'
+    },
+    divider: {
+        height: '100%',
+        margin: theme.spacing(0, 2),
+    },
+    chipFont: {
+        size: '16px',
+        color: '#ffffff'
+    },
+    media: {
+        width: '100%',
+        height: '100%',
+        borderRight: `1px solid ${theme.palette.divider}`,
+    },
+    rating: {
+        position: 'absolute',
+        marginLeft: '150px !important'
+    },
+    name: {
+        whiteSpace: 'nowrap',
+        paddingTop: '25px',
+        textAlign: 'left'
+    },
+    status: {
+        paddingRight: '155px',
+        paddingTop: '25px',
+        textAlign: 'left'
+    }
+}));
+  
+
 const RestaurantCard = (props) => {
     const { restaurant } = props;
+    const classes = useStyles();
+    const isOpen = restaurant.open_now;
+
     return(
-        <Card className="restaurant-card" variant="outlined" sx={{ border: 1 }}>
-            <Box display="flex">
+        <Card className={classes.root}>
+            <Box display="flex" alignItems="center">
                 <CardMedia
                     component="img"
-                    height="212"
-                    width="232"
                     src={`data:image/png;base64,${restaurant.photo}`}
-                    alt="restaurant image"
+                    height="180 !important"
+                    width="220 !important"
                 />
-                <Box borderLeft={1} borderColor="grey.500" pl={1} />
-                <CardContent>
-                    <CardHeaderDiv>
-                        <Chip label={
-                            <Typography className="chip-font">
-                                {restaurant.open_now ? "OPEN" : "CLOSED"}
-                            </Typography>
-                        } color="primary" />
-                        <Typography className="rating" variant="body1">
+                <Divider className={classes.divider} orientation="vertical" />
+            </Box>
+            <CardContent>
+                <CardHeaderDiv>
+                    <Box display="flex" alignItems="center">
+                        <Box mr={3}>
+                            <Chip label={
+                                <Typography className={classes.chipFont}>
+                                    {isOpen ? "OPEN" : "CLOSED"}
+                                </Typography>
+                            } color={isOpen ? "primary" : "warning"} />
+                        </Box>
+                        <Typography className={classes.rating} variant="body1">
                             Rating: {restaurant.rating}
                         </Typography>
-                    </CardHeaderDiv>
-                    <Typography className="name">
-                        {restaurant.name}
-                    </Typography>
-                    <Typography className="status" variant="h6" color="textSecondary">
-                        {restaurant.business_status}
-                    </Typography>
-                </CardContent>
-            </Box>
-      </Card>
+                    </Box>
+                </CardHeaderDiv>                
+                <Typography className={classes.name}>
+                    {restaurant.name}
+                </Typography>
+                <Typography className={classes.status} variant="h6" color="textSecondary">
+                    {restaurant.business_status}
+                </Typography>
+            </CardContent>
+        </Card>
     );
 }
 

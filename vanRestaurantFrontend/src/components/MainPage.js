@@ -77,8 +77,6 @@ function MainPage() {
                 return;
             }
             if(isTopRestaurantLoading) {
-                console.log("isTopRestaurantLoading: " + isTopRestaurantLoading);
-
                 await fetch(`http://127.0.0.1:8080/restaurant/top/${restaurants.topId}`, requestOptions)
                 .then(res => res.json())
                 .then(
