@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import RestaurantCard from './RestaurantCard';
-
-import '../styles/mainPage.css';
+import { makeStyles } from '@mui/styles';
 
 const username = 'juneKwak';
 const password = 'qwe123';
@@ -16,6 +15,12 @@ const requestOptions = {
     }
 };
 
+const useStyles = makeStyles((theme) => ({
+    mainPage: {
+        marginLeft: '200px'
+    }
+}));
+
 function MainPage() {
     const [geoData, setGeoData] = useState(null);
     const [restaurants, setRestaurants] = useState(null);
@@ -25,6 +30,7 @@ function MainPage() {
     const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(true);
     const [isTopRestaurantLoading, setisTopRestaurantLoading] = useState(true);
 
+    const classes = useStyles();
     // Fetch geolocation data
     useEffect(() => {
         const fetchGeoData = async() => {
@@ -99,7 +105,7 @@ function MainPage() {
     }
 
     return (
-        <div className="main-page">
+        <div className={classes.mainPage}>
             {restaurants !== null ? 
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 2, md: 9 }} justify="center">
                     {restaurants.results.map((restaurant, index) => (
