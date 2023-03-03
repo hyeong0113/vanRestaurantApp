@@ -131,18 +131,17 @@ function MainPage() {
             <Typography className={classes.topRestaurantText} variant="h5">
                 Here is a top rated restaurant in your location!
             </Typography>            
-            {topRestaurant !== null ?
+            {topRestaurant &&
                 <div className={classes.topRestaurantCard}>
                     <RestaurantCard restaurant={topRestaurant} />
                 </div>
-                : null
             }
 
             <Typography className={classes.restaurantListText} variant="h5">
                 Here are other recommendations
             </Typography>            
             {restaurants !== null ? 
-                <Grid className={classes.restaurantLists} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 2, md: 9 }} justify="center">
+                <Grid className={classes.restaurantLists} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 2, md: 9 }} justifyContent="center">
                     {restaurants.results.map((restaurant, index) => (
                         <Grid className={classes.restaurantItem} item xs={2} sm={4} md={4} key={index}>
                             <RestaurantCard restaurant={restaurant} />

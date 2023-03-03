@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
-const Restaurantschema = new mongoose.Schema({
+const restaurantSchema = new mongoose.Schema({
     id: {
-        type: String
+        type: String,
+        required: true
     },
     business_status: {
         type: String,
@@ -22,14 +23,17 @@ const Restaurantschema = new mongoose.Schema({
         required: true,
     },
     open_now: {     
-        type: Boolean
+        type: Boolean,
+        required: true
     },
     photo: {
-        type: String
+        type: String,
+        required: false
     },    
     rating: {
-        type: Number
+        type: Number,
+        required: false
     }
 });
-const Restaurant = mongoose.model("Restaurant", Restaurantschema);
+const Restaurant = mongoose.model("Restaurant", restaurantSchema);
 module.exports = Restaurant;

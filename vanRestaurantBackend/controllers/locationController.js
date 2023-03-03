@@ -81,16 +81,30 @@ const restaurantsWithLocation = async (req, res) => {
     });
     const { results } = mapRes.data;
     const mappedResults = await convertToRestaurantSchemaList(results);
+
+    if(!mappedResults) {
+        return res.status(400).send("Some values are invalid. Please try it again");
+    }
+
+    if(mappedResults.length <= 0) {
+        return res.status(404).send("There are no restaurants!");
+    }
+    
     const topRatedRestaurant = mappedResults.reduce((max, obj) => {
         return obj.rating > max.rating ? obj : max;
     });
 
-    const topdId = await saveObjectToDB(topRatedRestaurant);
+    const topId = await saveObjectToDB(topRatedRestaurant);
+
+    if(!topId) {
+        return res.status(400).send("Some values are invalid. Please try it again");
+    }
+    
     const filteredResults = mappedResults.filter(obj => obj !== topRatedRestaurant);
 
     res.status(200).json(
         {
-            topId: topdId,
+            topId: topId,
             results: filteredResults
         }
     );

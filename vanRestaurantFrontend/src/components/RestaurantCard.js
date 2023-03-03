@@ -59,14 +59,15 @@ const useStyles = makeStyles((theme) => ({
 const RestaurantCard = (props) => {
     const { restaurant } = props;
     const classes = useStyles();
-    const isOpen = restaurant.open_now;
+    const { photo, open_now, rating, name, business_status } = restaurant;
 
     return(
         <Card className={classes.card} variant="outlined">
             <Box display="flex" alignItems="center">
                 <CardMedia
                     component="img"
-                    src={`data:image/png;base64,${restaurant.photo}`}
+                    // Add data:image/png;base64, to photo data on backend
+                    src={`data:image/png;base64,${photo}`}
                     height="180 !important"
                     width="255 !important"
                 />
@@ -78,20 +79,20 @@ const RestaurantCard = (props) => {
                         <Box mr={3}>
                             <Chip label={
                                 <Typography className={classes.chipFont}>
-                                    {isOpen ? "OPEN" : "CLOSED"}
+                                    {open_now ? "OPEN" : "CLOSED"}
                                 </Typography>
-                            } color={isOpen ? "primary" : "warning"} />
+                            } color={open_now ? "primary" : "warning"} />
                         </Box>
                         <Typography className={classes.rating} variant="body2">
-                            Rating: {restaurant.rating}
+                            {`Rating: ${rating}`}
                         </Typography>
                     </Box>
                 </CardHeaderDiv>                
                 <Typography className={classes.name}>
-                    {restaurant.name}
+                    {name}
                 </Typography>
                 <Typography className={classes.status}color="textSecondary">
-                    {restaurant.business_status}
+                    {business_status}
                 </Typography>
             </CardContent>
         </Card>

@@ -4,13 +4,13 @@ This project is for practicing Node.js and React js.
 
 Language used:
 - Node.js (backend)
-- React js (frontend)
+- React   (frontend)
 
 Extension & Platform used:
 - axios
 - MongoDB
 - joi
-- Material UI React js
+- Material UI React
 
 vanRestaurantApp recommends 19 restaurants and the top rated restaurant nearby your location.
 There are nothing to do! Just open the application and wait for the result.
