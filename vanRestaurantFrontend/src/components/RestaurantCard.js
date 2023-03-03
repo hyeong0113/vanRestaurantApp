@@ -40,10 +40,11 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: '150px !important'
     },
     name: {
-        whiteSpace: 'nowrap',
         paddingTop: '25px',
         textAlign: 'left',
-        fontSize: '17px'
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        maxWidth: '100%',
     },
     status: {
         paddingRight: '155px',
@@ -80,7 +81,7 @@ const RestaurantCard = (props) => {
                                 </Typography>
                             } color={isOpen ? "primary" : "warning"} />
                         </Box>
-                        <Typography className={classes.rating} variant="body1">
+                        <Typography className={classes.rating} variant="body2">
                             Rating: {restaurant.rating}
                         </Typography>
                     </Box>

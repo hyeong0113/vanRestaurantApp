@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import RestaurantCard from './RestaurantCard';
 import { makeStyles } from '@mui/styles';
+import Typography from '@mui/material/Typography';
 
 const username = 'juneKwak';
 const password = 'qwe123';
@@ -17,7 +18,22 @@ const requestOptions = {
 
 const useStyles = makeStyles((theme) => ({
     mainPage: {
+        marginTop: '3%',
         marginLeft: '200px'
+    },
+    topRestaurantText: {
+        marginRight: '66% !important'
+    },
+    topRestaurantCard: {
+        marginTop: '40px',
+        transform: 'translateX(22%)'
+    },
+    restaurantListText: {
+        marginRight: '76% !important',
+        marginTop: '40px !important'
+    },
+    restaurantLists: {
+        marginTop: '40px !important'
     }
 }));
 
@@ -106,8 +122,21 @@ function MainPage() {
 
     return (
         <div className={classes.mainPage}>
+            <Typography className={classes.topRestaurantText} variant="h5">
+                Here is a top rated restaurant in your location!
+            </Typography>            
+            {topRestaurant !== null ?
+                <div className={classes.topRestaurantCard}>
+                    <RestaurantCard restaurant={topRestaurant} />
+                </div>
+                : null
+            }
+
+            <Typography className={classes.restaurantListText} variant="h5">
+                Here are other recommendations
+            </Typography>            
             {restaurants !== null ? 
-                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 2, md: 9 }} justify="center">
+                <Grid className={classes.restaurantLists} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 2, md: 9 }} justify="center">
                     {restaurants.results.map((restaurant, index) => (
                         <Grid item xs={2} sm={4} md={4} key={index}>
                             <RestaurantCard restaurant={restaurant} />
@@ -116,11 +145,6 @@ function MainPage() {
                 </Grid>                    
                 : null
             }
-            {topRestaurant !== null ?
-
-                console.log(topRestaurant) : null
-            }
-        
         </div>
     );
 }
