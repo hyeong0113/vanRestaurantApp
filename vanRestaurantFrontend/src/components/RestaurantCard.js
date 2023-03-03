@@ -8,11 +8,6 @@ import styled from 'styled-components';
 import Divider from '@mui/material/Divider';
 import { makeStyles } from '@mui/styles';
 
-const CardHeaderDiv = styled.div`
-    display: flex;
-    align-items: center;
-`
-
 const useStyles = makeStyles((theme) => ({
     card: {
         display: 'flex',
@@ -22,6 +17,10 @@ const useStyles = makeStyles((theme) => ({
         height: '180px',
         borderRadius: '25px !important',
         border: '4px solid rgb(0 0 0 / 54%) !important'
+    },
+    cardHeadr: {
+        display: 'flex',
+        alignItems: 'center'
     },
     divider: {
         height: '100%',
@@ -74,7 +73,7 @@ const RestaurantCard = (props) => {
                 <Divider className={classes.divider} orientation="vertical" />
             </Box>
             <CardContent>
-                <CardHeaderDiv>
+                <div className={classes.cardHeadr}>
                     <Box display="flex" alignItems="center">
                         <Box mr={3}>
                             <Chip label={
@@ -87,7 +86,7 @@ const RestaurantCard = (props) => {
                             {`Rating: ${rating}`}
                         </Typography>
                     </Box>
-                </CardHeaderDiv>                
+                </div>                
                 <Typography className={classes.name}>
                     {name}
                 </Typography>

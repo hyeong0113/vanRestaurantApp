@@ -141,7 +141,7 @@ function MainPage() {
                 Here are other recommendations
             </Typography>            
             {restaurants !== null ? 
-                <Grid className={classes.restaurantLists} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 2, md: 9 }} justifyContent="center">
+                <Grid className={classes.restaurantLists} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 2, md: 9 }}>
                     {restaurants.results.map((restaurant, index) => (
                         <Grid className={classes.restaurantItem} item xs={2} sm={4} md={4} key={index}>
                             <RestaurantCard restaurant={restaurant} />
