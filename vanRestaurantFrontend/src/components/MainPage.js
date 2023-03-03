@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: '200px'
     },
     topRestaurantText: {
+        whiteSpace: 'nowrap',
         marginRight: '66% !important'
     },
     topRestaurantCard: {
@@ -29,11 +30,16 @@ const useStyles = makeStyles((theme) => ({
         transform: 'translateX(22%)'
     },
     restaurantListText: {
+        whiteSpace: 'nowrap',
         marginRight: '76% !important',
         marginTop: '40px !important'
     },
     restaurantLists: {
-        marginTop: '40px !important'
+        marginTop: '40px !important',
+        padding: theme.spacing(2)
+    },
+    restaurantItem: {
+        margin: theme.spacing(2)
     }
 }));
 
@@ -138,7 +144,7 @@ function MainPage() {
             {restaurants !== null ? 
                 <Grid className={classes.restaurantLists} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 2, md: 9 }} justify="center">
                     {restaurants.results.map((restaurant, index) => (
-                        <Grid item xs={2} sm={4} md={4} key={index}>
+                        <Grid className={classes.restaurantItem} item xs={2} sm={4} md={4} key={index}>
                             <RestaurantCard restaurant={restaurant} />
                         </Grid>
                     ))}
