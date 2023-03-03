@@ -19,7 +19,7 @@ require('dotenv').config()
 *              JSON with status 200
 */
 const geoLocation = async (req, res) => {
-    const geoRes = await axios.post('https://www.googleapis.com/geolocation/v1/geolocate', {},
+    const geoRes = await axios.post(process.env.GEOMETRY, {},
     {
         params:
         {
@@ -69,7 +69,7 @@ const restaurantsWithLocation = async (req, res) => {
         return;
     }
 
-    const mapRes = await axios.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json',
+    const mapRes = await axios.get(process.env.NEARBY,
     {
         params:
         {
