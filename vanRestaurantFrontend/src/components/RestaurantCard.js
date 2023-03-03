@@ -14,13 +14,14 @@ const CardHeaderDiv = styled.div`
 `
 
 const useStyles = makeStyles((theme) => ({
-    root: {
+    card: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         width:'550px',
         height: '180px',
-        borderRadius: '25px !important'
+        borderRadius: '25px !important',
+        border: '4px solid rgb(0 0 0 / 54%) !important'
     },
     divider: {
         height: '100%',
@@ -61,7 +62,7 @@ const RestaurantCard = (props) => {
     const isOpen = restaurant.open_now;
 
     return(
-        <Card className={classes.root}>
+        <Card className={classes.card} variant="outlined">
             <Box display="flex" alignItems="center">
                 <CardMedia
                     component="img"
