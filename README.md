@@ -6,11 +6,11 @@ There are nothing to do! Just open the application and wait for the result.
 This project is based on Node.js for backend and React.js for frontend.
 For the backend, MVC model is used with axios. Also, MongoDB is used to store the top rated restaurant in your location.
 
-## Language used:
+## Language used
 - Node.js (backend)
 - React   (frontend)
 
-## Extension & Platform used:
+## Extension & Platform used
 - axios
 - MongoDB
 - joi
