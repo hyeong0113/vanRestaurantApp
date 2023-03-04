@@ -1,5 +1,5 @@
 const locationValidator = require('../validators/locationValidator');
-const { restaurantsWithLocation } = require('../controllers/locationController');
+const { getRestaurantsWithGeo } = require('../controllers/locationController');
 
 const locationValidation = async(req, res) => {
     const {lat, long} = req.params;
@@ -11,7 +11,7 @@ const locationValidation = async(req, res) => {
     if(error) {
         return res.status(400).send(error.details[0].message);
     }
-    await restaurantsWithLocation(req, res);
+    await getRestaurantsWithGeo(req, res);
 }
 
 module.exports = {

@@ -24,7 +24,11 @@ const restaurantSchema = new mongoose.Schema({
     },
     open_now: {     
         type: Boolean,
-        required: true
+        default: false
+    },
+    permanently_closed: {
+        type: Boolean,
+        default: false   
     },
     photo: {
         type: String,

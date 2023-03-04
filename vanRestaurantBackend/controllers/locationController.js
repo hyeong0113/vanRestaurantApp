@@ -1,6 +1,6 @@
 const axios = require('axios');
-const { saveObjectToDB, checkObjectExistsById } = require('../utilities/databaseUtility');
-const { convertToRestaurantSchemaList } = require('../utilities/schemaUtility');
+const { checkObjectExistsById } = require('../utilities/databaseUtility');
+const { saveAndReturnResponse } = require('../utilities/controllerUtility');
 require('dotenv').config()
 
 /*
@@ -18,7 +18,7 @@ require('dotenv').config()
 * @return:
 *              JSON with status 200
 */
-const geoLocation = async (req, res) => {
+const getGeoLocation = async (req, res) => {
     const geoRes = await axios.post(process.env.GEOMETRY, {},
     {
         params:
@@ -34,6 +34,71 @@ const geoLocation = async (req, res) => {
 *              Get list of restaurant searched by a name of location.
 * @pre-condition:
 *              parameters: {
+*                   input: string
+*              }
+* @post-condition:
+*              Google Map API response object
+* @description:
+*              Get input(name of location) from the request paramters.
+*              Validate input whether their value exist or not.
+*              If not, throw error.
+*              Call the Google Map API with input, inputtype(fixed to textquery), fields(fixed to formatted_address,geometry), and API key(in env).
+*              Get latitude, lonagitude, and formatted address from the response.
+*              Call function to get one top rated restaurant and 19 nearby restaurants.
+*              Convert the result to Restaurant schema.
+*              Get the highest rate restaurant.
+*              Cehck whether the highest rate restaurant in MongoDB.
+*                   if exist, display "Object exists".
+*                   if not, save it to MongoDB.
+*              Remove the highest rate restaurant from the result.
+*              Respond with the formatted address, the results received from the Google API and id of the top rated restaurant.
+* @param:
+*              input: string
+* @return:
+*              JSON with status 200
+*/
+const getRestaurantsWithLocationName = async (req, res) => {
+    const { input } = req.params;
+    if (!input) {
+        res.status(400).send("location name is undefined.");
+        return;
+    }
+
+    const placeRes = await axios.get(process.env.PLACE,
+    {
+        params:
+        {
+            input: input,
+            inputtype: 'textquery',
+            fields: 'formatted_address,geometry',
+            key: process.env.API_KEY
+        }
+    });
+    const { candidates } = placeRes.data;
+
+    if(!candidates) {
+        return res.status(400).send("Place::Some values are invalid. Please try it again");
+    }
+
+    const { formatted_address, geometry } = candidates[0];
+    const { lat, lng } = geometry.location;
+
+    const { topId, filteredResults } = await saveAndReturnResponse(res, lat, lng);
+
+    res.status(200).json(
+        {
+            addresss: formatted_address,
+            topId: topId,
+            results: filteredResults
+        }
+    );
+}
+
+/*
+* @title:
+*              Get list of restaurant searched by a geolocation.
+* @pre-condition:
+*              parameters: {
 *                   lat: float,
 *                   long: float
 *              }
@@ -44,6 +109,7 @@ const geoLocation = async (req, res) => {
 *              Validate latitude and longitude whether their value exist or not.
 *              If not, throw error.
 *              Call the Google Map API with location(latitude, longitude), radius(fixed to 1500m), type(fixed to restaurant), and API key(in env).
+*              Call function to get one top rated restaurant and 19 nearby restaurants.
 *              Convert the result to Restaurant schema.
 *              Get the highest rate restaurant.
 *              Cehck whether the highest rate restaurant in MongoDB.
@@ -57,7 +123,7 @@ const geoLocation = async (req, res) => {
 * @return:
 *              JSON with status 200
 */
-const restaurantsWithLocation = async (req, res) => {
+const getRestaurantsWithGeo = async (req, res) => {
     const {lat, long} = req.params;
     if (!lat) {
         res.status(400).send("latitude is undefined.");
@@ -69,38 +135,7 @@ const restaurantsWithLocation = async (req, res) => {
         return;
     }
 
-    const mapRes = await axios.get(process.env.NEARBY,
-    {
-        params:
-        {
-            location: `${lat},${long}`,
-            radius: 1500,
-            type: 'restaurant',
-            key: process.env.API_KEY
-        }
-    });
-    const { results } = mapRes.data;
-    const mappedResults = await convertToRestaurantSchemaList(results);
-
-    if(!mappedResults) {
-        return res.status(400).send("Some values are invalid. Please try it again");
-    }
-
-    if(mappedResults.length <= 0) {
-        return res.status(404).send("There are no restaurants!");
-    }
-    
-    const topRatedRestaurant = mappedResults.reduce((max, obj) => {
-        return obj.rating > max.rating ? obj : max;
-    });
-
-    const topId = await saveObjectToDB(topRatedRestaurant);
-
-    if(!topId) {
-        return res.status(400).send("Some values are invalid. Please try it again");
-    }
-    
-    const filteredResults = mappedResults.filter(obj => obj !== topRatedRestaurant);
+    const { topId, filteredResults } = await saveAndReturnResponse(req, res, lat, long);
 
     res.status(200).json(
         {
@@ -140,7 +175,8 @@ const getTopRestaurant = async (req, res) => {
 }
 
 module.exports = {
-    restaurantsWithLocation,
-    geoLocation,
+    getGeoLocation,
+    getRestaurantsWithLocationName,
+    getRestaurantsWithGeo,
     getTopRestaurant
 }
