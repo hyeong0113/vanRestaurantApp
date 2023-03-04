@@ -109,29 +109,30 @@ function MainPage() {
 
     // Fetch restaurants list
     const fetchRestaurantsByName = async() => {
-        await fetch(`http://127.0.0.1:8080/restaurants/input/${input}`, requestOptions)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log("geo data by location name fetched");
-                    setRestaurants(result);
-                    setIsRestaurantsLoading(true);
-                },
-                (error) => {
-                    console.log("Not loaded");
-                }
-            )
+        if(!isRestaurantsLoading) {
+            await fetch(`http://127.0.0.1:8080/restaurants/input/${input}`, requestOptions)
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        console.log("restaurants by location name loaded");
+                        setRestaurants(result);
+                        setIsRestaurantsLoading(true);
+                    },
+                    (error) => {
+                        console.log("Not loaded");
+                    }
+                )
+        }
     }
 
     // Fetch restaurants list
     const fetchRestaurants = async() => {
-        console.log("geoData:: " + geoData.lat, geoData.lng);
         if(!isRestaurantsLoading) {
             await fetch(`http://127.0.0.1:8080/restaurants/lat/${geoData.lat}/long/${geoData.lng}`, requestOptions)
                 .then(res => res.json())
                 .then(
                     (result) => {
-                        console.log("restaurants loaded");
+                        console.log("restaurants by geo idata loaded");
                         setRestaurants(result);
                         setIsRestaurantsLoading(true);
                         
@@ -148,7 +149,7 @@ function MainPage() {
         if(restaurants == null) {
             return;
         }
-        if(!isTopRestaurantLoading) {
+        if(!isTopRestaurantLoading && isRestaurantsLoading) {
             await fetch(`http://127.0.0.1:8080/restaurant/top/${restaurants.topId}`, requestOptions)
             .then(res => res.json())
             .then(

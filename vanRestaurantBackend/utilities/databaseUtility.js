@@ -4,7 +4,7 @@ async function checkObjectExistsById(id) {
     try {
         const result = await Restaurant.findOne({ id: id }).catch((error) => {
             console.error(error);
-        });   
+        });
          
         return result;
       } catch (error) {
@@ -13,12 +13,12 @@ async function checkObjectExistsById(id) {
 }
 
 async function saveObjectToDB(data) {
-    checkObjectExistsById(data.id)
-        .then((result) => {
+    await checkObjectExistsById(data.id)
+        .then(async(result) => {
             if (result) {
                 console.log('Object exists');
             } else {
-                data.save().catch((err) => console.log(err));
+                await data.save().catch((err) => console.log(err));
             }
         })
         .catch((err) => {

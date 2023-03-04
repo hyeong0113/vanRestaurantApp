@@ -166,9 +166,7 @@ const getRestaurantsWithGeo = async (req, res) => {
 */
 const getTopRestaurant = async (req, res) => {
     const { id } = req.params;
-    console.log("topId: " + id);
     const topRestaurant = await checkObjectExistsById(id);
-    console.log("topRestaurant: " + topRestaurant);
 
     if(!topRestaurant)
     {
