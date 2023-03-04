@@ -1,7 +1,6 @@
 # vanRestaurantApp
 ## Description
-vanRestaurantApp is an application to recommend 19 restaurants vanRestaurantApp recommends 19 restaurants and the top rated restaurant nearby your location.
-There are nothing to do! Just open the application and wait for the result.
+vanRestaurantApp is an application to recommend 19 restaurants vanRestaurantApp recommends 19 restaurants and the top rated restaurant nearby your location or anywhere you want!. Select the option and wait for the list.
 
 This project is based on Node.js for backend and React.js for frontend.
 For the backend, MVC model is used with axios. Also, MongoDB is used to store the top rated restaurant in your location.
@@ -19,7 +18,6 @@ For the backend, MVC model is used with axios. Also, MongoDB is used to store th
 ## Roadmap
 There are some future features suchs...
 - Authentication feature for registered user
-- Search restaurants by a name of location
 - Init Google map and show the location of the top-rated restaurant
 - (Considering) search other category such as gym or cafe, not only restaurant
 
