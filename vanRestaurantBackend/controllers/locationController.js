@@ -59,7 +59,7 @@ const getGeoLocation = async (req, res) => {
 */
 const getRestaurantsWithLocationName = async (req, res) => {
     const { input } = req.params;
-    if (!input) {
+    if (!input || input.length <= 0) {
         res.status(400).send("location name is undefined.");
         return;
     }
@@ -135,7 +135,7 @@ const getRestaurantsWithGeo = async (req, res) => {
         return;
     }
 
-    const { topId, filteredResults } = await saveAndReturnResponse(req, res, lat, long);
+    const { topId, filteredResults } = await saveAndReturnResponse(res, lat, long);
 
     res.status(200).json(
         {
@@ -166,7 +166,10 @@ const getRestaurantsWithGeo = async (req, res) => {
 */
 const getTopRestaurant = async (req, res) => {
     const { id } = req.params;
+    console.log("topId: " + id);
     const topRestaurant = await checkObjectExistsById(id);
+    console.log("topRestaurant: " + topRestaurant);
+
     if(!topRestaurant)
     {
         res.status(400).send("Invalid id, object not found.");

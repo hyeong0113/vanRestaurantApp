@@ -3,6 +3,8 @@ import Grid from '@mui/material/Grid';
 import RestaurantCard from './RestaurantCard';
 import { makeStyles } from '@mui/styles';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 const username = 'juneKwak';
 const password = 'qwe123';
@@ -45,25 +47,27 @@ const useStyles = makeStyles((theme) => ({
 
 function MainPage() {
     const [geoData, setGeoData] = useState(null);
+    const [input, setInput] = useState('');
     const [restaurants, setRestaurants] = useState(null);
     const [topRestaurant, settopRestaurant] = useState(null);
 
-    const [isDataLoading, setIsDataLoading] = useState(true);
-    const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(true);
-    const [isTopRestaurantLoading, setisTopRestaurantLoading] = useState(true);
+    const [isDataLoading, setIsDataLoading] = useState(false);
+    const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(false);
+    const [isTopRestaurantLoading, setisTopRestaurantLoading] = useState(false);
 
     const classes = useStyles();
+
     // Fetch geolocation data
     useEffect(() => {
         const fetchGeoData = async() => {
-            if(isDataLoading) {
+            if(!isDataLoading) {
                 await fetch(`http://127.0.0.1:8080/geo`, requestOptions)
                     .then(res => res.json())
                     .then(
                         (result) => {
                             console.log("data loaded");
-                            setGeoData(result);
-                            setIsDataLoading(false);
+                            setGeoData(result.location);
+                            setIsDataLoading(true);
                         },
                         (error) => {
                             console.log("Not loaded");
@@ -74,60 +78,102 @@ function MainPage() {
         fetchGeoData();
     }, [])
 
-    // Fetch restaurants list
     useEffect(() => {
-        const fetchRestaurants = async() => {
-            if(geoData == null) {
-                return;
+        const fetch = async() => {
+            if (isRestaurantsLoading && !isTopRestaurantLoading) {
+                await fetchTopRestaurant();
             }
-            if(isRestaurantsLoading) {
-                await fetch(`http://127.0.0.1:8080/restaurants/lat/${geoData.location.lat}/long/${geoData.location.lng}`, requestOptions)
-                    .then(res => res.json())
-                    .then(
-                        (result) => {
-                            console.log("restaurants loaded");
-                            setRestaurants(result);
-                            setIsRestaurantsLoading(false);
-                        },
-                        (error) => {
-                            console.log("Not loaded");
-                        }
-                    )
-            }
-        }
-        fetchRestaurants();
-    }, [geoData])
+        };
+        fetch();
+    }, [isRestaurantsLoading]);
 
-    // Fetch top restaurant
-    useEffect(() => {
-        const fetchTopRestaurant = async() => {
-            if(restaurants == null) {
-                return;
-            }
-            if(isTopRestaurantLoading) {
-                await fetch(`http://127.0.0.1:8080/restaurant/top/${restaurants.topId}`, requestOptions)
+    const locationNameOnChangeHandler = (event) => {
+        setInput(event.target.value);
+    }
+
+    const locationNameOnClickHandler = async() => {
+        setisTopRestaurantLoading(false);
+        settopRestaurant(null);
+        setIsRestaurantsLoading(false);
+        setRestaurants(null);
+        await fetchRestaurantsByName();
+    }
+
+    const myLocationOnClickHandler = async() => {
+        setisTopRestaurantLoading(false);
+        settopRestaurant(null);
+        setIsRestaurantsLoading(false);
+        setRestaurants(null);
+        await fetchRestaurants();
+    }
+
+    // Fetch restaurants list
+    const fetchRestaurantsByName = async() => {
+        await fetch(`http://127.0.0.1:8080/restaurants/input/${input}`, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log("geo data by location name fetched");
+                    setRestaurants(result);
+                    setIsRestaurantsLoading(true);
+                },
+                (error) => {
+                    console.log("Not loaded");
+                }
+            )
+    }
+
+    // Fetch restaurants list
+    const fetchRestaurants = async() => {
+        console.log("geoData:: " + geoData.lat, geoData.lng);
+        if(!isRestaurantsLoading) {
+            await fetch(`http://127.0.0.1:8080/restaurants/lat/${geoData.lat}/long/${geoData.lng}`, requestOptions)
                 .then(res => res.json())
                 .then(
                     (result) => {
-                        console.log("top restaurant loaded");
-                        settopRestaurant(result);
-                        setisTopRestaurantLoading(false);
+                        console.log("restaurants loaded");
+                        setRestaurants(result);
+                        setIsRestaurantsLoading(true);
+                        
                     },
                     (error) => {
                         console.log("Not loaded");
                     }
                 )
-            }
         }
-        fetchTopRestaurant();
-    }, [restaurants])    
+    }
 
-    if (!geoData || !restaurants || !topRestaurant) {
+    // Fetch top restaurant
+    const fetchTopRestaurant = async() => {
+        if(restaurants == null) {
+            return;
+        }
+        if(!isTopRestaurantLoading) {
+            await fetch(`http://127.0.0.1:8080/restaurant/top/${restaurants.topId}`, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log("top restaurant loaded");
+                    settopRestaurant(result);
+                    setisTopRestaurantLoading(true);
+                },
+                (error) => {
+                    console.log("Not loaded");
+                }
+            )
+        }
+    }
+
+    if (!geoData) {
         return <div>Loading...</div>;
     }
 
     return (
         <div className={classes.mainPage}>
+            {geoData.lat}, {geoData.lng}
+            <TextField id="outlined-basic" label="Outlined" variant="outlined" value={input} onChange={locationNameOnChangeHandler} />
+            <Button variant="contained" onClick={locationNameOnClickHandler}>Contained</Button>
+            <Button variant="contained" onClick={myLocationOnClickHandler}>My location</Button>
             <Typography className={classes.topRestaurantText} variant="h5">
                 Here is a top rated restaurant in your location!
             </Typography>            
