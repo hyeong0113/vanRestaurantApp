@@ -18,7 +18,7 @@ mongoose.connect(database, {useUnifiedTopology: true, useNewUrlParser: true })
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
-  origin: 'http://localhost:3000'
+  origin: 'http://localhost:3001'
 }));
 
 const userName = process.env.USERNAME;

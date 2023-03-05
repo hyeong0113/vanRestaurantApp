@@ -1,10 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Grid from '@mui/material/Grid';
 import RestaurantCard from './RestaurantCard';
 import { makeStyles } from '@mui/styles';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import { GoogleMap, LoadScript, useJsApiLoader } from '@react-google-maps/api';
+import GoogleMapComponent from './GoogleMapComponent';
+
+const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 const username = 'juneKwak';
 const password = 'qwe123';
@@ -59,22 +63,6 @@ function MainPage() {
 
     // Fetch geolocation data
     useEffect(() => {
-        const fetchGeoData = async() => {
-            if(!isDataLoading) {
-                await fetch(`http://127.0.0.1:8080/geo`, requestOptions)
-                    .then(res => res.json())
-                    .then(
-                        (result) => {
-                            console.log("data loaded");
-                            setGeoData(result.location);
-                            setIsDataLoading(true);
-                        },
-                        (error) => {
-                            console.log("Not loaded");
-                        }
-                    )
-            }
-        }
         fetchGeoData();
     }, [])
 
@@ -105,6 +93,24 @@ function MainPage() {
         setIsRestaurantsLoading(false);
         setRestaurants(null);
         await fetchRestaurants();
+    }
+
+    // fetch current geolocation of user data
+    const fetchGeoData = async() => {
+        if(!isDataLoading) {
+            await fetch(`http://127.0.0.1:8080/geo`, requestOptions)
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        console.log("data loaded");
+                        setGeoData(result.location);
+                        setIsDataLoading(true);
+                    },
+                    (error) => {
+                        console.log("Not loaded");
+                    }
+                )
+        }
     }
 
     // Fetch restaurants list
@@ -168,10 +174,16 @@ function MainPage() {
     if (!geoData) {
         return <div>Loading...</div>;
     }
-
+      
+  
+    // TODO: Init Google map on the web page
     return (
         <div className={classes.mainPage}>
-            {geoData.lat}, {geoData.lng}
+            {geoData &&
+                <GoogleMapComponent geoData={geoData} />
+            }
+          
+            {/* {geoData.lat}, {geoData.lng}
             <TextField id="outlined-basic" label="Outlined" variant="outlined" value={input} onChange={locationNameOnChangeHandler} />
             <Button variant="contained" onClick={locationNameOnClickHandler}>Contained</Button>
             <Button variant="contained" onClick={myLocationOnClickHandler}>My location</Button>
@@ -196,7 +208,7 @@ function MainPage() {
                     ))}
                 </Grid>                    
                 : null
-            }
+            } */}
         </div>
     );
 }
