@@ -178,12 +178,12 @@ function MainPage() {
     return (
         <div className={classes.mainPage}>
             {geoData &&
-                <GoogleMapComponent geoData={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />
+                <GoogleMapComponent location={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />
             }
           
             {geoData.lat}, {geoData.lng}
             <TextField id="outlined-basic" label="Outlined" variant="outlined" value={input} onChange={locationNameOnChangeHandler} />
-            <Button variant="contained" onClick={locationNameOnClickHandler}>Contained</Button>
+            <Button variant="contained" onClick={locationNameOnClickHandler}>Search</Button>
             <Button variant="contained" onClick={myLocationOnClickHandler}>My location</Button>
             <Typography className={classes.topRestaurantText} variant="h5">
                 Here is a top rated restaurant in your location!

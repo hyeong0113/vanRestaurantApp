@@ -2,9 +2,8 @@ import { useRef, useEffect, useState } from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
 const GoogleMapComponent = (props) => {
-    const [map, setMap] = useState(null);
-    const [markers, setMarkers] = useState([ { lat: props.geoData.lat, lng: props.geoData.lng } ]);
-    const [cneter, setCenter] = useState({ lat: props.geoData.lat, lng: props.geoData.lng });
+    const mapRef = useRef();
+    const [center, setCenter] = useState({ lat: props.location.lat, lng: props.location.lng });
     const [zoom, setZoom] = useState(14);
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
@@ -12,33 +11,17 @@ const GoogleMapComponent = (props) => {
     })
 
     useEffect(() => {
-        if(props.isTopRestaurantLoading && markers.length < 2) {
-            console.log(props.topRestaurant);
-            setMarkers(
-                [...markers, props.topRestaurant.location
-                ]
-            );
-
-            const bounds = new window.google.maps.LatLngBounds();
-            markers.forEach(marker => {
-              bounds.extend(marker);
-            });
-            setCenter(bounds.getCenter());
-            setZoom(10);            
+        if(props.isTopRestaurantLoading) {
+            setCenter(props.topRestaurant.location);
+        }
+        else {
+            setCenter(props.location);
         }
     })
 
-    // const onLoad = (map) => {
-    //     if(props.topRestaurant && props.topRestaurant !== undefined) {
-    //         setMarkers([...markers, props.geoData]);
-    //         setMarkers([...markers, props.topRestaurant.location]);
-    //         const bounds = new window.google.maps.LatLngBounds();
-    //         markers.forEach((marker) => bounds.extend(marker.getPosition()));
-    //         map.fitBounds(bounds);
-    //     }
-    //     console.log(map);
-    //     setMap(map);
-    // };
+    const onLoad = (map) => {
+        mapRef.current = map;
+    };
 
     if (loadError) return "Error";
     if (!isLoaded) return "Loading...";
@@ -58,16 +41,14 @@ const GoogleMapComponent = (props) => {
             {isLoaded &&
                 <GoogleMap
                     mapContainerStyle={mapContainerStyle}
-                    center={cneter}
+                    center={center}
+                    onLoad={onLoad}
                     zoom={zoom}
                     options={options}
                 >
-                {markers.map((marker, _index) => (
                     <Marker
-                        key={_index}
-                        position={marker}
+                        position={center}
                     />
-                ))}                 
             </GoogleMap>
             }
         </div>
