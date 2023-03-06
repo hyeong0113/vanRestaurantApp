@@ -1,16 +1,26 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useState } from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
 const GoogleMapComponent = (props) => {
+    const [map, setMap] = useState(null);
+    const [markers, setMarkers] = useState([]);
+
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: "AIzaSyAt3MM77NlV_PDgfy_CA4SYmc65-sBOCK8"
     })
 
-    const mapRef = useRef();
-    const onMapLoad = useCallback((map) => {
-      mapRef.current = map;
-    }, []);
+    const onLoad = (map) => {
+        if(props.topRestaurant && props.topRestaurant !== undefined) {
+            setMarkers([...markers, props.geoData]);
+            setMarkers([...markers, props.topRestaurant.location]);
+            const bounds = new window.google.maps.LatLngBounds();
+            markers.forEach((marker) => bounds.extend(marker.getPosition()));
+            map.fitBounds(bounds);
+        }
+        console.log(map);
+        setMap(map);
+    };
 
     if (loadError) return "Error";
     if (!isLoaded) return "Loading...";
@@ -27,13 +37,12 @@ const GoogleMapComponent = (props) => {
   
     return (
         <div>
-            {console.log(mapRef)}
             {isLoaded &&
                 <GoogleMap
                     mapContainerStyle={mapContainerStyle}
                     center={{ lat: props.geoData.lat, lng: props.geoData.lng }}
                     zoom={14}
-                    onLoad={onMapLoad}
+                    onLoad={onLoad}
                     options={options}
                 >
                 <Marker position={props.geoData} />
