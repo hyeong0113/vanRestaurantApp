@@ -175,12 +175,10 @@ function MainPage() {
         return <div>Loading...</div>;
     }
       
-  
-    // TODO: Init Google map on the web page
     return (
         <div className={classes.mainPage}>
             {geoData &&
-                <GoogleMapComponent geoData={geoData} topRestaurant={topRestaurant} />
+                <GoogleMapComponent geoData={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />
             }
           
             {geoData.lat}, {geoData.lng}

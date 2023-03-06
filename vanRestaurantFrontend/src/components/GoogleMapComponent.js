@@ -1,26 +1,44 @@
-import { useRef, useCallback, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
 const GoogleMapComponent = (props) => {
     const [map, setMap] = useState(null);
-    const [markers, setMarkers] = useState([]);
-
+    const [markers, setMarkers] = useState([ { lat: props.geoData.lat, lng: props.geoData.lng } ]);
+    const [cneter, setCenter] = useState({ lat: props.geoData.lat, lng: props.geoData.lng });
+    const [zoom, setZoom] = useState(14);
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: "AIzaSyAt3MM77NlV_PDgfy_CA4SYmc65-sBOCK8"
     })
 
-    const onLoad = (map) => {
-        if(props.topRestaurant && props.topRestaurant !== undefined) {
-            setMarkers([...markers, props.geoData]);
-            setMarkers([...markers, props.topRestaurant.location]);
+    useEffect(() => {
+        if(props.isTopRestaurantLoading && markers.length < 2) {
+            console.log(props.topRestaurant);
+            setMarkers(
+                [...markers, props.topRestaurant.location
+                ]
+            );
+
             const bounds = new window.google.maps.LatLngBounds();
-            markers.forEach((marker) => bounds.extend(marker.getPosition()));
-            map.fitBounds(bounds);
+            markers.forEach(marker => {
+              bounds.extend(marker);
+            });
+            setCenter(bounds.getCenter());
+            setZoom(10);            
         }
-        console.log(map);
-        setMap(map);
-    };
+    })
+
+    // const onLoad = (map) => {
+    //     if(props.topRestaurant && props.topRestaurant !== undefined) {
+    //         setMarkers([...markers, props.geoData]);
+    //         setMarkers([...markers, props.topRestaurant.location]);
+    //         const bounds = new window.google.maps.LatLngBounds();
+    //         markers.forEach((marker) => bounds.extend(marker.getPosition()));
+    //         map.fitBounds(bounds);
+    //     }
+    //     console.log(map);
+    //     setMap(map);
+    // };
 
     if (loadError) return "Error";
     if (!isLoaded) return "Loading...";
@@ -40,13 +58,16 @@ const GoogleMapComponent = (props) => {
             {isLoaded &&
                 <GoogleMap
                     mapContainerStyle={mapContainerStyle}
-                    center={{ lat: props.geoData.lat, lng: props.geoData.lng }}
-                    zoom={14}
-                    onLoad={onLoad}
+                    center={cneter}
+                    zoom={zoom}
                     options={options}
                 >
-                <Marker position={props.geoData} />
-                {props.topRestaurant && <Marker position={props.topRestaurant.location} />}
+                {markers.map((marker, _index) => (
+                    <Marker
+                        key={_index}
+                        position={marker}
+                    />
+                ))}                 
             </GoogleMap>
             }
         </div>
