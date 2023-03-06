@@ -27,6 +27,7 @@ const GoogleMapComponent = (props) => {
   
     return (
         <div>
+            {console.log(mapRef)}
             {isLoaded &&
                 <GoogleMap
                     mapContainerStyle={mapContainerStyle}
@@ -36,6 +37,7 @@ const GoogleMapComponent = (props) => {
                     options={options}
                 >
                 <Marker position={props.geoData} />
+                {props.topRestaurant && <Marker position={props.topRestaurant.location} />}
             </GoogleMap>
             }
         </div>

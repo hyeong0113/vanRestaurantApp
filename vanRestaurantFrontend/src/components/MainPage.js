@@ -180,10 +180,10 @@ function MainPage() {
     return (
         <div className={classes.mainPage}>
             {geoData &&
-                <GoogleMapComponent geoData={geoData} />
+                <GoogleMapComponent geoData={geoData} topRestaurant={topRestaurant} />
             }
           
-            {/* {geoData.lat}, {geoData.lng}
+            {geoData.lat}, {geoData.lng}
             <TextField id="outlined-basic" label="Outlined" variant="outlined" value={input} onChange={locationNameOnChangeHandler} />
             <Button variant="contained" onClick={locationNameOnClickHandler}>Contained</Button>
             <Button variant="contained" onClick={myLocationOnClickHandler}>My location</Button>
@@ -208,7 +208,7 @@ function MainPage() {
                     ))}
                 </Grid>                    
                 : null
-            } */}
+            }
         </div>
     );
 }
