@@ -1,17 +1,14 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import RestaurantCard from './RestaurantCard';
 import { makeStyles } from '@mui/styles';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { GoogleMap, LoadScript, useJsApiLoader } from '@react-google-maps/api';
 import GoogleMapComponent from './GoogleMapComponent';
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
-
-const username = 'juneKwak';
-const password = 'qwe123';
+const username = process.env.REACT_APP_USERNAME;
+const password = process.env.REACT_APP_PASSWORD;
 
 const authString = btoa(`${username}:${password}`);
 
@@ -98,7 +95,7 @@ function MainPage() {
     // fetch current geolocation of user data
     const fetchGeoData = async() => {
         if(!isDataLoading) {
-            await fetch(`http://127.0.0.1:8080/geo`, requestOptions)
+            await fetch(`${process.env.REACT_APP_API_URL}/geo`, requestOptions)
                 .then(res => res.json())
                 .then(
                     (result) => {
@@ -116,7 +113,7 @@ function MainPage() {
     // Fetch restaurants list
     const fetchRestaurantsByName = async() => {
         if(!isRestaurantsLoading) {
-            await fetch(`http://127.0.0.1:8080/restaurants/input/${input}`, requestOptions)
+            await fetch(`${process.env.REACT_APP_API_URL}/restaurants/input/${input}`, requestOptions)
                 .then(res => res.json())
                 .then(
                     (result) => {
@@ -134,7 +131,7 @@ function MainPage() {
     // Fetch restaurants list
     const fetchRestaurants = async() => {
         if(!isRestaurantsLoading) {
-            await fetch(`http://127.0.0.1:8080/restaurants/lat/${geoData.lat}/long/${geoData.lng}`, requestOptions)
+            await fetch(`${process.env.REACT_APP_API_URL}/restaurants/lat/${geoData.lat}/long/${geoData.lng}`, requestOptions)
                 .then(res => res.json())
                 .then(
                     (result) => {
@@ -156,7 +153,7 @@ function MainPage() {
             return;
         }
         if(!isTopRestaurantLoading && isRestaurantsLoading) {
-            await fetch(`http://127.0.0.1:8080/restaurant/top/${restaurants.topId}`, requestOptions)
+            await fetch(`${process.env.REACT_APP_API_URL}/restaurant/top/${restaurants.topId}`, requestOptions)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -180,8 +177,6 @@ function MainPage() {
             {geoData &&
                 <GoogleMapComponent location={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />
             }
-          
-            {geoData.lat}, {geoData.lng}
             <TextField id="outlined-basic" label="Outlined" variant="outlined" value={input} onChange={locationNameOnChangeHandler} />
             <Button variant="contained" onClick={locationNameOnClickHandler}>Search</Button>
             <Button variant="contained" onClick={myLocationOnClickHandler}>My location</Button>

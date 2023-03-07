@@ -7,7 +7,7 @@ const GoogleMapComponent = (props) => {
     const [zoom, setZoom] = useState(14);
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: "AIzaSyAt3MM77NlV_PDgfy_CA4SYmc65-sBOCK8"
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY
     })
 
     useEffect(() => {
