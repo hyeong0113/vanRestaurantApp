@@ -6,8 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import GoogleMapComponent from './GoogleMapComponent';
-import Menu from './TopbarMenu';
-
+import TopbarMenu from './TopbarMenu';
 
 const username = process.env.REACT_APP_USERNAME;
 const password = process.env.REACT_APP_PASSWORD;
@@ -172,7 +171,7 @@ function MainPage() {
       
     return (
         <div>
-            <Menu />
+            <TopbarMenu />
             {geoData &&
                 <GoogleMapComponent location={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />
             }

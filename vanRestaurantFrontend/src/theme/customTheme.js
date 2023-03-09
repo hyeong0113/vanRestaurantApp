@@ -4,8 +4,10 @@ const customTheme = createTheme({
   typography: {
     h6: {
       fontFamily: 'Noto sans, sans-serif;',
+    },
+    body4: {
+      fontFamily: 'Noto sans, sans-serif;',
     }
-    
   },
   palette: {
     primary: {
