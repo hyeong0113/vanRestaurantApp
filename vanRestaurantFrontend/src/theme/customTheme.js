@@ -1,13 +1,22 @@
 import { createTheme } from '@mui/material/styles';
 
 const customTheme = createTheme({
+  typography: {
+    h6: {
+      fontFamily: 'Noto sans, sans-serif;',
+    }
+    
+  },
   palette: {
     primary: {
-      main: '#22F81E',
+      main: '#FF9F46',
     },
-    warning: {
-      main: '#FF0202',
+    secondary: {
+      main: '#FFB800',
     },
+    info: {
+      main: '#FFF2D0'
+    }
   }
 });
 

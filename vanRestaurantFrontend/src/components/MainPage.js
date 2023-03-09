@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import GoogleMapComponent from './GoogleMapComponent';
+import Menu from './TopbarMenu';
+
 
 const username = process.env.REACT_APP_USERNAME;
 const password = process.env.REACT_APP_PASSWORD;
@@ -20,10 +22,6 @@ const requestOptions = {
 };
 
 const useStyles = makeStyles((theme) => ({
-    mainPage: {
-        marginTop: '3%',
-        marginLeft: '200px'
-    },
     topRestaurantText: {
         whiteSpace: 'nowrap',
         marginRight: '66% !important'
@@ -168,12 +166,13 @@ function MainPage() {
         }
     }
 
-    if (!geoData) {
-        return <div>Loading...</div>;
-    }
+    // if (!geoData) {
+    //     return <div>Loading...</div>;
+    // }
       
     return (
-        <div className={classes.mainPage}>
+        <div>
+            <Menu />
             {geoData &&
                 <GoogleMapComponent location={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />
             }
