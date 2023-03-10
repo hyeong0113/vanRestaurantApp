@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import GoogleMapComponent from './GoogleMapComponent';
 import TopbarMenu from './TopbarMenu';
-
+import Search from './Search';
 const username = process.env.REACT_APP_USERNAME;
 const password = process.env.REACT_APP_PASSWORD;
 
@@ -172,12 +172,20 @@ function MainPage() {
     return (
         <div>
             <TopbarMenu />
+            <Search
+                input={input}
+                locationNameOnChangeHandler={locationNameOnChangeHandler}
+                locationNameOnClickHandler={locationNameOnClickHandler}
+                myLocationOnClickHandler={myLocationOnClickHandler}
+            />
+            {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" value={input} onChange={locationNameOnChangeHandler} />
+            <Button variant="contained" onClick={locationNameOnClickHandler}>Search</Button>
+            <Button variant="contained" onClick={myLocationOnClickHandler}>My location</Button> */}
+
             {geoData &&
                 <GoogleMapComponent location={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />
             }
-            <TextField id="outlined-basic" label="Outlined" variant="outlined" value={input} onChange={locationNameOnChangeHandler} />
-            <Button variant="contained" onClick={locationNameOnClickHandler}>Search</Button>
-            <Button variant="contained" onClick={myLocationOnClickHandler}>My location</Button>
+
             <Typography className={classes.topRestaurantText} variant="h5">
                 Here is a top rated restaurant in your location!
             </Typography>            

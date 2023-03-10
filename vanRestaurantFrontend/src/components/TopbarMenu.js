@@ -100,7 +100,6 @@ const TopbarMenu = () => {
                     edge="end"
                     aria-label="menu"
                     variant="contained"
-                    disableElevation
                     onClick={handleClick}
                 >
                     <MenuIcon />
