@@ -86,7 +86,7 @@ const TopbarMenu = () => {
 
     const classes = useStyles();
     return (
-        <AppBar className={classes.bar} position="static">
+        <AppBar className={classes.bar} position="static" elevation={0}>
             <Toolbar className={classes.toolbar} variant="dense">
                 <Typography className={classes.title} variant="h6" color="inherit" component="div">
                     VanRestaurant
