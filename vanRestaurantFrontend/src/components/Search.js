@@ -26,9 +26,6 @@ const useStyles = makeStyles((theme) => ({
             borderRadius: '15px',
             color: 'rgba(0, 0, 0, 0)'
         },
-        // '& .MuiInputBase-input': {
-        //     color: 'rgba(255, 242, 208, 0.39) !important',
-        // },
         width: '580px !important',
     },
     buttonSection: {
@@ -39,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
         border: '1px solid rgba(0, 0, 0, 0.12) !important',
         borderRadius: '10px !important',
         height: '50px',
-        // marginBottom: '5px !important',
         marginRight: '30px !important'
     },
     buttonText: {
@@ -81,9 +77,6 @@ const Search = (props) => {
                     </Typography>                    
                 </Button>
             </Grid>
-            {/* <Grid item xs={2}>
-
-            </Grid> */}
         </Grid>
     );
 }
