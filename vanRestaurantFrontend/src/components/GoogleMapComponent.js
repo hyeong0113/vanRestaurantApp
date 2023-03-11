@@ -1,6 +1,15 @@
 import { useRef, useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import { makeStyles } from '@mui/styles';
 
+const useStyles = makeStyles((theme) => ({
+    map: {
+        marginLeft: '16%',
+        marginTop: '15px',
+        border: '1px solid rgba(255, 242, 208, 039)'
+    }
+}));
 const GoogleMapComponent = (props) => {
     const mapRef = useRef();
     const [center, setCenter] = useState({ lat: props.location.lat, lng: props.location.lng });
@@ -9,6 +18,8 @@ const GoogleMapComponent = (props) => {
         id: 'google-map-script',
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY
     })
+
+    const classes = useStyles();
 
     useEffect(() => {
         if(props.isTopRestaurantLoading) {
@@ -27,8 +38,9 @@ const GoogleMapComponent = (props) => {
     if (!isLoaded) return "Loading...";
 
     const mapContainerStyle = {
-        height: "60vh",
-        width: "900px"
+        height: "500px",
+        width: "1100px",
+        borderRadius: "15px"
     };
 
     const options = {
@@ -37,7 +49,7 @@ const GoogleMapComponent = (props) => {
     };
   
     return (
-        <div>
+        <Box className={classes.map} sx={mapContainerStyle}>
             {isLoaded &&
                 <GoogleMap
                     mapContainerStyle={mapContainerStyle}
@@ -51,7 +63,7 @@ const GoogleMapComponent = (props) => {
                     />
             </GoogleMap>
             }
-        </div>
+        </Box>
     );
 }
 
