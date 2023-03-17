@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 import { makeStyles } from '@mui/styles';
+// import Marker from './marker/CustomMarker';
 
 const useStyles = makeStyles((theme) => ({
     map: {
@@ -58,6 +59,22 @@ const GoogleMapComponent = (props) => {
                     zoom={zoom}
                     options={options}
                 >
+                <Box
+                sx={{
+                    width: 20,
+                    height: 20,
+                    backgroundColor: 'primary',
+                    '&:hover': {
+                    backgroundColor: 'primary',
+                    opacity: [0.9, 0.8, 0.7],
+                    },
+                }}
+                />
+                    {/* <Marker
+                        lat={11.0168}
+                        lng={76.9558}
+                        name="My Marker"
+                    /> */}
                     <Marker
                         position={center}
                     />
