@@ -9,9 +9,10 @@ import food2 from '../assets/images/food2.png';
 import food3 from '../assets/images/food3.png';
 import food4 from '../assets/images/food4.png';
 import food5 from '../assets/images/food5.png';
-import { Hidden, Typography } from '@mui/material';
+import { Hidden, Icon, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
+import IconButton from '@mui/material/IconButton';
 
 const images = [food1, food2, food3, food4, food5];
 
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     width: '190px',
     height: '80px',
-    paddingRight: '80%',
+    paddingLeft: '5%',
     paddingTop: '30px',
     fontWeight: '600 !important',
     fontStyle: 'normal',
@@ -35,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     padding: theme.spacing(0, 1),
+  },
+  homeItem: {
+    textAlign: 'right'
   },
   icon: {
     height: '40px !important',
@@ -48,6 +52,26 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: 100,
     right: 0
   },
+  button: {
+    position: 'relative',
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: '200px',
+      height: '400px',
+      borderRadius: '2px',
+      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+      opacity: 0,
+      transition: 'opacity 0.2s ease-in-out',
+      // overflow: 'initial'
+    },
+    '&:hover::before': {
+      opacity: 1,
+    }
+  }
 }));
 
 const Topbar = () => {
@@ -73,11 +97,15 @@ const Topbar = () => {
       </Grid>
       <Grid item xs={6}>
         <Grid container>
-          <Grid item xs={6}>
-            <HomeIcon className={classes.icon} />
+          <Grid className={classes.homeItem} item xs={6}>
+            <IconButton className={classes.button}>
+              <HomeIcon className={classes.icon} />
+            </IconButton>
           </Grid>
           <Grid item xs={6}>
-            <PersonIcon className={classes.icon} />
+            <IconButton className={classes.button}>
+              <PersonIcon className={classes.icon} />
+            </IconButton>
           </Grid>
         </Grid>
         <Box
