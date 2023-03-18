@@ -5,9 +5,9 @@ const customTheme = createTheme({
     h2: {
       fontFamily: 'Manrope, sans-serif',
     },
-    // body4: {
-    //   fontFamily: 'Noto sans, sans-serif;',
-    // }
+    h4: {
+      fontFamily: 'Manrope, sans-serif',
+    },
   },
   palette: {
     primary: {

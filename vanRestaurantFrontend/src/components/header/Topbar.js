@@ -50,25 +50,19 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: 100,
     right: 0
   },
-  // button: {
-  //   position: 'relative',
-  //   '&::after': {
-  //     content: '""',
-  //     position: 'absolute',
-  //     top: 0,
-  //     left: '50%',
-  //     transform: 'translateX(-50%)',
-  //     width: '200px',
-  //     height: '400px',
-  //     borderRadius: '2px',
-  //     backgroundColor: 'rgba(255, 255, 255, 0.5)',
-  //     opacity: 0,
-  //     transition: 'opacity 0.2s ease-in-out'
-  //   },
-  //   '&:active::after': {
-  //     opacity: 1,
-  //   }
-  // }
+  phrase: {
+    fontStyle: 'normal',
+    fontWeight: 500,
+    fontSize: '20px',
+    paddingTop: '2%',
+    paddingRight: '13%'
+  },
+  colored: {
+    color: '#EFC677'
+  },
+  whiteColored: {
+    color: '#FFFFFF'
+  }
 }));
 
 const Topbar = () => {
@@ -103,6 +97,13 @@ const Topbar = () => {
       <Grid item xs={6}>
         <Typography className={classes.title} variant='h2'>
           NearBy
+        </Typography>
+        <Typography className={classes.phrase} variant='h4'>
+          <span className={classes.colored}>Find</span>
+          <span className={classes.whiteColored}> favorite</span>
+          <span className={classes.colored}>restaurants</span>
+          <span className={classes.whiteColored}> near your</span>
+          <span className={classes.colored}> location</span>
         </Typography>
       </Grid>
       <Grid item xs={6}>
