@@ -10,14 +10,15 @@ import food5 from '../../assets/images/food5.png';
 import { Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
-import HeaderButton from './HeaderButton';
+import HeaderButton from '../button/HeaderButton';
+import TryButton from '../button/Trybutton';
 
 const images = [food1, food2, food3, food4, food5];
 
 const useStyles = makeStyles((theme) => ({
   background: {
     backgroundColor: 'rgba(103, 69, 18, 0.46)',
-    position: 'absolute',
+    position: 'relative',
     overflow: 'hidden',
     height: 400,
   },
@@ -45,9 +46,9 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     position: 'absolute',
-    width: 400,
-    height:400,
-    paddingTop: 100,
+    objectFit: 'cover',
+    width: 500,
+    height:500,
     right: 0
   },
   phrase: {
@@ -95,16 +96,17 @@ const Topbar = () => {
   return (
     <Grid className={classes.background} container>
       <Grid item xs={6}>
-        <Typography className={classes.title} variant='h2'>
+        <Typography className={classes.title} variant="h2">
           NearBy
         </Typography>
-        <Typography className={classes.phrase} variant='h4'>
+        <Typography className={classes.phrase} variant="h4">
           <span className={classes.colored}>Find</span>
           <span className={classes.whiteColored}> favorite</span>
           <span className={classes.colored}>restaurants</span>
           <span className={classes.whiteColored}> near your</span>
           <span className={classes.colored}> location</span>
         </Typography>
+        <TryButton />
       </Grid>
       <Grid item xs={6}>
         <Grid container>
