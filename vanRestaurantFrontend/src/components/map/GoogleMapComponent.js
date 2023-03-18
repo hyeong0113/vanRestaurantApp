@@ -2,6 +2,10 @@ import { useRef, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 import { makeStyles } from '@mui/styles';
+import MapIconButton from '../button/MapIconButton';
+import HomeIcon from '@mui/icons-material/Home';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const useStyles = makeStyles((theme) => ({
     mapBox: {
@@ -56,25 +60,27 @@ const GoogleMapComponent = (props) => {
                     zoom={zoom}
                     options={options}
                 >
+                <MapIconButton index={0} icon={<HomeIcon />} />
+
                 <Box
-                sx={{
-                    width: 20,
-                    height: 20,
-                    backgroundColor: 'primary',
-                    '&:hover': {
-                    backgroundColor: 'primary',
-                    opacity: [0.9, 0.8, 0.7],
-                    },
-                }}
+                    sx={{
+                        width: 20,
+                        height: 20,
+                        backgroundColor: 'primary',
+                        '&:hover': {
+                        backgroundColor: 'primary',
+                        opacity: [0.9, 0.8, 0.7],
+                        },
+                    }}
                 />
                     {/* <Marker
                         lat={11.0168}
                         lng={76.9558}
                         name="My Marker"
                     /> */}
-                    <Marker
-                        position={center}
-                    />
+                <Marker
+                    position={center}
+                />
             </GoogleMap>
             }
         </Box>
