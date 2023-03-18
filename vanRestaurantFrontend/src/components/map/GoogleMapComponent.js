@@ -10,6 +10,19 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 const useStyles = makeStyles((theme) => ({
     mapBox: {
         height: '100vh'
+    },
+    buttonContainer: {
+        position: 'absolute',
+        top: '50%',
+        left: '0',
+        transform: 'translateY(-50%)',
+        paddingLeft: '2.5%',
+        paddingTop: '5%',
+        display: 'grid',
+        gridRowGap: '5%'
+    },
+    icon: {
+        color: 'rgba(103, 69, 18, 0.89)'
     }
 }));
 const GoogleMapComponent = (props) => {
@@ -49,9 +62,14 @@ const GoogleMapComponent = (props) => {
         disableDefaultUI: true,
         zoomControl: true
     };
+
+    const onClick = () => {
+        console.log('test');
+    }
   
     return (
         <Box className={classes.mapBox}>
+
             {isLoaded &&
                 <GoogleMap
                     mapContainerStyle={mapContainerStyle}
@@ -60,7 +78,6 @@ const GoogleMapComponent = (props) => {
                     zoom={zoom}
                     options={options}
                 >
-                <MapIconButton index={0} icon={<HomeIcon />} />
 
                 <Box
                     sx={{
@@ -68,8 +85,8 @@ const GoogleMapComponent = (props) => {
                         height: 20,
                         backgroundColor: 'primary',
                         '&:hover': {
-                        backgroundColor: 'primary',
-                        opacity: [0.9, 0.8, 0.7],
+                            backgroundColor: 'primary',
+                            opacity: [0.9, 0.8, 0.7],
                         },
                     }}
                 />
@@ -82,7 +99,13 @@ const GoogleMapComponent = (props) => {
                     position={center}
                 />
             </GoogleMap>
+
             }
+            <div className={classes.buttonContainer}>
+                <MapIconButton index={0} icon={<HomeIcon className={classes.icon} />} />
+                <MapIconButton index={1} icon={<LocationOnIcon className={classes.icon} />} />
+                <MapIconButton index={2} icon={<FavoriteIcon className={classes.icon} />} />
+            </div>            
         </Box>
     );
 }
