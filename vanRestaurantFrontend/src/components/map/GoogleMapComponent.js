@@ -19,7 +19,8 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: '2.5%',
         paddingTop: '5%',
         display: 'grid',
-        gridRowGap: '5%'
+        gridRowGap: '5%',
+        position: 'fixed'
     },
     icon: {
         color: 'rgba(103, 69, 18, 0.89)'
