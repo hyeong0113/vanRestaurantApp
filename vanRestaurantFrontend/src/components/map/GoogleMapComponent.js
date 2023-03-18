@@ -2,13 +2,10 @@ import { useRef, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 import { makeStyles } from '@mui/styles';
-// import Marker from './marker/CustomMarker';
 
 const useStyles = makeStyles((theme) => ({
-    map: {
-        marginLeft: '16%',
-        marginTop: '15px',
-        border: '1px solid rgba(255, 242, 208, 039)'
+    mapBox: {
+        height: '100vh'
     }
 }));
 const GoogleMapComponent = (props) => {
@@ -39,9 +36,9 @@ const GoogleMapComponent = (props) => {
     if (!isLoaded) return "Loading...";
 
     const mapContainerStyle = {
-        height: "500px",
-        width: "1100px",
-        borderRadius: "15px"
+        height: "100%",
+        width: "100%",
+        // borderRadius: "15px"
     };
 
     const options = {
@@ -50,7 +47,7 @@ const GoogleMapComponent = (props) => {
     };
   
     return (
-        <Box className={classes.map} sx={mapContainerStyle}>
+        <Box className={classes.mapBox}>
             {isLoaded &&
                 <GoogleMap
                     mapContainerStyle={mapContainerStyle}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import Topbar from './header/Topbar';
+import GoogleMapComponent from './map/GoogleMapComponent';
 
 const username = process.env.REACT_APP_USERNAME;
 const password = process.env.REACT_APP_PASSWORD;
@@ -166,6 +167,12 @@ function MainPage() {
     return (
         <div>
             <Topbar />
+            {geoData &&
+                <GoogleMapComponent location={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />
+            }   
+            {/* {geoData &&
+                <GoogleMapComponent location={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />
+            }             */}
             {/* <Search
                 input={input}
                 locationNameOnChangeHandler={locationNameOnChangeHandler}
