@@ -9,15 +9,6 @@ import { useContext } from 'react';
 import { MapContext } from '../context/MapContext';
 
 const useStyles = makeStyles((theme) => ({
-    rootSection: {
-        position: 'absolute',
-        // top: '45%',
-        // right: '10px',
-        paddingTop: '10%',
-
-        display: 'flex',
-        justifyContent: 'flex-end'
-    },
     searchSection: {
         // display: 'flex'
     },
@@ -40,7 +31,7 @@ const Search = () => {
     const { input, locationNameOnChangeHandler, locationNameOnClickHandler } = useContext(MapContext);
     const classes = useStyles();
     return(
-        <Grid className={classes.rootSection} container alignItems="center">
+        <Grid container alignItems="center">
             <Grid className={classes.searchSection} item>
                 <TextField
                     id="search"

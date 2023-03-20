@@ -13,18 +13,21 @@ const useStyles = makeStyles((theme) => ({
         height: '100vh'
     },
     buttonContainer: {
-        top: '50%',
-        left: '0',
+        top: '55%',
+        left: '1%',
         transform: 'translateY(-50%)',
-        paddingLeft: '2.5%',
-        paddingTop: '5%',
         display: 'grid',
         gridRowGap: '5%',
         position: 'absolute'
     },
     icon: {
         color: 'rgba(103, 69, 18, 0.89)'
-    }
+    },
+    search: {
+        position: 'absolute',
+        top: '45%',
+        right: '1%',
+    },
 }));
 const GoogleMapComponent = (props) => {
     const mapRef = useRef();
@@ -56,7 +59,7 @@ const GoogleMapComponent = (props) => {
     const mapContainerStyle = {
         height: "100%",
         width: "100%",
-        // borderRadius: "15px"
+        position: "relative"
     };
 
     const options = {
@@ -106,7 +109,9 @@ const GoogleMapComponent = (props) => {
                 <MapIconButton index={1} icon={<LocationOnIcon className={classes.icon} />} />
                 <MapIconButton index={2} icon={<FavoriteIcon className={classes.icon} />} />
             </div>    
-            <Search />    
+            <div className={classes.search}>
+                <Search />
+            </div>
         </Box>
     );
 }
