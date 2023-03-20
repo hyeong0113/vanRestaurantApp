@@ -6,6 +6,7 @@ import MapIconButton from '../button/MapIconButton';
 import HomeIcon from '@mui/icons-material/Home';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import Search from '../search/Search';
 
 const useStyles = makeStyles((theme) => ({
     mapBox: {
@@ -69,7 +70,6 @@ const GoogleMapComponent = (props) => {
   
     return (
         <Box className={classes.mapBox}>
-            {console.log(center)}
             {isLoaded &&
                 <GoogleMap
                     mapContainerStyle={mapContainerStyle}
@@ -105,7 +105,8 @@ const GoogleMapComponent = (props) => {
                 <MapIconButton index={0} icon={<HomeIcon className={classes.icon} />} />
                 <MapIconButton index={1} icon={<LocationOnIcon className={classes.icon} />} />
                 <MapIconButton index={2} icon={<FavoriteIcon className={classes.icon} />} />
-            </div>            
+            </div>    
+            <Search />    
         </Box>
     );
 }

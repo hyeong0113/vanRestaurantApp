@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import Topbar from './header/Topbar';
 import GoogleMapComponent from './map/GoogleMapComponent';
-import Search from './search/Search';
+import { MapContext } from './context/MapContext';
 
 const username = process.env.REACT_APP_USERNAME;
 const password = process.env.REACT_APP_PASSWORD;
@@ -55,7 +55,6 @@ function MainPage() {
 
     // Fetch geolocation data
     useEffect(() => {
-        console.log("called?");
         fetchGeoData();
     }, [])
 
@@ -83,6 +82,7 @@ function MainPage() {
                     console.log("restaurants by location name loaded");
                     setRestaurants(result);
                     setIsRestaurantsLoading(true);
+                    console.log(restaurants);
                 },
                 (error) => {
                     console.log("Not loaded");
@@ -100,10 +100,12 @@ function MainPage() {
     // }, [isRestaurantsLoading]);
 
     const locationNameOnChangeHandler = (event) => {
+        console.log('locationNameOnChangeHandler:: ' + event.target.value);
         setInput(event.target.value);
     }
 
     const locationNameOnClickHandler = async() => {
+        console.log('locationNameOnClickHandler:: ' + input);
         await fetchRestaurantsByName();
     }
 
@@ -181,15 +183,21 @@ function MainPage() {
     return (
         <div>
             <Topbar />
-            {currentLocation &&
-                <GoogleMapComponent location={currentLocation} />
-            }   
+            <div>
+                {currentLocation &&
+                <MapContext.Provider value={{input, locationNameOnChangeHandler, locationNameOnClickHandler}}>
+                    <GoogleMapComponent
+                        location={currentLocation}
+                        locationNameOnChangeHandler={locationNameOnChangeHandler}
+                        locationNameOnClickHandler={locationNameOnClickHandler}
+                        input={input}
+                    />
+                </MapContext.Provider>
+                }   
+            </div>
 
-            <Search
-                input={input}
-                locationNameOnChangeHandler={locationNameOnChangeHandler}
-                locationNameOnClickHandler={locationNameOnClickHandler}
-            />
+
+
             {/* {geoData &&
                 <GoogleMapComponent location={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />
             }             */}
