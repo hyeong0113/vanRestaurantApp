@@ -19,12 +19,21 @@ const saveAndReturnResponse = async(lat, long) => {
 
     for(const elem of mappedResults) {
         var detail = await fetchPlaceDetail(elem.placeId);
-        console.log(detail.formatted_address);
         elem.address = detail.formatted_address;
     }
 
+    const topRatedRestaurant = mappedResults.reduce((max, obj) => {
+        return obj.rating > max.rating ? obj : max;
+    });
 
-    return mappedResults;
+    const index = mappedResults.findIndex(obj => obj === topRatedRestaurant);
+
+    // Remove the object from the original position
+    const removedObject = mappedResults.splice(index, 1);
+
+    // Add the removed object to the beginning of the array
+    const sortedResult = [...removedObject, ...mappedResults];
+    return sortedResult;
     // if(!mappedResults) {
     //     return res.status(400).send("Restaurants::Some values are invalid. Please try it again");
     // }
