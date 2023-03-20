@@ -1,7 +1,10 @@
-const Restaurant = require("../models/restaurantschema");
+const axios = require('axios');
+const RestaurantDto = require('../dtos/restaurantDto');
 const  { getPhotoByReference } = require("../utilities/photoUtility");
 
-async function convertToRestaurantSchemaList(results)
+require('dotenv').config();
+
+const convertToRestaurantSchemaList = async (results) =>
 {
     const mappedResults = [];
 
@@ -25,21 +28,7 @@ async function convertToRestaurantSchemaList(results)
             return null;
         }
 
-        mappedResults.push(
-            new Restaurant({
-                id: place_id,
-                business_status: business_status,
-                location: {
-                    lat: lat,
-                    lng: lng
-                },
-                name: name,
-                open_now: open_now,
-                permanently_closed: permanently_closed,
-                photo: photo,
-                rating: rating
-            })
-        );
+        mappedResults.push(new RestaurantDto(elem, open_now, photo));
     }
 
     return mappedResults;

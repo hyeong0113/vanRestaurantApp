@@ -83,65 +83,11 @@ const getRestaurantsWithLocationName = async (req, res) => {
     const { formatted_address, geometry } = candidates[0];
     const { lat, lng } = geometry.location;
 
-    const { topId, filteredResults } = await saveAndReturnResponse(res, lat, lng);
+    // const { topId, filteredResults } = await saveAndReturnResponse(res, lat, lng);
+    const temp = await saveAndReturnResponse(lat, lng);
 
     res.status(200).json(
-        {
-            addresss: formatted_address,
-            topId: topId,
-            results: filteredResults
-        }
-    );
-}
-
-/*
-* @title:
-*              Get list of restaurant searched by a geolocation.
-* @pre-condition:
-*              parameters: {
-*                   lat: float,
-*                   long: float
-*              }
-* @post-condition:
-*              Google Map API response object
-* @description:
-*              Get latitude and longitude from the request paramters.
-*              Validate latitude and longitude whether their value exist or not.
-*              If not, throw error.
-*              Call the Google Map API with location(latitude, longitude), radius(fixed to 1500m), type(fixed to restaurant), and API key(in env).
-*              Call function to get one top rated restaurant and 19 nearby restaurants.
-*              Convert the result to Restaurant schema.
-*              Get the highest rate restaurant.
-*              Cehck whether the highest rate restaurant in MongoDB.
-*                   if exist, display "Object exists".
-*                   if not, save it to MongoDB.
-*              Remove the highest rate restaurant from the result.
-*              Respond with the result received from the Google API and id of the top rated restaurant.
-* @param:
-*              lat: float
-*              long: float
-* @return:
-*              JSON with status 200
-*/
-const getRestaurantsWithGeo = async (req, res) => {
-    const {lat, long} = req.params;
-    if (!lat) {
-        res.status(400).send("latitude is undefined.");
-        return;
-    }
-
-    if (!long) {
-        res.status(400).send("longitude is undefined.");
-        return;
-    }
-
-    const { topId, filteredResults } = await saveAndReturnResponse(res, lat, long);
-
-    res.status(200).json(
-        {
-            topId: topId,
-            results: filteredResults
-        }
+        temp
     );
 }
 
@@ -164,20 +110,20 @@ const getRestaurantsWithGeo = async (req, res) => {
 * @return:
 *              JSON with status 200
 */
-const getTopRestaurant = async (req, res) => {
-    const { id } = req.params;
-    const topRestaurant = await checkObjectExistsById(id);
+// const getTopRestaurant = async (req, res) => {
+//     const { id } = req.params;
+//     const topRestaurant = await checkObjectExistsById(id);
 
-    if(!topRestaurant)
-    {
-        res.status(400).send("Invalid id, object not found.");
-    }
-    res.status(200).json(topRestaurant);
-}
+//     if(!topRestaurant)
+//     {
+//         res.status(400).send("Invalid id, object not found.");
+//     }
+//     res.status(200).json(topRestaurant);
+// }
 
 module.exports = {
     getGeoLocation,
     getRestaurantsWithLocationName,
-    getRestaurantsWithGeo,
-    getTopRestaurant
+    // getRestaurantsWithGeo,
+    // getTopRestaurant
 }

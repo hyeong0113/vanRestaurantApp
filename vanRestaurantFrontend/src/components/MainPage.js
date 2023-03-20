@@ -39,126 +39,125 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function MainPage() {
-    const [geoData, setGeoData] = useState(null);
-    const [input, setInput] = useState('');
-    const [restaurants, setRestaurants] = useState(null);
-    const [topRestaurant, settopRestaurant] = useState(null);
+    const [currentLocation, setCurrentLocation] = useState(null);
+    // const [input, setInput] = useState('');
+    // const [restaurants, setRestaurants] = useState(null);
+    // const [topRestaurant, settopRestaurant] = useState(null);
 
-    const [isDataLoading, setIsDataLoading] = useState(false);
-    const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(false);
-    const [isTopRestaurantLoading, setisTopRestaurantLoading] = useState(false);
+    // const [isDataLoading, setIsDataLoading] = useState(false);
+    // const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(false);
+    // const [isTopRestaurantLoading, setisTopRestaurantLoading] = useState(false);
 
     const classes = useStyles();
 
     // Fetch geolocation data
     useEffect(() => {
+        console.log("called?");
         fetchGeoData();
     }, [])
 
-    useEffect(() => {
-        const fetch = async() => {
-            if (isRestaurantsLoading && !isTopRestaurantLoading) {
-                await fetchTopRestaurant();
-            }
-        };
-        fetch();
-    }, [isRestaurantsLoading]);
-
-    const locationNameOnChangeHandler = (event) => {
-        setInput(event.target.value);
-    }
-
-    const locationNameOnClickHandler = async() => {
-        setisTopRestaurantLoading(false);
-        settopRestaurant(null);
-        setIsRestaurantsLoading(false);
-        setRestaurants(null);
-        await fetchRestaurantsByName();
-    }
-
-    const myLocationOnClickHandler = async() => {
-        setisTopRestaurantLoading(false);
-        settopRestaurant(null);
-        setIsRestaurantsLoading(false);
-        setRestaurants(null);
-        await fetchRestaurants();
-    }
-
     // fetch current geolocation of user data
     const fetchGeoData = async() => {
-        if(!isDataLoading) {
-            await fetch(`${process.env.REACT_APP_API_URL}/geo`, requestOptions)
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        console.log("data loaded");
-                        setGeoData(result.location);
-                        setIsDataLoading(true);
-                    },
-                    (error) => {
-                        console.log("Not loaded");
-                    }
-                )
-        }
-    }
-
-    // Fetch restaurants list
-    const fetchRestaurantsByName = async() => {
-        if(!isRestaurantsLoading) {
-            await fetch(`${process.env.REACT_APP_API_URL}/restaurants/input/${input}`, requestOptions)
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        console.log("restaurants by location name loaded");
-                        setRestaurants(result);
-                        setIsRestaurantsLoading(true);
-                    },
-                    (error) => {
-                        console.log("Not loaded");
-                    }
-                )
-        }
-    }
-
-    // Fetch restaurants list
-    const fetchRestaurants = async() => {
-        if(!isRestaurantsLoading) {
-            await fetch(`${process.env.REACT_APP_API_URL}/restaurants/lat/${geoData.lat}/long/${geoData.lng}`, requestOptions)
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        console.log("restaurants by geo idata loaded");
-                        setRestaurants(result);
-                        setIsRestaurantsLoading(true);
-                        
-                    },
-                    (error) => {
-                        console.log("Not loaded");
-                    }
-                )
-        }
-    }
-
-    // Fetch top restaurant
-    const fetchTopRestaurant = async() => {
-        if(restaurants == null) {
-            return;
-        }
-        if(!isTopRestaurantLoading && isRestaurantsLoading) {
-            await fetch(`${process.env.REACT_APP_API_URL}/restaurant/top/${restaurants.topId}`, requestOptions)
+        await fetch(`${process.env.REACT_APP_API_URL}/geo`, requestOptions)
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log("top restaurant loaded");
-                    settopRestaurant(result);
-                    setisTopRestaurantLoading(true);
+                    console.log("data loaded");
+                    setCurrentLocation(result.location);
                 },
                 (error) => {
                     console.log("Not loaded");
                 }
-            )
-        }
-    }
+        )
+    }    
+
+    // useEffect(() => {
+    //     const fetch = async() => {
+    //         if (isRestaurantsLoading && !isTopRestaurantLoading) {
+    //             await fetchTopRestaurant();
+    //         }
+    //     };
+    //     fetch();
+    // }, [isRestaurantsLoading]);
+
+    // const locationNameOnChangeHandler = (event) => {
+    //     setInput(event.target.value);
+    // }
+
+    // const locationNameOnClickHandler = async() => {
+    //     setisTopRestaurantLoading(false);
+    //     settopRestaurant(null);
+    //     setIsRestaurantsLoading(false);
+    //     setRestaurants(null);
+    //     await fetchRestaurantsByName();
+    // }
+
+    // const myLocationOnClickHandler = async() => {
+    //     setisTopRestaurantLoading(false);
+    //     settopRestaurant(null);
+    //     setIsRestaurantsLoading(false);
+    //     setRestaurants(null);
+    //     await fetchRestaurants();
+    // }
+
+
+    // // Fetch restaurants list
+    // const fetchRestaurantsByName = async() => {
+    //     if(!isRestaurantsLoading) {
+    //         await fetch(`${process.env.REACT_APP_API_URL}/restaurants/input/${input}`, requestOptions)
+    //             .then(res => res.json())
+    //             .then(
+    //                 (result) => {
+    //                     console.log("restaurants by location name loaded");
+    //                     setRestaurants(result);
+    //                     setIsRestaurantsLoading(true);
+    //                 },
+    //                 (error) => {
+    //                     console.log("Not loaded");
+    //                 }
+    //             )
+    //     }
+    // }
+
+    // // Fetch restaurants list
+    // const fetchRestaurants = async() => {
+    //     if(!isRestaurantsLoading) {
+    //         await fetch(`${process.env.REACT_APP_API_URL}/restaurants/lat/${geoData.lat}/long/${geoData.lng}`, requestOptions)
+    //             .then(res => res.json())
+    //             .then(
+    //                 (result) => {
+    //                     console.log("restaurants by geo idata loaded");
+    //                     setRestaurants(result);
+    //                     setIsRestaurantsLoading(true);
+                        
+    //                 },
+    //                 (error) => {
+    //                     console.log("Not loaded");
+    //                 }
+    //             )
+    //     }
+    // }
+
+    // // Fetch top restaurant
+    // const fetchTopRestaurant = async() => {
+    //     if(restaurants == null) {
+    //         return;
+    //     }
+    //     if(!isTopRestaurantLoading && isRestaurantsLoading) {
+    //         await fetch(`${process.env.REACT_APP_API_URL}/restaurant/top/${restaurants.topId}`, requestOptions)
+    //         .then(res => res.json())
+    //         .then(
+    //             (result) => {
+    //                 console.log("top restaurant loaded");
+    //                 settopRestaurant(result);
+    //                 setisTopRestaurantLoading(true);
+    //             },
+    //             (error) => {
+    //                 console.log("Not loaded");
+    //             }
+    //         )
+    //     }
+    // }
 
     // if (!geoData) {
     //     return <div>Loading...</div>;
@@ -167,8 +166,8 @@ function MainPage() {
     return (
         <div>
             <Topbar />
-            {geoData &&
-                <GoogleMapComponent location={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />
+            {currentLocation &&
+                <GoogleMapComponent location={currentLocation} />
             }   
             {/* {geoData &&
                 <GoogleMapComponent location={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />

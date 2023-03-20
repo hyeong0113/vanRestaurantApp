@@ -12,7 +12,6 @@ const getPhotoByReference = async (reference) => {
             key: process.env.API_KEY
         }
     })
-    // res.set('Content-Type', photo.headers['content-type']);
     return (Buffer.from(photo.data).toString('base64'));
 }
 

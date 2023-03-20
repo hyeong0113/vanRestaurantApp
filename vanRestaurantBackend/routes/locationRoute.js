@@ -5,9 +5,9 @@ const router = express.Router();
 
 router.get('/geo', getGeoLocation);
 router.get('/restaurants/input/:input', getRestaurantsWithLocationName);
-router.get('/restaurants/lat/:lat/long/:long', async(req, res) => {
-    locationValidation(req, res)
-});
-router.get('/restaurant/top/:id', getTopRestaurant);
+// router.get('/restaurants/lat/:lat/long/:long', async(req, res) => {
+//     locationValidation(req, res)
+// });
+// router.get('/restaurant/top/:id', getTopRestaurant);
 
 module.exports = router;

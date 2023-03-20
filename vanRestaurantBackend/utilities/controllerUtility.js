@@ -3,7 +3,7 @@ const { saveObjectToDB } = require('../utilities/databaseUtility');
 const { convertToRestaurantSchemaList } = require('../utilities/schemaUtility');
 require('dotenv').config()
 
-const saveAndReturnResponse = async(res, lat, long) => {
+const saveAndReturnResponse = async(lat, long) => {
     const mapRes = await axios.get(process.env.NEARBY,
         {
             params:
@@ -17,28 +17,42 @@ const saveAndReturnResponse = async(res, lat, long) => {
     const { results } = mapRes.data;
     const mappedResults = await convertToRestaurantSchemaList(results);
 
-    if(!mappedResults) {
-        return res.status(400).send("Restaurants::Some values are invalid. Please try it again");
-    }
+    return mappedResults;
+    // if(!mappedResults) {
+    //     return res.status(400).send("Restaurants::Some values are invalid. Please try it again");
+    // }
 
-    if(mappedResults.length <= 0) {
-        return res.status(404).send("There are no restaurants!");
-    }
+    // if(mappedResults.length <= 0) {
+    //     return res.status(404).send("There are no restaurants!");
+    // }
     
-    const topRatedRestaurant = mappedResults.reduce((max, obj) => {
-        return obj.rating > max.rating ? obj : max;
-    });
+    // const topRatedRestaurant = mappedResults.reduce((max, obj) => {
+    //     return obj.rating > max.rating ? obj : max;
+    // });
 
-    const topId = await saveObjectToDB(topRatedRestaurant);
+    // const topId = await saveObjectToDB(topRatedRestaurant);
 
-    if(!topId) {
-        return res.status(400).send("Restaurants::Some values are invalid. Please try it again");
-    }
+    // if(!topId) {
+    //     return res.status(400).send("Restaurants::Some values are invalid. Please try it again");
+    // }
     
-    const filteredResults = mappedResults.filter(obj => obj !== topRatedRestaurant);
+    // const filteredResults = mappedResults.filter(obj => obj !== topRatedRestaurant);
 
-    return { topId, filteredResults };
+    // return { topId, filteredResults };
 }
+
+// const fetchPlaceDetail = async (placeId) => {
+//     const result = await axios.get(process.env.DETAIL,
+//         {
+//             params:
+//             {
+//                 place_id: placeId,
+//                 key: process.env.API_KEY
+//             }
+//     });
+//     return result;
+// }
+
 
 module.exports = {
     saveAndReturnResponse

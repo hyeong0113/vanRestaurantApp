@@ -70,7 +70,7 @@ const GoogleMapComponent = (props) => {
   
     return (
         <Box className={classes.mapBox}>
-
+            {console.log(center)}
             {isLoaded &&
                 <GoogleMap
                     mapContainerStyle={mapContainerStyle}

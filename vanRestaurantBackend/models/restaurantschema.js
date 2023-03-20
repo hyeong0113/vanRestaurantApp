@@ -1,10 +1,18 @@
 const mongoose = require("mongoose");
 const restaurantSchema = new mongoose.Schema({
-    id: {
+    placeId: {
         type: String,
         required: true
     },
-    business_status: {
+    name: {
+        type: String,
+        required: true,
+    },
+    addresss: {
+        type: String,
+        required: true
+    },
+    businessStatus: {
         type: String,
         required: true,
     },
@@ -18,17 +26,9 @@ const restaurantSchema = new mongoose.Schema({
             required: true
         }
     },
-    name: {
-        type: String,
-        required: true,
-    },
-    open_now: {     
+    openNow: {     
         type: Boolean,
         default: false
-    },
-    permanently_closed: {
-        type: Boolean,
-        default: false   
     },
     photo: {
         type: String,
