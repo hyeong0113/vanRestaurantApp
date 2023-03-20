@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
         height: '100vh'
     },
     buttonContainer: {
-        position: 'absolute',
         top: '50%',
         left: '0',
         transform: 'translateY(-50%)',
@@ -20,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: '5%',
         display: 'grid',
         gridRowGap: '5%',
-        position: 'fixed'
+        position: 'absolute'
     },
     icon: {
         color: 'rgba(103, 69, 18, 0.89)'

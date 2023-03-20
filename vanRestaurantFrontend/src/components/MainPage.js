@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import Topbar from './header/Topbar';
 import GoogleMapComponent from './map/GoogleMapComponent';
+import Search from './search/Search';
 
 const username = process.env.REACT_APP_USERNAME;
 const password = process.env.REACT_APP_PASSWORD;
@@ -16,33 +17,35 @@ const requestOptions = {
 };
 
 const useStyles = makeStyles((theme) => ({
-    topRestaurantText: {
-        whiteSpace: 'nowrap',
-        marginRight: '66% !important'
-    },
-    topRestaurantCard: {
-        marginTop: '40px',
-        transform: 'translateX(22%)'
-    },
-    restaurantListText: {
-        whiteSpace: 'nowrap',
-        marginRight: '76% !important',
-        marginTop: '40px !important'
-    },
-    restaurantLists: {
-        marginTop: '40px !important',
-        padding: theme.spacing(2)
-    },
-    restaurantItem: {
-        margin: theme.spacing(2)
-    }
+    // topRestaurantText: {
+    //     whiteSpace: 'nowrap',
+    //     marginRight: '66% !important'
+    // },
+    // topRestaurantCard: {
+    //     marginTop: '40px',
+    //     transform: 'translateX(22%)'
+    // },
+    // restaurantListText: {
+    //     whiteSpace: 'nowrap',
+    //     marginRight: '76% !important',
+    //     marginTop: '40px !important'
+    // },
+    // restaurantLists: {
+    //     marginTop: '40px !important',
+    //     padding: theme.spacing(2)
+    // },
+    // restaurantItem: {
+    //     margin: theme.spacing(2)
+    // }
 }));
 
 function MainPage() {
     const [currentLocation, setCurrentLocation] = useState(null);
-    // const [input, setInput] = useState('');
-    // const [restaurants, setRestaurants] = useState(null);
+    const [input, setInput] = useState('');
+    const [restaurants, setRestaurants] = useState(null);
     // const [topRestaurant, settopRestaurant] = useState(null);
+
+    const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(false);
 
     // const [isDataLoading, setIsDataLoading] = useState(false);
     // const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(false);
@@ -69,6 +72,22 @@ function MainPage() {
                     console.log("Not loaded");
                 }
         )
+    }  
+    
+    // Fetch restaurants list
+    const fetchRestaurantsByName = async() => {
+        await fetch(`${process.env.REACT_APP_API_URL}/restaurants/search/${input}`, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log("restaurants by location name loaded");
+                    setRestaurants(result);
+                    setIsRestaurantsLoading(true);
+                },
+                (error) => {
+                    console.log("Not loaded");
+                }
+            )
     }    
 
     // useEffect(() => {
@@ -80,17 +99,13 @@ function MainPage() {
     //     fetch();
     // }, [isRestaurantsLoading]);
 
-    // const locationNameOnChangeHandler = (event) => {
-    //     setInput(event.target.value);
-    // }
+    const locationNameOnChangeHandler = (event) => {
+        setInput(event.target.value);
+    }
 
-    // const locationNameOnClickHandler = async() => {
-    //     setisTopRestaurantLoading(false);
-    //     settopRestaurant(null);
-    //     setIsRestaurantsLoading(false);
-    //     setRestaurants(null);
-    //     await fetchRestaurantsByName();
-    // }
+    const locationNameOnClickHandler = async() => {
+        await fetchRestaurantsByName();
+    }
 
     // const myLocationOnClickHandler = async() => {
     //     setisTopRestaurantLoading(false);
@@ -104,7 +119,7 @@ function MainPage() {
     // // Fetch restaurants list
     // const fetchRestaurantsByName = async() => {
     //     if(!isRestaurantsLoading) {
-    //         await fetch(`${process.env.REACT_APP_API_URL}/restaurants/input/${input}`, requestOptions)
+    //         await fetch(`${process.env.REACT_APP_API_URL}/restaurants/search/${input}`, requestOptions)
     //             .then(res => res.json())
     //             .then(
     //                 (result) => {
@@ -169,6 +184,12 @@ function MainPage() {
             {currentLocation &&
                 <GoogleMapComponent location={currentLocation} />
             }   
+
+            <Search
+                input={input}
+                locationNameOnChangeHandler={locationNameOnChangeHandler}
+                locationNameOnClickHandler={locationNameOnClickHandler}
+            />
             {/* {geoData &&
                 <GoogleMapComponent location={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />
             }             */}
