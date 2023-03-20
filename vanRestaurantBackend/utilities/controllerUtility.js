@@ -17,6 +17,13 @@ const saveAndReturnResponse = async(lat, long) => {
     const { results } = mapRes.data;
     const mappedResults = await convertToRestaurantSchemaList(results);
 
+    for(const elem of mappedResults) {
+        var detail = await fetchPlaceDetail(elem.placeId);
+        console.log(detail.formatted_address);
+        elem.address = detail.formatted_address;
+    }
+
+
     return mappedResults;
     // if(!mappedResults) {
     //     return res.status(400).send("Restaurants::Some values are invalid. Please try it again");
@@ -41,17 +48,19 @@ const saveAndReturnResponse = async(lat, long) => {
     // return { topId, filteredResults };
 }
 
-// const fetchPlaceDetail = async (placeId) => {
-//     const result = await axios.get(process.env.DETAIL,
-//         {
-//             params:
-//             {
-//                 place_id: placeId,
-//                 key: process.env.API_KEY
-//             }
-//     });
-//     return result;
-// }
+const fetchPlaceDetail = async (placeId) => {
+    const detail = await axios.get(process.env.DETAIL,
+        {
+            params:
+            {
+                place_id: placeId,
+                key: process.env.API_KEY
+            }
+    });
+    const { result } = detail.data;
+
+    return result;
+}
 
 
 module.exports = {
