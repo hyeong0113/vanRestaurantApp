@@ -1,5 +1,4 @@
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
@@ -9,14 +8,8 @@ import { useContext } from 'react';
 import { MapContext } from '../context/MapContext';
 
 const useStyles = makeStyles((theme) => ({
-    searchSection: {
-        // display: 'flex'
-    },
     searchField: {
         paddingRight: '10px !important'
-    },
-    buttonSection: {
-        // paddingRight: '250px',
     },
     button: {
         background: '#FFFFFF !important',

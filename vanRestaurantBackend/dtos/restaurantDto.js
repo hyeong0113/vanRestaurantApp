@@ -8,6 +8,8 @@ class RestaurantDto {
         this.openNow = open_now;
         this.photo = photo;
         this.rating = restaurant.rating;
+        this.isTop = false;
+        this.isFavorite = false;
     }
   }
   

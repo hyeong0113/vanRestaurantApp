@@ -28,11 +28,10 @@ const saveAndReturnResponse = async(lat, long) => {
 
     const index = mappedResults.findIndex(obj => obj === topRatedRestaurant);
 
-    // Remove the object from the original position
     const removedObject = mappedResults.splice(index, 1);
 
-    // Add the removed object to the beginning of the array
     const sortedResult = [...removedObject, ...mappedResults];
+    sortedResult[0].isTop = true;
     return sortedResult;
     // if(!mappedResults) {
     //     return res.status(400).send("Restaurants::Some values are invalid. Please try it again");

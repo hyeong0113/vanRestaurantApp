@@ -3,6 +3,7 @@ import { makeStyles } from '@mui/styles';
 import Topbar from './header/Topbar';
 import GoogleMapComponent from './map/GoogleMapComponent';
 import { MapContext } from './context/MapContext';
+import MainRestaurantCard from './card/MainRestaurantCard';
 
 const username = process.env.REACT_APP_USERNAME;
 const password = process.env.REACT_APP_PASSWORD;
@@ -82,7 +83,6 @@ function MainPage() {
                     console.log("restaurants by location name loaded");
                     setRestaurants(result);
                     setIsRestaurantsLoading(true);
-                    console.log(restaurants);
                 },
                 (error) => {
                     console.log("Not loaded");
@@ -100,12 +100,10 @@ function MainPage() {
     // }, [isRestaurantsLoading]);
 
     const locationNameOnChangeHandler = (event) => {
-        console.log('locationNameOnChangeHandler:: ' + event.target.value);
         setInput(event.target.value);
     }
 
     const locationNameOnClickHandler = async() => {
-        console.log('locationNameOnClickHandler:: ' + input);
         await fetchRestaurantsByName();
     }
 
@@ -192,11 +190,10 @@ function MainPage() {
                         locationNameOnClickHandler={locationNameOnClickHandler}
                         input={input}
                     />
-                </MapContext.Provider>
-                }   
+                </MapContext.Provider>}   
             </div>
 
-
+            {isRestaurantsLoading && <MainRestaurantCard restaurant={restaurants[0]} />}
 
             {/* {geoData &&
                 <GoogleMapComponent location={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />

@@ -83,7 +83,6 @@ const getRestaurantsWithLocationName = async (req, res) => {
     const { formatted_address, geometry } = candidates[0];
     const { lat, lng } = geometry.location;
 
-    // const { topId, filteredResults } = await saveAndReturnResponse(res, lat, lng);
     const temp = await saveAndReturnResponse(lat, lng);
 
     res.status(200).json(

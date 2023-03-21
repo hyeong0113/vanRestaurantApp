@@ -1,6 +1,15 @@
 import { createTheme } from '@mui/material/styles';
 
 const customTheme = createTheme({
+  components: {
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          padding: 0
+        },
+      }
+    }
+  },
   typography: {
     h2: {
       fontFamily: 'Manrope, sans-serif',
@@ -8,6 +17,12 @@ const customTheme = createTheme({
     h4: {
       fontFamily: 'Manrope, sans-serif',
     },
+    h5: {
+      fontFamily: 'Manrope, sans-serif',
+    },
+    body1: {
+      fontFamily: 'Manrope, sans-serif',
+    }
   },
   palette: {
     primary: {
