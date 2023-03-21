@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Topbar from './header/Topbar';
@@ -31,12 +29,13 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '10px 10px 0px 0px',
         width: "100%",
         position: "absolute",
-        top: theme.spacing(76)
+        top: theme.spacing(80),
+        height: '700px !important',
     },
     box: {
         display: "flex",
         overflowX: "scroll",
-        padding: theme.spacing(3),
+        padding: theme.spacing(1),
         "&::-webkit-scrollbar": {
             width: "100px",
         },
