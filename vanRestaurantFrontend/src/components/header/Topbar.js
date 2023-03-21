@@ -18,7 +18,7 @@ const images = [food1, food2, food3, food4, food5];
 const useStyles = makeStyles((theme) => ({
   background: {
     backgroundColor: 'rgba(103, 69, 18, 0.46)',
-    position: 'relative',
+    position: 'positive',
     overflow: 'hidden',
     height: 400,
   },

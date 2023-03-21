@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 import Topbar from './header/Topbar';
 import GoogleMapComponent from './map/GoogleMapComponent';
 import { MapContext } from './context/MapContext';
@@ -18,26 +22,41 @@ const requestOptions = {
 };
 
 const useStyles = makeStyles((theme) => ({
-    // topRestaurantText: {
-    //     whiteSpace: 'nowrap',
-    //     marginRight: '66% !important'
-    // },
-    // topRestaurantCard: {
-    //     marginTop: '40px',
-    //     transform: 'translateX(22%)'
-    // },
-    // restaurantListText: {
-    //     whiteSpace: 'nowrap',
-    //     marginRight: '76% !important',
-    //     marginTop: '40px !important'
-    // },
-    // restaurantLists: {
-    //     marginTop: '40px !important',
-    //     padding: theme.spacing(2)
-    // },
-    // restaurantItem: {
-    //     margin: theme.spacing(2)
-    // }
+    main: {
+        display: "flex",
+        flexDirection: "column"
+    },
+    container: {
+        background: 'rgba(255, 255, 255, 0.6)',
+        borderRadius: '10px 10px 0px 0px',
+        width: "100%",
+        position: "absolute",
+        top: theme.spacing(76)
+    },
+    box: {
+        display: "flex",
+        overflowX: "scroll",
+        padding: theme.spacing(3),
+        "&::-webkit-scrollbar": {
+            width: "100px",
+        },
+        "&::-webkit-scrollbar-track": {
+            background: "rgba(0, 0, 0, 0.1)",
+            borderRadius: "10px",
+            width: "100px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+            background: "#EFC677",
+            borderRadius: "10px",
+        }        
+      },
+    innerBox: {
+        width: 400,
+        height: 570,
+        marginRight: theme.spacing(21),
+        paddingTop: '3%',
+        paddingBottom: '3%'
+    }
 }));
 
 function MainPage() {
@@ -179,21 +198,49 @@ function MainPage() {
     // }
       
     return (
-        <div>
+        <div className={classes.main}>
             <Topbar />
             <div>
                 {currentLocation &&
-                <MapContext.Provider value={{input, locationNameOnChangeHandler, locationNameOnClickHandler}}>
-                    <GoogleMapComponent
-                        location={currentLocation}
-                        locationNameOnChangeHandler={locationNameOnChangeHandler}
-                        locationNameOnClickHandler={locationNameOnClickHandler}
-                        input={input}
-                    />
-                </MapContext.Provider>}   
+                    <MapContext.Provider value={{input, locationNameOnChangeHandler, locationNameOnClickHandler}}>
+                        <GoogleMapComponent
+                            location={currentLocation}
+                            locationNameOnChangeHandler={locationNameOnChangeHandler}
+                            locationNameOnClickHandler={locationNameOnClickHandler}
+                            input={input}
+                        />
+                    </MapContext.Provider>}   
             </div>
 
-            {isRestaurantsLoading && <MainRestaurantCard restaurant={restaurants[0]} />}
+            {isRestaurantsLoading &&
+                // <Grid className={classes.container} container spacing={0} wrap="nowrap">
+                //     <div style={{ overflowX: 'auto' }}>
+                //         {restaurants.map((restaurant, index) => (
+                //             <Grid item key={index}>
+                //                 <Paper style={{ width: 400, height: 570 }}>
+                //                     <MainRestaurantCard restaurant={restaurant} index={index} />
+                //                 </Paper>
+                //             </Grid>
+                //         ))}
+                //     </div>
+
+                // </Grid>
+                <Container className={classes.container} maxWidth={false}>
+                    {/* <Typography variant="h6" gutterBottom>
+                        Cards Container
+                    </Typography> */}
+                    <Box className={classes.box}>
+                        {restaurants.map((restaurant, index) => (
+                            <Box className={classes.innerBox}>
+                                <MainRestaurantCard restaurant={restaurant} index={index} />
+                            </Box>
+                        ))}
+                    </Box>
+                </Container>
+                
+                }
+
+
 
             {/* {geoData &&
                 <GoogleMapComponent location={geoData} topRestaurant={topRestaurant} isTopRestaurantLoading={isTopRestaurantLoading} />

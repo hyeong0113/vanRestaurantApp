@@ -51,6 +51,7 @@ const MainRestaurantCard = (props) => {
     console.log(restaurant);
     return(
         <Card className={classes.card} variant="outlined">
+            <Chip label="" />
             <CardMedia
                 component="img"
                 src={`data:image/png;base64,${photo}`}

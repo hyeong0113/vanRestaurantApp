@@ -13,20 +13,20 @@ const useStyles = makeStyles((theme) => ({
         height: '100vh'
     },
     buttonContainer: {
-        top: '55%',
-        left: '1%',
         transform: 'translateY(-50%)',
         display: 'grid',
         gridRowGap: '5%',
-        position: 'absolute'
+        position: "absolute",
+        top: theme.spacing(65),
+        left: theme.spacing(2)
     },
     icon: {
         color: 'rgba(103, 69, 18, 0.89)'
     },
     search: {
-        position: 'absolute',
-        top: '45%',
-        right: '1%',
+        position: "absolute",
+        top: theme.spacing(55),
+        left: theme.spacing(130)
     },
 }));
 const GoogleMapComponent = (props) => {
