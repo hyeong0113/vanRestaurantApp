@@ -5,8 +5,8 @@ import CardMedia from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
-import styled from 'styled-components';
-import Divider from '@mui/material/Divider';
+import ReviewButton from '../button/GotoReviewButton';
+import FavoriteButton from '../button/FavoriteButton';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -15,18 +15,18 @@ const useStyles = makeStyles((theme) => ({
         width: '400px',
         border: '1px solid rgba(122, 122, 122, 0.26) !important',
         borderRadius: '10px 10px 8px 8px !important',
-        boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.3)'
+        boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.3)',
+        // position: 'relative'
     },
     container: {
         rowGap: '5px'
     },
-    reviewButton: {
-        borderRadius: '10px !important',
-        color: 'white',
-        height: '25px !important',
-    },
     name: {
         fontWeight: '400 !important',
+        maxWidth: "100%",
+        overflow: "hidden",
+        whiteSpace: 'nowrap',
+        textOverflow: "ellipsis",
     },
     leftItem: {
         textAlign: 'left',
@@ -36,10 +36,20 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'right',
         paddingRight: '2.5%'
     },
-
     text: {
         fontWeight: '400 !important',
         fontSize: '20px !important',
+    },
+    chip: {
+        color: '#FFFEFE !important',
+        fontFamily: 'Manrope, sans-serif !important',
+        fontStyle: 'normal',
+        fontWeight: 700,
+        height: '40px !important',
+        width: '230px !important',
+        position: "absolute",
+        top: theme.spacing(2),
+        left: theme.spacing(2),
     }
 }));
   
@@ -51,14 +61,18 @@ const MainRestaurantCard = (props) => {
     console.log(restaurant);
     return(
         <Card className={classes.card} variant="outlined">
-            <Chip label="" />
-            <CardMedia
-                component="img"
-                src={`data:image/png;base64,${photo}`}
-                height="340 !important"
-                width="400 !important"
-            />
-            <CardContent>
+            <div style={{position: 'relative'}}>
+                <CardMedia
+                    component="img"
+                    src={`data:image/png;base64,${photo}`}
+                    height="340 !important"
+                    width="400 !important"
+                />
+                <Chip className={classes.chip} color="primary" label="TOP 1 in your location" />
+                <FavoriteButton />  
+            </div>
+ 
+            <CardContent style={{paddingBottom: 10}}>
                 <Grid className={classes.container} container>
                     <Grid item xs={12}>
                         <Typography className={classes.name} variant="h5">
@@ -71,11 +85,7 @@ const MainRestaurantCard = (props) => {
                         </Typography>
                     </Grid>
                     <Grid className={classes.rightItem} item xs={6}>
-                        <Button className={classes.reviewButton} variant="contained">
-                            <Typography variant="body1">
-                                Go To Reviews
-                            </Typography>
-                        </Button>
+                        <ReviewButton />
                     </Grid>
                     <Grid className={classes.leftItem} item xs={6}>
                         <Typography className={classes.text} variant="body1">

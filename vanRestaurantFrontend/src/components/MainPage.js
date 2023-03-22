@@ -29,13 +29,13 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '10px 10px 0px 0px',
         width: "100%",
         position: "absolute",
-        top: theme.spacing(80),
-        height: '700px !important',
+        top: theme.spacing(81.5),
+        height: '690px !important',
     },
     box: {
         display: "flex",
         overflowX: "scroll",
-        padding: theme.spacing(1),
+        paddingLeft: theme.spacing(5),
         "&::-webkit-scrollbar": {
             width: "100px",
         },
