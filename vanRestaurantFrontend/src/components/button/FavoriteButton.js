@@ -10,8 +10,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#EFC677 !important',
         borderShadow: '0px 4px 4px rgba(o, o, o, o.25)',
         position: "absolute",
-        bottom: theme.spacing(40),
-        right: theme.spacing(-20),
+        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.46)'
     },
     icon: {
         color: '#FFFFFF'

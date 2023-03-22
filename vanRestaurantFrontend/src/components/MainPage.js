@@ -125,6 +125,11 @@ function MainPage() {
         await fetchRestaurantsByName();
     }
 
+    const locationNameOnKeyPressHandler = async(event) => {
+        if (event.key === 'Enter') {
+            await fetchRestaurantsByName();
+          }  
+    }
     // const myLocationOnClickHandler = async() => {
     //     setisTopRestaurantLoading(false);
     //     settopRestaurant(null);
@@ -201,11 +206,12 @@ function MainPage() {
             <Topbar />
             <div>
                 {currentLocation &&
-                    <MapContext.Provider value={{input, locationNameOnChangeHandler, locationNameOnClickHandler}}>
+                    <MapContext.Provider value={{input, locationNameOnChangeHandler, locationNameOnClickHandler, locationNameOnKeyPressHandler}}>
                         <GoogleMapComponent
                             location={currentLocation}
                             locationNameOnChangeHandler={locationNameOnChangeHandler}
                             locationNameOnClickHandler={locationNameOnClickHandler}
+                            locationNameOnKeyPressHandler={locationNameOnKeyPressHandler}
                             input={input}
                         />
                     </MapContext.Provider>}   
@@ -230,7 +236,7 @@ function MainPage() {
                     </Typography> */}
                     <Box className={classes.box}>
                         {restaurants.map((restaurant, index) => (
-                            <Box className={classes.innerBox}>
+                            <Box className={classes.innerBox} key={index}>
                                 <MainRestaurantCard restaurant={restaurant} index={index} />
                             </Box>
                         ))}

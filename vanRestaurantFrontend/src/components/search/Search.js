@@ -21,8 +21,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Search = () => {
-    const { input, locationNameOnChangeHandler, locationNameOnClickHandler } = useContext(MapContext);
+    const { input, locationNameOnChangeHandler, locationNameOnClickHandler, locationNameOnKeyPressHandler } = useContext(MapContext);
     const classes = useStyles();
+    const style = {
+        width: '550px',
+        background: 'rgba(255, 255, 255, 0.78)',
+        border: '2px solid rgba(103, 69, 18, 0.62)',
+        borderRadius: '9px'
+    };
     return(
         <Grid container alignItems="center">
             <Grid className={classes.searchSection} item>
@@ -32,15 +38,9 @@ const Search = () => {
                     variant="outlined"
                     fullWidth
                     value={input}
+                    onKeyDown={locationNameOnKeyPressHandler}
                     onChange={locationNameOnChangeHandler}
-                    InputProps={{
-                        style: {
-                            width: '550px',
-                            background: 'rgba(255, 255, 255, 0.78)',
-                            border: '2px solid rgba(103, 69, 18, 0.62)',
-                            borderRadius: '9px'
-                        }
-                    }}
+                    InputProps={{style}}
                 />
             </Grid>
             <Grid className={classes.buttonSection} item>
