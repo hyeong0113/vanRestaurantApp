@@ -47,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         overflowX: "scroll",
         paddingLeft: theme.spacing(5),
-        transition: 'all 0.5s ease-in-out',
         "&::-webkit-scrollbar": {
             width: "100px",
         },
@@ -62,9 +61,12 @@ const useStyles = makeStyles((theme) => ({
         }        
       },
     boxShrink: {
-        height: 0
+        height: 0,
+        // TODO: Decrease height of box slowly
+        // overflowX: 'hidden',
+        // transition: 'all 0.5s ease-out',
     },      
-    innerBox: {
+    cardBox: {
         width: 400,
         height: 570,
         marginRight: theme.spacing(21),
@@ -96,8 +98,8 @@ function MainPage() {
     const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(false);
     const [isDataLoading, setIsDataLoading] = useState(false);
 
-    // height: '690px !important',
     const [isShrink, setIsShrink] = useState(false);
+
     const classes = useStyles();
 
     // Fetch geolocation data
@@ -143,7 +145,7 @@ function MainPage() {
     const handleDownButtonClick = () => {
         setIsShrink(!isShrink);
     }
-
+    console.log(isShrink)
     return (
         <div className={classes.main}>
             <Backdrop
@@ -164,7 +166,6 @@ function MainPage() {
                         />
                     </MapContext.Provider>}   
             </div>
-
             {isRestaurantsLoading &&
                 <Container className={`${classes.container} ${isShrink ? classes.containerShrink : ''}`} maxWidth={false}>
                     <IconButton className={classes.downButton} onClick={handleDownButtonClick}>
@@ -173,13 +174,13 @@ function MainPage() {
                     <Box className={`${classes.box} ${isShrink ? classes.boxShrink : ''}`}>                    
                         {restaurants.map((restaurant, index) => (
                             <Grow
-                              in={!isShrink}
-                              style={{ transformOrigin: '0 0 0' }}
-                              {...(!isShrink ? { timeout: 1000 } : {})}
+                                in={!isShrink}
+                                style={{ transformOrigin: '0 0 0' }}
+                                timeout={500*index}
                             >
-                            <Box className={classes.innerBox} key={index}>
-                                <MainRestaurantCard restaurant={restaurant} index={index} />
-                            </Box>
+                            <Box className={classes.cardBox} key={index}>
+                                    <MainRestaurantCard restaurant={restaurant} index={index} />
+                                </Box>
                             </Grow>
                         ))}
                     </Box>
