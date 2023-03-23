@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
 import CardContent from '@mui/material/CardContent';
@@ -32,15 +33,19 @@ const useStyles = makeStyles((theme) => ({
     },
     leftItem: {
         textAlign: 'left',
-        paddingLeft: '2.5%'
+        paddingLeft: '6%'
     },
     rightItem: {
         textAlign: 'right',
-        paddingRight: '2.5%'
+        paddingRight: '6%'
+    },
+    address: {
+        textAlign: 'center',
+        paddingRight: '6%'
     },
     text: {
         fontWeight: '400 !important',
-        fontSize: '20px !important',
+        fontSize: '15px !important',
     },
     chip: {
         color: '#FFFEFE !important',
@@ -59,9 +64,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MainRestaurantCard = (props) => {
-    const { restaurant } = props;
+    const [isSelected, setIsSelected] = useState(false);
+    const { restaurant, index } = props;
     const classes = useStyles();
-    const { photo, rating, name, address } = restaurant;
+    const { photo, rating, name, address, url } = restaurant;
+    
+    const onFavoriteButtonClick = () => {
+        setIsSelected((isSelected) => !isSelected);
+    }
+
     return(
         <Card className={classes.card} variant="outlined">
             <CardMedia
@@ -73,14 +84,14 @@ const MainRestaurantCard = (props) => {
             />
             <Grid className={classes.buttonCanainer} container>
                 <Grid className={classes.leftItem} item xs={6}>
-                    <Chip className={classes.chip} color="primary" label="TOP 1 in your location" />
+                    {index === 0 && <Chip className={classes.chip} color="primary" label="TOP 1 in your location" />}
                 </Grid>
                 <Grid className={classes.rightItem} item xs={6}>
-                    <FavoriteButton />
+                    <FavoriteButton isSelected={isSelected} onFavoriteButtonClick={onFavoriteButtonClick} />
                 </Grid>                    
             </Grid>         
             <CardContent>
-                <Grid className={classes.container} container>
+                <Grid className={classes.container} rowSpacing={1} container>
                     <Grid item xs={12}>
                         <Typography className={classes.name} variant="h5">
                             {name}
@@ -92,7 +103,7 @@ const MainRestaurantCard = (props) => {
                         </Typography>
                     </Grid>
                     <Grid className={classes.rightItem} item xs={6}>
-                        <ReviewButton />
+                        <ReviewButton url={url} />
                     </Grid>
                     <Grid className={classes.leftItem} item xs={6}>
                         <Typography className={classes.text} variant="body1">
@@ -109,7 +120,7 @@ const MainRestaurantCard = (props) => {
                             Address
                         </Typography>
                     </Grid>
-                    <Grid className={classes.rightItem} item xs={6}>
+                    <Grid className={classes.address} item xs={6}>
                         <Typography className={classes.text} variant="body1">
                             {address}
                         </Typography>                            

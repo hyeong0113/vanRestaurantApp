@@ -7,7 +7,7 @@ require('dotenv').config();
 const convertToRestaurantSchemaList = async (results) =>
 {
     const mappedResults = [];
-
+    
     for(const elem of results)
     {
         const photo = await getPhotoByReference(elem.photos[0].photo_reference);

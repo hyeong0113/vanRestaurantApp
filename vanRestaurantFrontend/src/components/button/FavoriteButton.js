@@ -1,5 +1,6 @@
 import IconButton from '@mui/material/IconButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -20,8 +21,13 @@ const useStyles = makeStyles((theme) => ({
 const FavoriteButton = (props) => {
     const classes = useStyles();
     return (
-        <IconButton className={classes.button}>
-            <FavoriteBorderIcon className={classes.icon} />
+        <IconButton className={classes.button} onClick={props.onFavoriteButtonClick}>
+            {props.isSelected ?
+                <FavoriteIcon className={classes.icon} />
+                :
+                <FavoriteBorderIcon className={classes.icon} />
+            }
+            
         </IconButton>
     );
 }

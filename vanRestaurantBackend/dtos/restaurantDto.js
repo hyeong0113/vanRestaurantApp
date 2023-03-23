@@ -10,6 +10,7 @@ class RestaurantDto {
         this.rating = restaurant.rating;
         this.isTop = false;
         this.isFavorite = false;
+        this.url = null;
     }
   }
   

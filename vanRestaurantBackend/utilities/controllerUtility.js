@@ -20,6 +20,7 @@ const saveAndReturnResponse = async(lat, long) => {
     for(const elem of mappedResults) {
         var detail = await fetchPlaceDetail(elem.placeId);
         elem.address = detail.formatted_address;
+        elem.url = detail.url;
     }
 
     const topRatedRestaurant = mappedResults.reduce((max, obj) => {

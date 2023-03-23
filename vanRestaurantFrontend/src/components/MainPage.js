@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
         height: '690px !important',
         position: "absolute",
         top: theme.spacing(81),
-        transition: 'all 0.5s ease-in-out',
+        transition: 'all 0.5s ease-in',
     },
     containerShrink: {
         height: '80px !important',
@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         overflowX: "scroll",
         paddingLeft: theme.spacing(5),
+        // transition: 'width 1s',
         "&::-webkit-scrollbar": {
             width: "100px",
         },
@@ -145,7 +146,7 @@ function MainPage() {
     const handleDownButtonClick = () => {
         setIsShrink(!isShrink);
     }
-    console.log(isShrink)
+
     return (
         <div className={classes.main}>
             <Backdrop
@@ -174,11 +175,12 @@ function MainPage() {
                     <Box className={`${classes.box} ${isShrink ? classes.boxShrink : ''}`}>                    
                         {restaurants.map((restaurant, index) => (
                             <Grow
+                                key={index}
                                 in={!isShrink}
                                 style={{ transformOrigin: '0 0 0' }}
                                 timeout={500*index}
                             >
-                            <Box className={classes.cardBox} key={index}>
+                                <Box className={classes.cardBox} key={index}>
                                     <MainRestaurantCard restaurant={restaurant} index={index} />
                                 </Box>
                             </Grow>

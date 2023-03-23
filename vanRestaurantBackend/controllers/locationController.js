@@ -85,9 +85,7 @@ const getRestaurantsWithLocationName = async (req, res) => {
 
     const temp = await saveAndReturnResponse(lat, lng);
 
-    res.status(200).json(
-        temp
-    );
+    res.status(200).json(temp);
 }
 
 /*

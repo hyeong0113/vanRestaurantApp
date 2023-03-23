@@ -8,6 +8,8 @@ const useStyles = makeStyles((theme) => ({
         height: '25px !important',
     },
     buttonText: {
+        fontSize: '15px !important',
+        fontWeight: '400 !important',
         color: '#FFFFFF'
     }
 }));
@@ -15,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 const ReviewButton = (props) => {
     const classes = useStyles();
     return(
-        <Button className={classes.reviewButton} variant="contained">
+        <Button className={classes.reviewButton} variant="contained" href={props.url} target="_blank">
             <Typography className={classes.buttonText} variant="body1">
                 Go To Reviews
             </Typography>
