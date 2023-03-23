@@ -67,7 +67,7 @@ const MainRestaurantCard = (props) => {
     const [isSelected, setIsSelected] = useState(false);
     const { restaurant, index } = props;
     const classes = useStyles();
-    const { photo, rating, name, address, url } = restaurant;
+    const { photo, rating, name, address, url, openNow } = restaurant;
     
     const onFavoriteButtonClick = () => {
         setIsSelected((isSelected) => !isSelected);
@@ -84,7 +84,11 @@ const MainRestaurantCard = (props) => {
             />
             <Grid className={classes.buttonCanainer} container>
                 <Grid className={classes.leftItem} item xs={6}>
-                    {index === 0 && <Chip className={classes.chip} color="primary" label="TOP 1 in your location" />}
+                    {index === 0 ?
+                        <Chip className={classes.chip} color="primary" label="TOP 1 in your location" />
+                        :
+                        <Chip className={classes.chip} color={openNow ? "primary" : "error"} label={openNow ? "OPEN" : "CLOSED"} />
+                    }
                 </Grid>
                 <Grid className={classes.rightItem} item xs={6}>
                     <FavoriteButton isSelected={isSelected} onFavoriteButtonClick={onFavoriteButtonClick} />

@@ -28,9 +28,9 @@ const customTheme = createTheme({
     primary: {
       main: '#EFC677',
     },
-    // secondary: {
-    //   main: '#FFB800',
-    // },
+    error: {
+      main: '#EF7474',
+    },
     // info: {
     //   main: '#FFF2D0'
     // }
