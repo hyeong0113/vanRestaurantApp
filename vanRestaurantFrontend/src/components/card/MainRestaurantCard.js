@@ -20,7 +20,8 @@ const useStyles = makeStyles((theme) => ({
         rowGap: '5px'
     },
     image: {
-        position: 'relateive'
+        position: 'relateive',
+        objectFit: 'cover'
     },
     name: {
         fontWeight: '400 !important',
