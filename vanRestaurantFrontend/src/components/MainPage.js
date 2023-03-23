@@ -4,8 +4,9 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import IconButton from '@mui/material/IconButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Grow from '@mui/material/Grow';
 
 import Topbar from './header/Topbar';
 import GoogleMapComponent from './map/GoogleMapComponent';
@@ -83,7 +84,10 @@ const useStyles = makeStyles((theme) => ({
     },
     icon: {
         color: 'rgba(103, 69, 18, 0.89)'
-    }
+    },
+    iconShrink: {
+        transform: 'rotate(180deg)'
+    },
 }));
 
 function MainPage() {
@@ -127,6 +131,7 @@ function MainPage() {
                     setRestaurants(result);
                     setCurrentLocation(result[0].location);
                     setIsRestaurantsLoading(true);
+                    setIsShrink(false);
                 },
                 (error) => {
                     console.log("Not loaded");
@@ -163,13 +168,19 @@ function MainPage() {
             {isRestaurantsLoading &&
                 <Container className={`${classes.container} ${isShrink ? classes.containerShrink : ''}`} maxWidth={false}>
                     <IconButton className={classes.downButton} onClick={handleDownButtonClick}>
-                        <ExpandMoreIcon className={classes.icon} fontSize='large' />
+                        <ExpandMoreIcon className={`${classes.icon} ${isShrink ? classes.iconShrink : ''}`} fontSize='large' />
                     </IconButton>
                     <Box className={`${classes.box} ${isShrink ? classes.boxShrink : ''}`}>                    
                         {restaurants.map((restaurant, index) => (
+                            <Grow
+                              in={!isShrink}
+                              style={{ transformOrigin: '0 0 0' }}
+                              {...(!isShrink ? { timeout: 1000 } : {})}
+                            >
                             <Box className={classes.innerBox} key={index}>
                                 <MainRestaurantCard restaurant={restaurant} index={index} />
                             </Box>
+                            </Grow>
                         ))}
                     </Box>
                 </Container>
