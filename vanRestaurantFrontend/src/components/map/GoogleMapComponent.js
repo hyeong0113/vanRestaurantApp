@@ -73,7 +73,7 @@ const GoogleMapComponent = (props) => {
     const onClick = () => {
         console.log('test');
     }
-  
+    console.log(props.location);
     return (
         <Box className={classes.mapBox}>
             {isLoaded &&

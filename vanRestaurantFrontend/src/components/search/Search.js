@@ -36,10 +36,7 @@ const Search = () => {
 
     const handlePlaceChanged = () => {
         const [ placeReceived ] = placeRef.current.getPlaces();
-        console.log('placeReceived:: ' + placeReceived);
-
         setPlace(placeReceived.formatted_address);
-        console.log('place:: ' + place);
     };
 
     const onChangeHandler = (event) => {
@@ -51,7 +48,6 @@ const Search = () => {
 
     const onKeyPressHandler = async(event) => {
         if (event.key === 'Enter') {
-            console.log(event);
             await fetchRestaurantsByName(place);
         }  
     }    

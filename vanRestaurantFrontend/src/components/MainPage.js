@@ -3,6 +3,8 @@ import { makeStyles } from '@mui/styles';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Topbar from './header/Topbar';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import GoogleMapComponent from './map/GoogleMapComponent';
 import { MapContext } from './context/MapContext';
 import MainRestaurantCard from './card/MainRestaurantCard';
@@ -66,7 +68,7 @@ function MainPage() {
 
     const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(false);
 
-    // const [isDataLoading, setIsDataLoading] = useState(false);
+    const [isDataLoading, setIsDataLoading] = useState(false);
     // const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(false);
     // const [isTopRestaurantLoading, setisTopRestaurantLoading] = useState(false);
 
@@ -94,18 +96,21 @@ function MainPage() {
     
     // Fetch restaurants list
     const fetchRestaurantsByName = async(input) => {
+        setIsDataLoading(true);
         await fetch(`${process.env.REACT_APP_API_URL}/restaurants/search/${input}`, requestOptions)
             .then(res => res.json())
             .then(
                 (result) => {
                     console.log("restaurants by location name loaded");
                     setRestaurants(result);
+                    setCurrentLocation(result[0].location);
                     setIsRestaurantsLoading(true);
                 },
                 (error) => {
                     console.log("Not loaded");
                 }
             )
+        setIsDataLoading(false);
     }    
 
     // useEffect(() => {
@@ -190,6 +195,12 @@ function MainPage() {
       
     return (
         <div className={classes.main}>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={isDataLoading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Topbar />
             <div>
                 {currentLocation &&
