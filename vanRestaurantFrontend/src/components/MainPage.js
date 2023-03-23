@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 
 function MainPage() {
     const [currentLocation, setCurrentLocation] = useState(null);
-    const [input, setInput] = useState('');
+    // const [input, setInput] = useState('');
     const [restaurants, setRestaurants] = useState(null);
     // const [topRestaurant, settopRestaurant] = useState(null);
 
@@ -93,7 +93,7 @@ function MainPage() {
     }  
     
     // Fetch restaurants list
-    const fetchRestaurantsByName = async() => {
+    const fetchRestaurantsByName = async(input) => {
         await fetch(`${process.env.REACT_APP_API_URL}/restaurants/search/${input}`, requestOptions)
             .then(res => res.json())
             .then(
@@ -117,19 +117,6 @@ function MainPage() {
     //     fetch();
     // }, [isRestaurantsLoading]);
 
-    const locationNameOnChangeHandler = (event) => {
-        setInput(event.target.value);
-    }
-
-    const locationNameOnClickHandler = async() => {
-        await fetchRestaurantsByName();
-    }
-
-    const locationNameOnKeyPressHandler = async(event) => {
-        if (event.key === 'Enter') {
-            await fetchRestaurantsByName();
-          }  
-    }
     // const myLocationOnClickHandler = async() => {
     //     setisTopRestaurantLoading(false);
     //     settopRestaurant(null);
@@ -206,34 +193,18 @@ function MainPage() {
             <Topbar />
             <div>
                 {currentLocation &&
-                    <MapContext.Provider value={{input, locationNameOnChangeHandler, locationNameOnClickHandler, locationNameOnKeyPressHandler}}>
+                    <MapContext.Provider
+                        value={{fetchRestaurantsByName}}
+                    >
                         <GoogleMapComponent
                             location={currentLocation}
-                            locationNameOnChangeHandler={locationNameOnChangeHandler}
-                            locationNameOnClickHandler={locationNameOnClickHandler}
-                            locationNameOnKeyPressHandler={locationNameOnKeyPressHandler}
-                            input={input}
+                            fetchRestaurantsByName={fetchRestaurantsByName}
                         />
                     </MapContext.Provider>}   
             </div>
 
             {isRestaurantsLoading &&
-                // <Grid className={classes.container} container spacing={0} wrap="nowrap">
-                //     <div style={{ overflowX: 'auto' }}>
-                //         {restaurants.map((restaurant, index) => (
-                //             <Grid item key={index}>
-                //                 <Paper style={{ width: 400, height: 570 }}>
-                //                     <MainRestaurantCard restaurant={restaurant} index={index} />
-                //                 </Paper>
-                //             </Grid>
-                //         ))}
-                //     </div>
-
-                // </Grid>
                 <Container className={classes.container} maxWidth={false}>
-                    {/* <Typography variant="h6" gutterBottom>
-                        Cards Container
-                    </Typography> */}
                     <Box className={classes.box}>
                         {restaurants.map((restaurant, index) => (
                             <Box className={classes.innerBox} key={index}>
@@ -243,7 +214,7 @@ function MainPage() {
                     </Box>
                 </Container>
                 
-                }
+            }
 
 
 

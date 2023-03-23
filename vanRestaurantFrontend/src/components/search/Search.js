@@ -1,7 +1,9 @@
+import { useRef, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
+import { StandaloneSearchBox } from "@react-google-maps/api";
 
 import { makeStyles } from '@mui/styles';
 import { useContext } from 'react';
@@ -21,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Search = () => {
-    const { input, locationNameOnChangeHandler, locationNameOnClickHandler, locationNameOnKeyPressHandler } = useContext(MapContext);
+    const { fetchRestaurantsByName } = useContext(MapContext);
     const classes = useStyles();
     const style = {
         width: '550px',
@@ -29,22 +31,52 @@ const Search = () => {
         border: '2px solid rgba(103, 69, 18, 0.62)',
         borderRadius: '9px'
     };
+    const [place, setPlace] = useState('');
+    const placeRef = useRef();
+
+    const handlePlaceChanged = () => {
+        const [ placeReceived ] = placeRef.current.getPlaces();
+        console.log('placeReceived:: ' + placeReceived);
+
+        setPlace(placeReceived.formatted_address);
+        console.log('place:: ' + place);
+    };
+
+    const onChangeHandler = (event) => {
+        setPlace(event.target.value);
+    }
+    const onClickHandler = async() => {
+        await fetchRestaurantsByName(place);
+    }
+
+    const onKeyPressHandler = async(event) => {
+        if (event.key === 'Enter') {
+            console.log(event);
+            await fetchRestaurantsByName(place);
+        }  
+    }    
+
     return(
         <Grid container alignItems="center">
             <Grid className={classes.searchSection} item>
-                <TextField
-                    id="search"
-                    className={classes.searchField}
-                    variant="outlined"
-                    fullWidth
-                    value={input}
-                    onKeyDown={locationNameOnKeyPressHandler}
-                    onChange={locationNameOnChangeHandler}
-                    InputProps={{style}}
-                />
+                <StandaloneSearchBox
+                    onLoad={ref => placeRef.current = ref}
+                    onPlacesChanged={handlePlaceChanged}
+                >                
+                    <TextField
+                        id="search"
+                        className={classes.searchField}
+                        variant="outlined"
+                        fullWidth
+                        value={place}
+                        onKeyDown={onKeyPressHandler}
+                        onChange={onChangeHandler}
+                        InputProps={{style}}
+                    />
+                </StandaloneSearchBox>
             </Grid>
             <Grid className={classes.buttonSection} item>
-                <IconButton className={classes.button} variant="contained" onClick={locationNameOnClickHandler}>
+                <IconButton className={classes.button} variant="contained" onClick={onClickHandler}>
                     <SearchIcon />
                 </IconButton>
             </Grid>

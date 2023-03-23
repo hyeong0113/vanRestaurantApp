@@ -29,13 +29,16 @@ const useStyles = makeStyles((theme) => ({
         left: theme.spacing(130)
     },
 }));
+
+const libary = ['places']
 const GoogleMapComponent = (props) => {
     const mapRef = useRef();
     const [center, setCenter] = useState({ lat: props.location.lat, lng: props.location.lng });
     const [zoom, setZoom] = useState(14);
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+        libraries: libary
     })
 
     const classes = useStyles();
@@ -81,37 +84,37 @@ const GoogleMapComponent = (props) => {
                     zoom={zoom}
                     options={options}
                 >
-
-                <Box
-                    sx={{
-                        width: 20,
-                        height: 20,
-                        backgroundColor: 'primary',
-                        '&:hover': {
+                    <Box
+                        sx={{
+                            width: 20,
+                            height: 20,
                             backgroundColor: 'primary',
-                            opacity: [0.9, 0.8, 0.7],
-                        },
-                    }}
-                />
-                    {/* <Marker
-                        lat={11.0168}
-                        lng={76.9558}
-                        name="My Marker"
-                    /> */}
-                <Marker
-                    position={center}
-                />
-            </GoogleMap>
-
+                            '&:hover': {
+                                backgroundColor: 'primary',
+                                opacity: [0.9, 0.8, 0.7],
+                            },
+                        }}
+                    />
+                        {/* <Marker
+                            lat={11.0168}
+                            lng={76.9558}
+                            name="My Marker"
+                        /> */}
+                    <Marker
+                        position={center}
+                    />
+                </GoogleMap>
             }
+            
             <div className={classes.buttonContainer}>
                 <MapIconButton index={0} icon={<HomeIcon className={classes.icon} />} />
                 <MapIconButton index={1} icon={<LocationOnIcon className={classes.icon} />} />
                 <MapIconButton index={2} icon={<FavoriteIcon className={classes.icon} />} />
             </div>    
             <div className={classes.search}>
-                <Search />
+                {isLoaded && <Search />}
             </div>
+            
         </Box>
     );
 }
