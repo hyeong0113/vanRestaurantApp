@@ -12,13 +12,16 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: theme.palette.primary.light,
         },
     },
+    buttonSelected: {
+        backgroundColor: '#EFC677 !important'
+    }
 }));
 
-const MapIconButton = ({ icon, index }) => {
+const MapIconButton = (props) => {
     const classes = useStyles();
     return (
-        <IconButton key={index} className={classes.button}>
-            {icon}
+        <IconButton key={props.index} className={`${classes.button} ${props.selectedButton === props.type ? classes.buttonSelected : ''}`} onClick={() => props.handleButtonClick(props.type)}>
+            {props.icon}
         </IconButton>
     );
 }

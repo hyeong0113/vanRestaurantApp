@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
     icon: {
         color: 'rgba(103, 69, 18, 0.89)'
     },
+    iconSelected: {
+        color: '#FFFFFF'
+    },
     search: {
         position: "absolute",
         top: theme.spacing(55),
@@ -33,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 const libary = ['places']
 const GoogleMapComponent = (props) => {
     const mapRef = useRef();
+    const [selectedButton, setSelectedButton] = useState(null);
     const [center, setCenter] = useState({ lat: props.location.lat, lng: props.location.lng });
     const [zoom, setZoom] = useState(14);
     const { isLoaded, loadError } = useJsApiLoader({
@@ -42,6 +46,10 @@ const GoogleMapComponent = (props) => {
     })
 
     const classes = useStyles();
+
+    const handleButtonClick = (buttonName) => {
+        setSelectedButton(buttonName);
+    };
 
     useEffect(() => {
         if(props.isTopRestaurantLoading) {
@@ -107,9 +115,24 @@ const GoogleMapComponent = (props) => {
             }
             
             <div className={classes.buttonContainer}>
-                <MapIconButton index={0} icon={<HomeIcon className={classes.icon} />} />
-                <MapIconButton index={1} icon={<LocationOnIcon className={classes.icon} />} />
-                <MapIconButton index={2} icon={<FavoriteIcon className={classes.icon} />} />
+                <MapIconButton
+                    index={0}
+                    selectedButton={selectedButton}
+                    icon={<HomeIcon className={`${classes.icon} ${selectedButton === "address" ? classes.iconSelected : ''}`} />}
+                    handleButtonClick={handleButtonClick}
+                    type="address" />
+                <MapIconButton
+                    index={1}
+                    selectedButton={selectedButton}
+                    icon={<LocationOnIcon className={`${classes.icon} ${selectedButton === "myLocation" ? classes.iconSelected : ''}`} />}
+                    handleButtonClick={handleButtonClick}
+                    type="myLocation" />
+                <MapIconButton
+                    index={2}
+                    selectedButton={selectedButton}
+                    icon={<FavoriteIcon className={`${classes.icon} ${selectedButton === "favorite" ? classes.iconSelected : ''}`} />}
+                    handleButtonClick={handleButtonClick}
+                    type="favorite" />
             </div>    
             <div className={classes.search}>
                 {isLoaded && <Search />}

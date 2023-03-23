@@ -92,8 +92,8 @@ const MainRestaurantCard = (props) => {
                 </Grid>
                 <Grid className={classes.rightItem} item xs={6}>
                     <FavoriteButton isSelected={isSelected} onFavoriteButtonClick={onFavoriteButtonClick} />
-                </Grid>                    
-            </Grid>         
+                </Grid>
+            </Grid>     
             <CardContent>
                 <Grid className={classes.container} rowSpacing={1} container>
                     <Grid item xs={12}>
@@ -128,7 +128,7 @@ const MainRestaurantCard = (props) => {
                         <Typography className={classes.text} variant="body1">
                             {address}
                         </Typography>                            
-                    </Grid>           
+                    </Grid>
                 </Grid>        
             </CardContent>
         </Card>
