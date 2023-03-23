@@ -33,15 +33,20 @@ const useStyles = makeStyles((theme) => ({
         background: 'rgba(255, 255, 255, 0.6)',
         borderRadius: '10px 10px 0px 0px',
         width: "100%",
+        height: '690px !important',
         position: "absolute",
         top: theme.spacing(81),
-        height: '690px !important',
+        transition: 'all 0.5s ease-in-out',
+    },
+    containerShrink: {
+        height: '80px !important',
+        top: theme.spacing(157),
     },
     box: {
         display: "flex",
         overflowX: "scroll",
         paddingLeft: theme.spacing(5),
-        // position: 'relative',
+        transition: 'all 0.5s ease-in-out',
         "&::-webkit-scrollbar": {
             width: "100px",
         },
@@ -55,12 +60,15 @@ const useStyles = makeStyles((theme) => ({
             borderRadius: "10px",
         }        
       },
+    boxShrink: {
+        height: 0
+    },      
     innerBox: {
         width: 400,
         height: 570,
         marginRight: theme.spacing(21),
         paddingTop: '1%',
-        paddingBottom: '3%'
+        paddingBottom: '3%',
     },
     downButton: {
         borderRadius: '50%',
@@ -83,6 +91,9 @@ function MainPage() {
     const [restaurants, setRestaurants] = useState(null);
     const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(false);
     const [isDataLoading, setIsDataLoading] = useState(false);
+
+    // height: '690px !important',
+    const [isShrink, setIsShrink] = useState(false);
     const classes = useStyles();
 
     // Fetch geolocation data
@@ -124,6 +135,10 @@ function MainPage() {
         setIsDataLoading(false);
     }    
 
+    const handleDownButtonClick = () => {
+        setIsShrink(!isShrink);
+    }
+
     return (
         <div className={classes.main}>
             <Backdrop
@@ -146,11 +161,11 @@ function MainPage() {
             </div>
 
             {isRestaurantsLoading &&
-                <Container className={classes.container} maxWidth={false}>
-                    <IconButton className={classes.downButton}>
+                <Container className={`${classes.container} ${isShrink ? classes.containerShrink : ''}`} maxWidth={false}>
+                    <IconButton className={classes.downButton} onClick={handleDownButtonClick}>
                         <ExpandMoreIcon className={classes.icon} fontSize='large' />
-                    </IconButton>    
-                    <Box className={classes.box}>                    
+                    </IconButton>
+                    <Box className={`${classes.box} ${isShrink ? classes.boxShrink : ''}`}>                    
                         {restaurants.map((restaurant, index) => (
                             <Box className={classes.innerBox} key={index}>
                                 <MainRestaurantCard restaurant={restaurant} index={index} />
