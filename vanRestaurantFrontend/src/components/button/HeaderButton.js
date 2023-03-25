@@ -26,16 +26,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HeaderButton = ({ icon }) => {
+const HeaderButton = ({ iconName, icon, handleIconStyleChange }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    handleIconStyleChange(iconName);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+    handleIconStyleChange(null);
   };
 
   return (

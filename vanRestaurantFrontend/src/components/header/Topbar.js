@@ -46,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
     width: '40px !important',
     color: "#ffffff"
   },
+  iconClicked: {
+    color: "#EFC677"
+  },
   image: {
     position: 'absolute',
     objectFit: 'cover',
@@ -81,9 +84,8 @@ const useStyles = makeStyles((theme) => ({
 const Topbar = () => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState(0);
-  const [activeButtons, setActiveButtons] = useState([]);
-  // const [anchorEl1, setAnchorEl1] = useState(null);
-  // const [anchorEl2, setAnchorEl2] = useState(null);
+  const [currentIcon, setCurrentIcon] = useState(null);
+  const backgroundImage = `${images[currentImage]}`;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -93,7 +95,9 @@ const Topbar = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const backgroundImage = `${images[currentImage]}`;
+  const handleIconStyleChange = (iconName) => {
+    setCurrentIcon(iconName);
+  }
 
   return (
     <Grid className={classes.background} container>
@@ -113,10 +117,16 @@ const Topbar = () => {
       <Grid item xs={6}>
         <Grid container>
           <Grid className={classes.homeItem} item xs={6}>
-            <HeaderButton index={0} icon={<HomeIcon className={classes.icon} />} />
+            <HeaderButton
+              iconName="home"
+              icon={<HomeIcon className={`${classes.icon} ${currentIcon==="home" ? classes.iconClicked : ''}`} />}
+              handleIconStyleChange={handleIconStyleChange} />
           </Grid>
           <Grid item xs={6}>
-            <HeaderButton index={1} icon={<PersonIcon className={classes.icon} />} />
+            <HeaderButton
+              iconName="user"
+              icon={<PersonIcon className={`${classes.icon} ${currentIcon==="user" ? classes.iconClicked : ''}`} />}
+              handleIconStyleChange={handleIconStyleChange} />
           </Grid>          
         </Grid>
         <Box
