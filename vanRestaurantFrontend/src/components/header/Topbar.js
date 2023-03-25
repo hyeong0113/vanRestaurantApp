@@ -93,30 +93,6 @@ const Topbar = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // const handleButtonClick1 = (event) => {
-  //   console.log(event)
-  //   console.log("event.currentTarget:: " + event.currentTarget)
-  //   setAnchorEl1(event.currentTarget);
-  // };
-
-  // const handleButtonClick2 = (event) => {
-  //   setAnchorEl2(event.currentTarget);
-  // };
-  // const handleMenuClose = () => {
-  //   setAnchorEl1(null);
-  //   setAnchorEl2(null);
-  // };
-
-  // const homeMenu = (
-  //     <Menu className={classes.menu} open={Boolean(anchorEl1)}>
-  //       {console.log(Boolean(anchorEl1))}
-  //       {console.log(anchorEl1)}
-  //       <MenuItem onClick={handleMenuClose}>Menu Item 1</MenuItem>
-  //       <MenuItem onClick={handleMenuClose}>Menu Item 2</MenuItem>
-  //       <MenuItem onClick={handleMenuClose}>Menu Item 3</MenuItem>
-  //     </Menu>
-  // )
-
   const backgroundImage = `${images[currentImage]}`;
 
   return (
