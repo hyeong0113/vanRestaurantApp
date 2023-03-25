@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import { makeStyles } from '@mui/styles';
+import Popover from '@mui/material/Popover';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -25,19 +28,42 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const HeaderButton = ({ onClick, index, icon}) => {
+const HeaderButton = ({ icon }) => {
     const classes = useStyles();
     const [isActive, setIsActive] = useState(false);
-  
-    const handleClick = () => {
-      setIsActive(!isActive);
-      onClick();
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
     };
-  
+
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
+    console.log(anchorEl);
+
     return (
-      <IconButton className={`${classes.button} ${isActive ? 'active' : ''}`} onClick={handleClick}>
-        {icon}
-      </IconButton>
+      <>
+        <IconButton onClick={(event) => handleClick(event)}>
+          {icon}
+        </IconButton>
+        <Menu
+          id="basic-menu"
+          className={`${classes.button} ${open ? 'active' : ''}`} 
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+        >
+          <MenuItem onClick={handleClose}>Profile</MenuItem>
+          <MenuItem onClick={handleClose}>My account</MenuItem>
+          <MenuItem onClick={handleClose}>Logout</MenuItem>
+        </Menu>
+      </>
     );
   };
 export default HeaderButton;

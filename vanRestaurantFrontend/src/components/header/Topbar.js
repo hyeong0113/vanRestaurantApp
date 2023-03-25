@@ -8,6 +8,8 @@ import food3 from '../../assets/images/food3.png';
 import food4 from '../../assets/images/food4.png';
 import food5 from '../../assets/images/food5.png';
 import { Typography } from '@mui/material';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import HeaderButton from '../button/HeaderButton';
@@ -31,11 +33,11 @@ const useStyles = makeStyles((theme) => ({
     fontStyle: 'normal',
     color: "#ffffff"
   },
-  toolbar: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: theme.spacing(0, 1),
-  },
+  // toolbar: {
+  //   display: 'flex',
+  //   justifyContent: 'space-between',
+  //   padding: theme.spacing(0, 1),
+  // },
   homeItem: {
     textAlign: 'right'
   },
@@ -63,14 +65,26 @@ const useStyles = makeStyles((theme) => ({
   },
   whiteColored: {
     color: '#FFFFFF'
-  }
+  },
+  menu: {
+    '& .MuiList-padding': {
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+    },
+    '& .MuiMenuItem-root': {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+    },
+  }  
 }));
 
 const Topbar = () => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState(0);
   const [activeButtons, setActiveButtons] = useState([]);
-  
+  // const [anchorEl1, setAnchorEl1] = useState(null);
+  // const [anchorEl2, setAnchorEl2] = useState(null);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage(currentImage => (currentImage + 1) % images.length);
@@ -79,17 +93,29 @@ const Topbar = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleClick = (index) => {
-    const indexInArray = activeButtons.indexOf(index);
+  // const handleButtonClick1 = (event) => {
+  //   console.log(event)
+  //   console.log("event.currentTarget:: " + event.currentTarget)
+  //   setAnchorEl1(event.currentTarget);
+  // };
 
-    if (indexInArray > -1) {
-      const newArray = [...activeButtons];
-      newArray.splice(indexInArray, 1);
-      setActiveButtons(newArray);
-    } else {
-      setActiveButtons([...activeButtons, index]);
-    }
-  };
+  // const handleButtonClick2 = (event) => {
+  //   setAnchorEl2(event.currentTarget);
+  // };
+  // const handleMenuClose = () => {
+  //   setAnchorEl1(null);
+  //   setAnchorEl2(null);
+  // };
+
+  // const homeMenu = (
+  //     <Menu className={classes.menu} open={Boolean(anchorEl1)}>
+  //       {console.log(Boolean(anchorEl1))}
+  //       {console.log(anchorEl1)}
+  //       <MenuItem onClick={handleMenuClose}>Menu Item 1</MenuItem>
+  //       <MenuItem onClick={handleMenuClose}>Menu Item 2</MenuItem>
+  //       <MenuItem onClick={handleMenuClose}>Menu Item 3</MenuItem>
+  //     </Menu>
+  // )
 
   const backgroundImage = `${images[currentImage]}`;
 
@@ -111,11 +137,11 @@ const Topbar = () => {
       <Grid item xs={6}>
         <Grid container>
           <Grid className={classes.homeItem} item xs={6}>
-            <HeaderButton onClick={() => handleClick(0)} index={0} icon={<HomeIcon className={classes.icon} />} />
+            <HeaderButton index={0} icon={<HomeIcon className={classes.icon} />} />
           </Grid>
           <Grid item xs={6}>
-            <HeaderButton onClick={() => handleClick(1)} index={1} icon={<PersonIcon className={classes.icon} />} />
-          </Grid>
+            <HeaderButton index={1} icon={<PersonIcon className={classes.icon} />} />
+          </Grid>          
         </Grid>
         <Box
            component="img"

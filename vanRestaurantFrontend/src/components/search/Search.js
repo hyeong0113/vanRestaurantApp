@@ -65,6 +65,7 @@ const Search = () => {
                         variant="outlined"
                         fullWidth
                         value={place}
+                        label="Enter a location or address"
                         onKeyDown={onKeyPressHandler}
                         onChange={onChangeHandler}
                         InputProps={{style}}
