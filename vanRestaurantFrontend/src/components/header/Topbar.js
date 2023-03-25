@@ -8,8 +8,6 @@ import food3 from '../../assets/images/food3.png';
 import food4 from '../../assets/images/food4.png';
 import food5 from '../../assets/images/food5.png';
 import { Typography } from '@mui/material';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import HeaderButton from '../button/HeaderButton';
@@ -33,11 +31,6 @@ const useStyles = makeStyles((theme) => ({
     fontStyle: 'normal',
     color: "#ffffff"
   },
-  // toolbar: {
-  //   display: 'flex',
-  //   justifyContent: 'space-between',
-  //   padding: theme.spacing(0, 1),
-  // },
   homeItem: {
     textAlign: 'right'
   },
@@ -80,6 +73,8 @@ const useStyles = makeStyles((theme) => ({
     },
   }  
 }));
+const homeMenu = ["HOME", "CONTACT", "ABOUT US"];
+const userMenu = ["PROFILE", "LOG OUT", "REGISTER"];
 
 const Topbar = () => {
   const classes = useStyles();
@@ -119,12 +114,14 @@ const Topbar = () => {
           <Grid className={classes.homeItem} item xs={6}>
             <HeaderButton
               iconName="home"
+              menu={homeMenu}
               icon={<HomeIcon className={`${classes.icon} ${currentIcon==="home" ? classes.iconClicked : ''}`} />}
               handleIconStyleChange={handleIconStyleChange} />
           </Grid>
           <Grid item xs={6}>
             <HeaderButton
               iconName="user"
+              menu={userMenu}
               icon={<PersonIcon className={`${classes.icon} ${currentIcon==="user" ? classes.iconClicked : ''}`} />}
               handleIconStyleChange={handleIconStyleChange} />
           </Grid>          
