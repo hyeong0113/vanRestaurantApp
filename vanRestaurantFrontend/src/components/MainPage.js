@@ -13,6 +13,7 @@ import Topbar from './header/Topbar';
 import GoogleMapComponent from './map/GoogleMapComponent';
 import { MapContext } from './context/MapContext';
 import MainRestaurantCard from './card/MainRestaurantCard';
+import MediumRestaurantCard from './card/MediumRestaurantCard';
 
 const username = process.env.REACT_APP_USERNAME;
 const password = process.env.REACT_APP_PASSWORD;
@@ -32,23 +33,15 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: "column"
     },
     container: {
+        height: '690px !important',
+        top: theme.spacing(81),
         background: 'rgba(255, 255, 255, 0.6)',
         borderRadius: '10px 10px 0px 0px',
         width: "100%",
-        height: '690px !important',
         position: "absolute",
-        top: theme.spacing(81),
-        transition: 'all 0.5s ease-in',
-    },
-    containerShrink: {
-        height: '80px !important',
-        top: theme.spacing(157),
-    },
-    box: {
-        display: "flex",
+        transition: 'all 0.5s ease',
         overflowX: "scroll",
-        paddingLeft: theme.spacing(5),
-        // transition: 'width 1s',
+        overflowY: 'hidden !important',
         "&::-webkit-scrollbar": {
             width: "100px",
         },
@@ -60,18 +53,33 @@ const useStyles = makeStyles((theme) => ({
         "&::-webkit-scrollbar-thumb": {
             background: "#EFC677",
             borderRadius: "10px",
-        }        
-      },
+        },
+        "&::-webkit-scrollbar-horizontal": {
+            position: 'absolute !important',
+        }
+    },
+    containerMedium: {
+        height: '400px !important',
+        top: theme.spacing(117.2),        
+    },    
+    containerShrink: {
+        height: '80px !important',
+        top: theme.spacing(157),
+    },
+    box: {
+        display: "flex",
+        height: '650px !important',
+        paddingLeft: theme.spacing(5),
+    },
     boxMedium: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        marginRight: '30px'
+        height: '360px !important',
+        // top: 0,
+        // right: 0,
+        // marginRight: '30px'
     },
     boxShrink: {
         height: 0,
         // TODO: Decrease height of box slowly
-        // overflowX: 'hidden',
         // transition: 'all 0.5s ease-out',
     },
     cardBox: {
@@ -80,6 +88,16 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(21),
         paddingTop: '1%',
         paddingBottom: '3%',
+    },
+    cardBoxMedium: {
+        width: 400,
+        height: 290,
+    },    
+    mediumButton: {
+        position: 'absolute !important',
+        top: 0,
+        right: 0,
+        marginRight: '30px !important'
     },
     downButton: {
         borderRadius: '50%',
@@ -107,6 +125,7 @@ function MainPage() {
     const [isDataLoading, setIsDataLoading] = useState(false);
 
     const [isShrink, setIsShrink] = useState(false);
+    const [isMedium, setIsMedium] = useState(false);
 
     const classes = useStyles();
 
@@ -152,6 +171,11 @@ function MainPage() {
 
     const handleDownButtonClick = () => {
         setIsShrink(!isShrink);
+        setIsMedium(false);
+    }
+
+    const handleMediumButtonClick = () => {
+        setIsMedium(!isMedium);
     }
 
     return (
@@ -175,11 +199,54 @@ function MainPage() {
                     </MapContext.Provider>}   
             </div>
             {isRestaurantsLoading &&
+                <Container className={`${classes.container} ${isMedium ? classes.containerMedium : ''}`} maxWidth={false}>
+                    <IconButton className={classes.downButton} onClick={handleDownButtonClick}>
+                        <ExpandMoreIcon className={`${classes.icon} ${isShrink ? classes.iconShrink : ''}`} fontSize='large' />
+                    </IconButton>
+                    <IconButton className={classes.mediumButton} onClick={handleMediumButtonClick}>
+                        <CloseFullscreenIcon />
+                    </IconButton>
+                    <Box className={`${classes.box} ${isMedium ? classes.boxMedium : ''}`}>                    
+                        {restaurants.map((restaurant, index) => (
+                            <Grow
+                                key={index}
+                                in={!isShrink}
+                                style={{ transformOrigin: '0 0 0' }}
+                                timeout={500*index}
+                            >
+                                <Box className={`${classes.cardBox} ${isMedium ? classes.cardBoxMedium : ''}`} key={index}>
+                                    <MediumRestaurantCard restaurant={restaurant} index={index} />
+                                </Box> 
+                            </Grow>
+                        ))}                    
+                    </Box>
+                </Container>
+            }
+        </div>
+    );
+}
+
+export default MainPage;
+
+// {restaurants.map((restaurant, index) => (
+//     <Grow
+//         key={index}
+//         in={!isShrink}
+//         style={{ transformOrigin: '0 0 0' }}
+//         timeout={500*index}
+//     >
+//         <Box className={classes.cardBox} key={index}>
+//             <MainRestaurantCard restaurant={restaurant} index={index} />
+//         </Box>
+// ))}
+
+
+/*
                 <Container className={`${classes.container} ${isShrink ? classes.containerShrink : ''}`} maxWidth={false}>
                     <IconButton className={classes.downButton} onClick={handleDownButtonClick}>
                         <ExpandMoreIcon className={`${classes.icon} ${isShrink ? classes.iconShrink : ''}`} fontSize='large' />
                     </IconButton>
-                    <IconButton>
+                    <IconButton className={classes.mediumButton}>
                         <CloseFullscreenIcon />
                     </IconButton>
                     <Box className={`${classes.box} ${isShrink ? classes.boxShrink : ''}`}>                    
@@ -193,13 +260,9 @@ function MainPage() {
                                 <Box className={classes.cardBox} key={index}>
                                     <MainRestaurantCard restaurant={restaurant} index={index} />
                                 </Box>
+                             
                             </Grow>
                         ))}
                     </Box>
                 </Container>
-            }
-        </div>
-    );
-}
-
-export default MainPage;
+ */
