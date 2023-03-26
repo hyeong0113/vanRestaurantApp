@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grow from '@mui/material/Grow';
+import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 
 import Topbar from './header/Topbar';
 import GoogleMapComponent from './map/GoogleMapComponent';
@@ -61,12 +62,18 @@ const useStyles = makeStyles((theme) => ({
             borderRadius: "10px",
         }        
       },
+    boxMedium: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        marginRight: '30px'
+    },
     boxShrink: {
         height: 0,
         // TODO: Decrease height of box slowly
         // overflowX: 'hidden',
         // transition: 'all 0.5s ease-out',
-    },      
+    },
     cardBox: {
         width: 400,
         height: 570,
@@ -171,6 +178,9 @@ function MainPage() {
                 <Container className={`${classes.container} ${isShrink ? classes.containerShrink : ''}`} maxWidth={false}>
                     <IconButton className={classes.downButton} onClick={handleDownButtonClick}>
                         <ExpandMoreIcon className={`${classes.icon} ${isShrink ? classes.iconShrink : ''}`} fontSize='large' />
+                    </IconButton>
+                    <IconButton>
+                        <CloseFullscreenIcon />
                     </IconButton>
                     <Box className={`${classes.box} ${isShrink ? classes.boxShrink : ''}`}>                    
                         {restaurants.map((restaurant, index) => (
