@@ -4,8 +4,7 @@ import Grid from '@mui/material/Grid';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import Chip from '@mui/material/Chip';
-import FavoriteButton from '../button/FavoriteButton';
+import StarIcon from '@mui/icons-material/Star';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -17,34 +16,34 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.3)',
     },
     container: {
-        rowGap: '5px'
+        rowGap: '5px',
+        paddingTop: '2%'
     },
     image: {
         position: 'relateive',
         objectFit: 'cover'
     },
-    name: {
+    text: {
         fontWeight: '400 !important',
         maxWidth: "100%",
         overflow: "hidden",
         whiteSpace: 'nowrap',
         textOverflow: "ellipsis",
     },
+    ratingIcon: {
+        paddingTop: '1.5%',
+        paddingRight: '4%'
+    },
     leftItem: {
         textAlign: 'left',
-        paddingLeft: '6%'
+        paddingLeft: '3%'
     },
     rightItem: {
         textAlign: 'right',
-        paddingRight: '6%'
+        paddingRight: '3%'
     },
-    address: {
-        textAlign: 'center',
-        paddingRight: '6%'
-    },
-    text: {
-        fontWeight: '400 !important',
-        fontSize: '15px !important',
+    rating: {
+        display: 'flex'
     },
     chip: {
         color: '#FFFEFE !important',
@@ -77,7 +76,7 @@ const MediumRestaurantCard = (props) => {
             <CardMedia
                 component="img"
                 src={`data:image/png;base64,${photo}`}
-                height="150 !important"
+                height="235 !important"
                 width="400 !important"
                 style={{ position: 'relative' }}
             />
@@ -96,12 +95,16 @@ const MediumRestaurantCard = (props) => {
             <CardContent>
                 <Grid className={classes.container} rowSpacing={1} container>
                     <Grid className={classes.leftItem} item xs={6}>
-                        <Typography className={classes.text} variant="body1">
-                            {rating}
-                        </Typography>                            
+                        <div className={classes.rating}>
+                            <StarIcon className={classes.ratingIcon} fontSize='medium' />
+                            <Typography className={classes.text} variant="h5">
+                                {rating}
+                            </Typography>  
+                        </div>
+                          
                     </Grid>                    
                     <Grid className={classes.rightItem} item xs={6}>
-                        <Typography className={classes.name} variant="h5">
+                        <Typography className={classes.text} variant="h5">
                             {name}
                         </Typography>
                     </Grid>
