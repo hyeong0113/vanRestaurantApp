@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
     },
     cardBox: {
         width: 400,
-        transition: 'all 2s ease',
+        // transition: 'all 2s ease',
         marginRight: theme.spacing(21),
         paddingTop: '1%',
         paddingBottom: '3%',
@@ -171,28 +171,14 @@ function MainPage() {
     //     )
     // }
 
-    const renderMediumRestaurantCard = (restaurant, index) => (
-        <Fade
-        key={index}
-        in={!isShrink}
-        style={{ transformOrigin: '0 0 0' }}
-        timeout={500*index}
-        >
-            <Box className={classes.cardBox} key={index}>
-                <MediumRestaurantCard restaurant={restaurant} index={index} />
-            </Box>                              
-        </Fade>
-    )    
-
     const handleDownButtonClick = () => {
-        setOpacity(!opacity);
+        // setOpacity(!opacity);
         setIsShrink(!isShrink);
         setIsMedium(false);
     }
 
     const handleMediumButtonClick = () => {
-        // console.log(opacity);
-        setOpacity(0);
+        // setOpacity(!opacity);
         setIsMedium(!isMedium);
         setIsShrink(false);
     }
@@ -218,93 +204,66 @@ function MainPage() {
                     </MapContext.Provider>}   
             </div>
             {isRestaurantsLoading &&
-                <Container className={classes.container} maxWidth={false}>
-                    <IconButton className={classes.downButton} onClick={handleDownButtonClick}>
-                        <ExpandMoreIcon className={`${classes.icon} ${isShrink ? classes.iconShrink : ''}`} fontSize='large' />
-                    </IconButton>
-                    <IconButton className={classes.mediumButton} onClick={handleMediumButtonClick}>
-                        <CloseFullscreenIcon />
-                    </IconButton>
-                    <Box className={classes.box}>                    
-                        {restaurants.map((restaurant, index) => {
-                            if(isMedium) {
-                                return(
-                                    <Fade
-                                    key={index}
-                                    in={true}
-                                    style={{ transformOrigin: '0 0 0' }}
-                                    timeout={500*index}
-                                    easing="ease"
-                                    >
-                                        <Box className={classes.cardBox} key={index}>
-                                            <MediumRestaurantCard restaurant={restaurant} index={index} />
-                                        </Box>                              
-                                    </Fade>
-                                )
-                            }
-                            else if(isShrink) {
-                                return(
-                                    <div key={index} className={classes.shrinkedCard}/>
-                                )
-                            }else {
-                                return (
-                                    <Fade
-                                    key={index}
-                                    in={true}
-                                    style={{ transformOrigin: '0 0 0' }}
-                                    timeout={500*index}
-                                    >
-                                        <Box className={classes.cardBox} key={index}>
-                                            <MainRestaurantCard restaurant={restaurant} index={index} />
-                                        </Box>                                
-                                    </Fade>
-                                )
-                            }
-                        })}                    
-                    </Box>
-                </Container>
+                <Fade
+                    in={true}
+                    timeout={3000}
+                    easing="ease"
+                >            
+                    <Container className={classes.container} maxWidth={false}>
+                        <IconButton className={classes.downButton} onClick={handleDownButtonClick}>
+                            <ExpandMoreIcon className={`${classes.icon} ${isShrink ? classes.iconShrink : ''}`} fontSize='large' />
+                        </IconButton>
+                        <IconButton className={classes.mediumButton} onClick={handleMediumButtonClick}>
+                            <CloseFullscreenIcon />
+                        </IconButton>
+                        <Fade
+                            in={true}
+                            // timeout={1000}
+                            easing="ease"
+                        >
+                            <Box className={classes.box}>                    
+                                {restaurants.map((restaurant, index) => {
+                                    if(isMedium) {
+                                        return(
+                                            <Fade
+                                                key={index}
+                                                in={true}
+                                                style={{ transformOrigin: '0 0 0' }}
+                                                timeout={500*index}
+                                                easing="ease"
+                                            >
+                                                <Box className={classes.cardBox} key={index}>
+                                                    <MediumRestaurantCard restaurant={restaurant} index={index} />
+                                                </Box>                              
+                                            </Fade>
+                                        )
+                                    }
+                                    else if(isShrink) {
+                                        return(
+                                            <div key={index} className={classes.shrinkedCard}/>
+                                        )
+                                    }else {
+                                        return (
+                                            <Fade
+                                                key={index}
+                                                in={true}
+                                                style={{ transformOrigin: '0 0 0' }}
+                                                timeout={500*index}
+                                            >
+                                                <Box className={classes.cardBox} key={index}>
+                                                    <MainRestaurantCard restaurant={restaurant} index={index} />
+                                                </Box>                                
+                                            </Fade>
+                                        )
+                                    }
+                                })}                    
+                            </Box>
+                        </Fade>
+                    </Container>
+                </Fade>
             }
         </div>
     );
 }
 
 export default MainPage;
-
-// {restaurants.map((restaurant, index) => (
-//     <Grow
-//         key={index}
-//         in={!isShrink}
-//         style={{ transformOrigin: '0 0 0' }}
-//         timeout={500*index}
-//     >
-//         <Box className={classes.cardBox} key={index}>
-//             <MainRestaurantCard restaurant={restaurant} index={index} />
-//         </Box>
-// ))}
-
-
-/*
-                <Container className={`${classes.container} ${isShrink ? classes.containerShrink : ''}`} maxWidth={false}>
-                    <IconButton className={classes.downButton} onClick={handleDownButtonClick}>
-                        <ExpandMoreIcon className={`${classes.icon} ${isShrink ? classes.iconShrink : ''}`} fontSize='large' />
-                    </IconButton>
-                    <IconButton className={classes.mediumButton}>
-                        <CloseFullscreenIcon />
-                    </IconButton>
-                    <Box className={`${classes.box} ${isShrink ? classes.boxShrink : ''}`}>                    
-                        {restaurants.map((restaurant, index) => (
-                            <Grow
-                                key={index}
-                                in={!isShrink}
-                                style={{ transformOrigin: '0 0 0' }}
-                                timeout={500*index}
-                            >
-                                <Box className={classes.cardBox} key={index}>
-                                    <MainRestaurantCard restaurant={restaurant} index={index} />
-                                </Box>
-                             
-                            </Grow>
-                        ))}
-                    </Box>
-                </Container>
- */
