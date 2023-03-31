@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@mui/styles';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -105,7 +105,6 @@ function MainPage() {
     const [restaurants, setRestaurants] = useState(null);
     const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(false);
     const [isDataLoading, setIsDataLoading] = useState(false);
-    const [opacity, setOpacity] = useState(1);
 
     const [isShrink, setIsShrink] = useState(false);
     const [isMedium, setIsMedium] = useState(false);
@@ -172,13 +171,11 @@ function MainPage() {
     // }
 
     const handleDownButtonClick = () => {
-        // setOpacity(!opacity);
         setIsShrink(!isShrink);
         setIsMedium(false);
     }
 
     const handleMediumButtonClick = () => {
-        // setOpacity(!opacity);
         setIsMedium(!isMedium);
         setIsShrink(false);
     }
@@ -206,7 +203,7 @@ function MainPage() {
             {isRestaurantsLoading &&
                 <Fade
                     in={true}
-                    timeout={3000}
+                    timeout={{enter: 3000, exit: 5000}}
                     easing="ease"
                 >            
                     <Container className={classes.container} maxWidth={false}>
@@ -216,49 +213,44 @@ function MainPage() {
                         <IconButton className={classes.mediumButton} onClick={handleMediumButtonClick}>
                             <CloseFullscreenIcon />
                         </IconButton>
-                        <Fade
-                            in={true}
-                            // timeout={1000}
-                            easing="ease"
-                        >
-                            <Box className={classes.box}>                    
-                                {restaurants.map((restaurant, index) => {
-                                    if(isMedium) {
-                                        return(
-                                            <Fade
-                                                key={index}
-                                                in={true}
-                                                style={{ transformOrigin: '0 0 0' }}
-                                                timeout={500*index}
-                                                easing="ease"
-                                            >
-                                                <Box className={classes.cardBox} key={index}>
-                                                    <MediumRestaurantCard restaurant={restaurant} index={index} />
-                                                </Box>                              
-                                            </Fade>
-                                        )
-                                    }
-                                    else if(isShrink) {
-                                        return(
-                                            <div key={index} className={classes.shrinkedCard}/>
-                                        )
-                                    }else {
-                                        return (
-                                            <Fade
-                                                key={index}
-                                                in={true}
-                                                style={{ transformOrigin: '0 0 0' }}
-                                                timeout={500*index}
-                                            >
-                                                <Box className={classes.cardBox} key={index}>
-                                                    <MainRestaurantCard restaurant={restaurant} index={index} />
-                                                </Box>                                
-                                            </Fade>
-                                        )
-                                    }
-                                })}                    
-                            </Box>
-                        </Fade>
+                        <Box className={classes.box}>                    
+                            {restaurants.map((restaurant, index) => {
+                                if(isMedium) {
+                                    return(
+                                        <Fade
+                                            key={index}
+                                            in={!isShrink}
+                                            style={{ transformOrigin: '0 0 0' }}
+                                            timeout={500*index}
+                                            easing="ease"
+                                        >
+                                            <Box className={classes.cardBox} key={index}>
+                                                <MediumRestaurantCard restaurant={restaurant} index={index} />
+                                            </Box>                              
+                                        </Fade>
+                                    )
+                                }
+                                else if(isShrink) {
+                                    return(
+                                        <div key={index} className={classes.shrinkedCard}/>
+                                    )
+                                }
+                                else {
+                                    return (
+                                        <Fade
+                                            key={index}
+                                            in={!isShrink}
+                                            style={{ transformOrigin: '0 0 0' }}
+                                            timeout={500*index}
+                                        >
+                                            <Box className={classes.cardBox} key={index}>
+                                                <MainRestaurantCard restaurant={restaurant} index={index} />
+                                            </Box>                                
+                                        </Fade>
+                                    )
+                                }
+                            })}                    
+                        </Box>
                     </Container>
                 </Fade>
             }

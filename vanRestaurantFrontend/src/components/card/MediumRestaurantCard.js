@@ -3,8 +3,10 @@ import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardContent';
+import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import StarIcon from '@mui/icons-material/Star';
+import FavoriteButton from '../button/FavoriteButton';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -17,7 +19,8 @@ const useStyles = makeStyles((theme) => ({
     },
     container: {
         rowGap: '5px',
-        paddingTop: '2%'
+        paddingBottom: '5%',
+        marginTop: '-40px !important'
     },
     image: {
         position: 'relateive',
@@ -57,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     },
     buttonCanainer: {
         position: 'relative',
-        transform: 'translateY(-700%)'
+        transform: 'translateY(-550%)'
     }
 }));
 
@@ -81,7 +84,7 @@ const MediumRestaurantCard = (props) => {
                 style={{ position: 'relative' }}
             />
             <Grid className={classes.buttonCanainer} container>
-                {/* <Grid className={classes.leftItem} item xs={6}>
+                <Grid className={classes.leftItem} item xs={6}>
                     {index === 0 ?
                         <Chip className={classes.chip} color="primary" label="#1" />
                         :
@@ -90,7 +93,7 @@ const MediumRestaurantCard = (props) => {
                 </Grid>
                 <Grid className={classes.rightItem} item xs={6}>
                     <FavoriteButton isSelected={isSelected} onFavoriteButtonClick={onFavoriteButtonClick} />
-                </Grid> */}
+                </Grid>
             </Grid>     
             <CardContent>
                 <Grid className={classes.container} rowSpacing={1} container>
