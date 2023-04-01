@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const GoogleLoginButton = () => {
+const GoogleLogInButton = () => {
     const classes = useStyles();
 
     const responseGoogle = (response) => {
@@ -70,4 +70,4 @@ const GoogleLoginButton = () => {
     
 }
 
-export default GoogleLoginButton;
+export default GoogleLogInButton;

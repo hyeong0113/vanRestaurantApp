@@ -1,16 +1,23 @@
 import { useEffect } from 'react';
-import GoogleLoginButton from '../button/GoogleLoginButton';
+import GoogleLogInButton from '../button/GoogleLogInButton';
 import { gapi } from 'gapi-script';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
 import { Typography } from '@mui/material';
+import SignInButton from '../button/SignInBurron';
+import SignUpButton from '../button/SignUpButton';
 
 const useStyles = makeStyles((theme) => ({
     main: {
         height: '100vh',
         backgroundColor: 'rgba(239, 198, 119, 0.82)',
         position: 'relative'
+    },
+    title: {
+        color: '#FFFFFF',
+        position: 'relative',
+        transform: 'translateY(170%)'
     },
     box: {
         position: 'absolute',
@@ -52,7 +59,10 @@ const LoginPage = () => {
 
     return (
         <div className={classes.main}>
-            <Grid className={classes.box} container direction='column' rowSpacing={5}>
+            <Typography className={classes.title} variant='h2'>
+                Welcome!
+            </Typography>
+            <Grid className={classes.box} container direction='column' rowSpacing={4}>
                 <Grid item>
                     <TextField
                         id="outlined-password-input"
@@ -81,8 +91,14 @@ const LoginPage = () => {
                     </Typography>
                 </Grid>
                 <Grid item>
-                    <GoogleLoginButton />
+                    <SignInButton />
+                </Grid>                
+                <Grid item>
+                    <GoogleLogInButton />
                 </Grid>
+                <Grid item>
+                    <SignUpButton />
+                </Grid>                
             </Grid>
         </div>
     )
