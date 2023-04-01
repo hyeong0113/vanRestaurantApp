@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 const SignUpButton = () => {
     const classes = useStyles();
     return(
-        <Button className={classes.button}>
+        <Button className={classes.button} LinkComponent={Link} to="/signup">
             <Typography className={classes.text}>
                 SIGN UP
             </Typography>

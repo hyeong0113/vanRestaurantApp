@@ -2,9 +2,7 @@ import './App.css';
 import {
   BrowserRouter as Router,
   Routes,
-  // Switch,
   Route,
-  // Redirect,
 } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import customTheme from './theme/customTheme';

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import { makeStyles } from '@mui/styles';
@@ -82,8 +83,8 @@ const HeaderButton = ({ iconName, icon, handleIconStyleChange, menu }) => {
           horizontal: 'center',
         }}        
       >
-        {menu.map((name, index) => (
-          <MenuItem key={index} className={classes.menuItem} onClick={handleClose}>{name}</MenuItem>
+        {menu.map((element, index) => (
+          <MenuItem key={index} component={Link} className={classes.menuItem} onClick={handleClose} to={element.path}>{element.name}</MenuItem>
         ))}
       </Menu>
     </div>

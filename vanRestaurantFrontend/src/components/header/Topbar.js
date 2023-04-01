@@ -73,8 +73,18 @@ const useStyles = makeStyles((theme) => ({
     },
   }  
 }));
-const homeMenu = ["HOME", "CONTACT", "ABOUT US"];
-const userMenu = ["PROFILE", "LOG OUT", "REGISTER"];
+
+const homeMenu = [
+  {name: "HOME", path: "/"},
+  {name: "CONTACT", path: "/"},
+  {name: "ABOUT US", path: "/"}
+]
+
+const userMenu = [
+  {name: "PROFILE", path: "/"},
+  {name: "LOG IN", path: "/login"},
+  {name: "SIGN UP", path: "/signup"}
+]
 
 const Topbar = () => {
   const classes = useStyles();
