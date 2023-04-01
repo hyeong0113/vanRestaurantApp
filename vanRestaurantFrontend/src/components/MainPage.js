@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -6,7 +6,6 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Grow from '@mui/material/Grow';
 import Fade from '@mui/material/Fade';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 
@@ -111,10 +110,10 @@ function MainPage() {
 
     const classes = useStyles();
 
-    // Fetch geolocation data
-    useEffect(() => {
-        fetchGeoData();
-    }, [])
+    // // Fetch geolocation data
+    // useEffect(() => {
+    //     fetchGeoData();
+    // }, [])
 
     // fetch current geolocation of user data
     const fetchGeoData = async() => {
