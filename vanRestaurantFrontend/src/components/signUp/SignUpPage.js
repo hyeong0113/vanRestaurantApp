@@ -1,7 +1,14 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
 import SubmitSignUpButton from '../button/SubmitSignUpButton';
+
+const username = process.env.REACT_APP_USERNAME;
+const password = process.env.REACT_APP_PASSWORD;
+
+const authString = btoa(`${username}:${password}`);
 
 const useStyles = makeStyles((theme) => ({
     main: {
@@ -29,20 +36,81 @@ const useStyles = makeStyles((theme) => ({
 
 
 const SignUpPage = () => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [email, setEmail] = useState("");
+    const [userName, setUserName] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    let navigate = useNavigate();
 
     const classes = useStyles();
-    // var token = gapi.auth.getToken().access_token;
+
+    const signUp = async() => {
+        setIsLoading(true);
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${authString}`
+            },
+            body: JSON.stringify({
+                email: email,
+                userName: userName,
+                password: password,
+                confirmPassword: confirmPassword
+            })
+        };
+
+        console.log(requestOptions)
+        
+        await fetch(`${process.env.REACT_APP_API_URL}/identity/signup`, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log("User sign up successful");
+                    console.log(result);
+                    if (result) {
+                        navigate('/login');
+                    }
+                },
+                (error) => {
+                    console.log("User sign up failed");
+                }
+            )
+        setIsLoading(false);
+    }
+
+    const onChangeEmailHandler = (event) => {
+        setEmail(event.target.value);
+    }
+
+    const onChangeUserNameHandler = (event) => {
+        setUserName(event.target.value);
+    }
+
+    const onChangePasswordlHandler = (event) => {
+        setPassword(event.target.value);
+    }
+
+    const onChangeConfirmPasswordHandler = (event) => {
+        setConfirmPassword(event.target.value);
+    }
+
+    const onSubmitClickSignUp = async () => {
+        await signUp();
+    }
 
     return (
         <div className={classes.main}>
             <Grid className={classes.box} container direction='column' rowSpacing={4}>
                 <Grid item>
                     <TextField
-                        id="outlined-password-input"
+                        id="email-input"
                         className={classes.text}
                         label="Email address"
                         type="email"
-                        autoComplete="current-password"
+                        value={email}
+                        onChange={onChangeEmailHandler}
                         InputProps={{
                             className: classes.textHeight,
                         }}
@@ -50,11 +118,12 @@ const SignUpPage = () => {
                 </Grid>
                 <Grid item>
                     <TextField
-                        id="outlined-password-input"
+                        id="userName-input"
                         className={classes.text}
                         label="Username"
                         type="username"
-                        autoComplete="current-password"
+                        value={userName}
+                        onChange={onChangeUserNameHandler}
                         InputProps={{
                             className: classes.textHeight,
                         }}
@@ -62,11 +131,12 @@ const SignUpPage = () => {
                 </Grid>
                 <Grid item>
                     <TextField
-                        id="outlined-password-input"
+                        id="password-input"
                         className={classes.text}
                         label="Password"
                         type="password"
-                        autoComplete="current-password"
+                        value={password}
+                        onChange={onChangePasswordlHandler}
                         InputProps={{
                             className: classes.textHeight,
                         }}
@@ -74,18 +144,19 @@ const SignUpPage = () => {
                 </Grid>                
                 <Grid item>
                     <TextField
-                        id="outlined-password-input"
+                        id="confirmPassword-input"
                         className={classes.text}
                         label="Confirm Password"
                         type="password"
-                        autoComplete="current-password"
+                        value={confirmPassword}
+                        onChange={onChangeConfirmPasswordHandler}
                         InputProps={{
                             className: classes.textHeight,
                         }}
                     />
                 </Grid>
                 <Grid item>
-                    <SubmitSignUpButton />
+                    <SubmitSignUpButton onClick={onSubmitClickSignUp} />
                 </Grid>                
             </Grid>
         </div>

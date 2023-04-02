@@ -2,8 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
-const app = express();
 const basicAuth = require('express-basic-auth');
+const app = express();
 
 require('dotenv').config();
 
@@ -17,7 +17,9 @@ mongoose.connect(database, {useUnifiedTopology: true, useNewUrlParser: true })
 .then(() => console.log('Mongo DB connected'))
 .catch(err => console.log(err));
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(cors({
   origin: 'http://localhost:3000'
 }));
@@ -35,7 +37,6 @@ const basic = basicAuth({
   challenge: true
 });
 
-// Aple to register different authentication on each route, before using requre()
 app.use('/', basic, require('./routes/locationRoute'));
 app.use('/', basic, require('./routes/identityRoute'));
 

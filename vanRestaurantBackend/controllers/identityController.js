@@ -5,6 +5,12 @@ const User = require('../models/userSchema');
 
 const signUp = async (req, res) => {
     const { userName, email, password, confirmPassword } = req.body;
+    console.log(req.body);
+
+    console.log(userName);
+    console.log(email);
+    console.log(password);
+    console.log(confirmPassword);
 
     if(password !== confirmPassword)
     {

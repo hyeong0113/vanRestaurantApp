@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import GoogleLogInButton from '../button/GoogleLogInButton';
 import { gapi } from 'gapi-script';
 import Grid from '@mui/material/Grid';
@@ -7,6 +8,11 @@ import { makeStyles } from '@mui/styles';
 import { Typography } from '@mui/material';
 import SignInButton from '../button/SignInButton';
 import SignUpButton from '../button/SignUpButton';
+
+const username = process.env.REACT_APP_USERNAME;
+const password = process.env.REACT_APP_PASSWORD;
+
+const authString = btoa(`${username}:${password}`);
 
 const useStyles = makeStyles((theme) => ({
     main: {
@@ -43,20 +49,57 @@ const useStyles = makeStyles((theme) => ({
 
 
 const LoginPage = () => {
-    // useEffect(() => {
-    //     function start() {
-    //         gapi.auth2.init({
-    //             clientId: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
-    //             scope: ''
-    //         })
-    //     }
-
-    //     gapi.load('client:auth2', start);
-    //     console.log(gapi.auth);
-    // })
-
+    const [isLoading, setIsLoading] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const classes = useStyles();
-    // var token = gapi.auth.getToken().access_token;
+    let navigate = useNavigate();
+
+    const logIn = async() => {
+        setIsLoading(true);
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${authString}`
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+            })
+        };
+
+        console.log(requestOptions)
+        
+        await fetch(`${process.env.REACT_APP_API_URL}/identity/login`, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log("User sign up successful");
+                    console.log(result);
+                    if (result) {
+                        console.log(result);
+                        navigate('/');
+                    }
+                },
+                (error) => {
+                    console.log("User sign up failed");
+                }
+            )
+        setIsLoading(false);
+    }
+
+    const onChangeEmailHandler = (event) => {
+        setEmail(event.target.value);
+    }
+
+    const onChangePasswordlHandler = (event) => {
+        setPassword(event.target.value);
+    }
+
+    const onSubmitClickLogIn = async () => {
+        await logIn();
+    }
 
     return (
         <div className={classes.main}>
@@ -66,11 +109,12 @@ const LoginPage = () => {
             <Grid className={classes.box} container direction='column' rowSpacing={4}>
                 <Grid item>
                     <TextField
-                        id="outlined-password-input"
+                        id="email-input"
                         className={classes.text}
                         label="Email address"
                         type="email"
-                        autoComplete="current-password"
+                        value={email}
+                        onChange={onChangeEmailHandler}
                         InputProps={{
                             className: classes.textHeight,
                         }}
@@ -78,11 +122,12 @@ const LoginPage = () => {
                 </Grid>
                 <Grid item>
                     <TextField
-                        id="outlined-password-input"
+                        id="password-input"
                         className={classes.text}
                         label="Password"
                         type="password"
-                        autoComplete="current-password"
+                        value={password}
+                        onChange={onChangePasswordlHandler}
                         InputProps={{
                             className: classes.textHeight,
                         }}
@@ -92,7 +137,7 @@ const LoginPage = () => {
                     </Typography>
                 </Grid>
                 <Grid item>
-                    <SignInButton />
+                    <SignInButton onClick={onSubmitClickLogIn} />
                 </Grid>                
                 <Grid item>
                     <GoogleLogInButton />

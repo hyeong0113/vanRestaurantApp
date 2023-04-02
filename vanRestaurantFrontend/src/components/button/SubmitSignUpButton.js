@@ -19,10 +19,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const SubmitSignUpButton = () => {
+const SubmitSignUpButton = (props) => {
+    const { onClick } = props;
     const classes = useStyles();
     return(
-        <Button className={classes.button}>
+        <Button className={classes.button} onClick={onClick}>
             <Typography className={classes.text}>
                 SUBMIT
             </Typography>
