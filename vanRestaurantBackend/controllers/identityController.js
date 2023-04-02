@@ -1,9 +1,7 @@
-const axios = require('axios');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const User = require('../models/userSchema');
-const { resolveSoa } = require('dns');
 
 const signUp = async (req, res) => {
     const { userName, email, password, confirmPassword } = req.body;
@@ -57,6 +55,15 @@ const logIn = (req, res) => {
       .catch(err => res.status(500).json({ message: err.message }));
 }
 
+const logOut = async (req, res) => {
+    try {
+        req.session = null;
+        return res.status(200).send({ message: "You've been signed out!" });
+    } catch (err) {
+        res.status(500).err(err);
+    }
+}
+
 const checkCookie = (req, res) => {
     if(req.session) {
         res.status(200).json({ response: req.session.token });
@@ -68,5 +75,6 @@ const checkCookie = (req, res) => {
 module.exports = {
     signUp,
     logIn,
+    logOut,
     checkCookie
 }
