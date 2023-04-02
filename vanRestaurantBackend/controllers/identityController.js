@@ -4,8 +4,21 @@ const bcrypt = require("bcryptjs");
 
 const User = require('../models/userSchema');
 
-const signUp = (req, res) => {
-    const { userName, email, password } = req.body;
+const signUp = async (req, res) => {
+    const { userName, email, password, confirmPassword } = req.body;
+
+    if(password !== confirmPassword)
+    {
+        res.status(403).json({ error: "Password is not matched!" });
+        return;
+    }
+
+    if(await User.findOne({ email: email }))
+    {
+        res.status(403).json({ error: "Email is already registered!" });
+        return;
+    }
+
     const newUser = new User({ userName, email, password });
   
     bcrypt.genSalt(10, (err, salt) => {
