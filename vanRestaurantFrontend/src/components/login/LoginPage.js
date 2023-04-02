@@ -43,16 +43,17 @@ const useStyles = makeStyles((theme) => ({
 
 
 const LoginPage = () => {
-    useEffect(() => {
-        function start() {
-            gapi.auth2.init({
-                clientId: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
-                scope: ''
-            })
-        }
+    // useEffect(() => {
+    //     function start() {
+    //         gapi.auth2.init({
+    //             clientId: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
+    //             scope: ''
+    //         })
+    //     }
 
-        gapi.load('client:auth2', start);
-    })
+    //     gapi.load('client:auth2', start);
+    //     console.log(gapi.auth);
+    // })
 
     const classes = useStyles();
     // var token = gapi.auth.getToken().access_token;
