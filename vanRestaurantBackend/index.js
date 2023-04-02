@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
 const app = express();
 const basicAuth = require('express-basic-auth');
 
@@ -19,6 +20,11 @@ mongoose.connect(database, {useUnifiedTopology: true, useNewUrlParser: true })
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
   origin: 'http://localhost:3000'
+}));
+app.use(cookieSession({
+  name: 'session',
+  secret: process.env.COOKIE_SECRET,
+  httpOnly: true
 }));
 
 const userName = process.env.USERNAME;
