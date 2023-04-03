@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { makeStyles } from '@mui/styles';
 import googleLogo from '../../assets/images/googleLogo.png';
 
@@ -9,6 +9,13 @@ const username = process.env.REACT_APP_USERNAME;
 const password = process.env.REACT_APP_PASSWORD;
 
 const authString = btoa(`${username}:${password}`);
+
+const requestOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Basic ${authString}`
+    }
+};
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -35,14 +42,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const GoogleLogInButton = () => {
+    const [ user, setUser ] = useState(null);
+
     const classes = useStyles();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (user) {
+            fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                headers: {
+                        Authorization: `Bearer ${user.access_token}`,
+                        Accept: 'application/json'
+                }}
+            )
+            .then((response) => response.json())
+            .then((data) => responseGoogle(data))
+            .catch((err) => console.log(err));
+        }
+    }, [user]);
+
     const responseGoogle = async (response) => {
-        const { credential } = response;
-        if(credential) {
-            const decoded = jwt_decode(credential);
-            const { email } = decoded;
+        if(response) {
+            const { email } = response;
             const requestOptions = {
                 method: 'POST',
                 headers: {
@@ -80,10 +101,15 @@ const GoogleLogInButton = () => {
         console.log(response);
     }
 
-    const customButton = ({ onClick }) => (
+    const login = useGoogleLogin({
+        onSuccess: credentialResponse => setUser(credentialResponse),
+        onError: error => errorResponseGoogle(error)
+    });
+
+    return(
         <button
             className={classes.button}
-            onClick={onClick}
+            onClick={() => login()}
         >
             <img
                 className={classes.logo}
@@ -94,17 +120,7 @@ const GoogleLogInButton = () => {
                 CONTINUE WITH GOOGLE
             </span>
         </button>
-      );
-
-    return(
-        <GoogleLogin
-            onSuccess={responseGoogle}
-            onError={errorResponseGoogle}
-        />
     )
-
-
-    
 }
 
 export default GoogleLogInButton;

@@ -59,7 +59,6 @@ const LoginPage = () => {
     const location = useLocation();
 
     useEffect(() => {
-        console.log("called?");
         if(location.state) {
             setIsProfileLoaded(true);
             setEmail(location.state);
