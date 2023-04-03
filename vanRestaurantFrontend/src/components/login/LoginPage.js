@@ -55,6 +55,18 @@ const LoginPage = () => {
     const classes = useStyles();
     let navigate = useNavigate();
 
+    useEffect(() => {
+        function start() {
+            gapi.client.init({
+                clientId: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
+                scope: ''
+            })
+        }
+
+        gapi.load('client:auth2', start);
+        console.log('gapi:: ', gapi);
+    })
+
     const logIn = async() => {
         setIsLoading(true);
         const requestOptions = {
@@ -67,10 +79,7 @@ const LoginPage = () => {
                 email: email,
                 password: password,
             })
-        };
-
-        console.log(requestOptions)
-        
+        };        
         await fetch(`${process.env.REACT_APP_API_URL}/identity/login`, requestOptions)
             .then(res => res.json())
             .then(

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
@@ -41,9 +41,13 @@ const SignUpPage = () => {
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    let navigate = useNavigate();
 
+    let navigate = useNavigate();
     const classes = useStyles();
+    const location = useLocation();
+
+    const profileObj = location.state;
+    console.log(profileObj);
 
     const signUp = async() => {
         setIsLoading(true);

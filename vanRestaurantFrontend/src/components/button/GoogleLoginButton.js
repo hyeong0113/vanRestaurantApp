@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from 'react-google-login';
 import { makeStyles } from '@mui/styles';
 import googleLogo from '../../assets/images/googleLogo.png';
@@ -28,14 +29,18 @@ const useStyles = makeStyles((theme) => ({
 
 const GoogleLogInButton = () => {
     const classes = useStyles();
+    const navigate = useNavigate();
 
     const responseGoogle = (response) => {
-        console.log("Success:: ");
-        console.log(response);
+        const { profileObj } = response;
+        if(profileObj) {
+            console.log("Google Success:: ", profileObj);
+            navigate('/signup', { state: profileObj });
+        }
     }
 
     const errorResponseGoogle = (response) => {
-        console.log("Error:: ");
+        console.log("Google Error:: ");
         console.log(response);
     }
 
