@@ -5,6 +5,11 @@ import { GoogleLogin } from '@react-oauth/google';
 import { makeStyles } from '@mui/styles';
 import googleLogo from '../../assets/images/googleLogo.png';
 
+const username = process.env.REACT_APP_USERNAME;
+const password = process.env.REACT_APP_PASSWORD;
+
+const authString = btoa(`${username}:${password}`);
+
 const useStyles = makeStyles((theme) => ({
     button: {
         height: '111%',
@@ -33,11 +38,40 @@ const GoogleLogInButton = () => {
     const classes = useStyles();
     const navigate = useNavigate();
 
-    const responseGoogle = (response) => {
+    const responseGoogle = async (response) => {
         const { credential } = response;
         if(credential) {
             const decoded = jwt_decode(credential);
-            navigate('/signup', { state: decoded });
+            const { email } = decoded;
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Basic ${authString}`
+                },
+                body: JSON.stringify({
+                    email: email
+                })
+            };
+            await fetch(`${process.env.REACT_APP_API_URL}/identity/google/check`, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log("Google check:: ", result);
+                    const { registered } = result;
+                    if (registered) {
+                        navigate('/login', { state: email });
+                    }
+                    else {
+                        navigate('/signup', { state: email });
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                    console.log("User sign up failed");
+                }
+            )            
+            
         }
     }
 

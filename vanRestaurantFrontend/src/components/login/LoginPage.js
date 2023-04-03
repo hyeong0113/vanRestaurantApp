@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import GoogleLogInButton from '../button/GoogleLogInButton';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -51,8 +51,20 @@ const LoginPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const [isProfileLoaded, setIsProfileLoaded] = useState(false);
+
     const classes = useStyles();
     let navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        console.log("called?");
+        if(location.state) {
+            setIsProfileLoaded(true);
+            setEmail(location.state);
+        }
+    }, [location.state]);
 
     const logIn = async() => {
         setIsLoading(true);
@@ -114,6 +126,7 @@ const LoginPage = () => {
                         InputProps={{
                             className: classes.textHeight,
                         }}
+                        disabled={isProfileLoaded}
                     />
                 </Grid>
                 <Grid item>

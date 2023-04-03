@@ -2,16 +2,10 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const User = require('../models/userSchema');
+const { checkUserExistsByEmail } = require('../utilities/identityUtility');
 
 const signUp = async (req, res) => {
     const { userName, email, password, confirmPassword } = req.body;
-    console.log(req.body);
-
-    console.log(userName);
-    console.log(email);
-    console.log(password);
-    console.log(confirmPassword);
-
     if(password !== confirmPassword)
     {
         res.status(403).json({ message: "Password is not matched!" });
@@ -40,13 +34,14 @@ const signUp = async (req, res) => {
     });
 }
 
-const logIn = (req, res) => {
+const logIn = async (req, res) => {
     const { email, password } = req.body;
 
-    User.findOne({ email })
+    await User.findOne({ email })
         .then(user => {
-            if (!user) return res.status(400).json({ message: 'User not found' });
-    
+            if (!user) {
+                return res.status(400).json({ message: 'User not found' });
+            }
             bcrypt.compare(password, user.password, (err, isMatch) => {
                 if (err) throw err;
                 if (isMatch) {
@@ -70,6 +65,16 @@ const logOut = async (req, res) => {
     }
 }
 
+const checkGoogleEmailRegistered = async (req, res) => {
+    const { email } = req.body;
+    const user = await checkUserExistsByEmail(email);
+
+    if(user) {
+        return res.status(200).send({ message: "Given Google email is already registered!", registered: true });
+    }
+    return res.status(200).send({ message: "Given Google email is not registered yet!", registered: false });
+}
+
 const checkCookie = (req, res) => {
     if(req.session) {
         res.status(200).json({ response: req.session.token });
@@ -82,5 +87,6 @@ module.exports = {
     signUp,
     logIn,
     logOut,
+    checkGoogleEmailRegistered,
     checkCookie
 }

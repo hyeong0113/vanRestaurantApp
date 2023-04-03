@@ -55,8 +55,7 @@ const SignUpPage = () => {
     useEffect(() => {
         if(location.state) {
             setIsProfileLoaded(true);
-            const profileObj = location.state;
-            setEmail(profileObj.email);
+            setEmail(location.state);
         }
     }, []);
     
