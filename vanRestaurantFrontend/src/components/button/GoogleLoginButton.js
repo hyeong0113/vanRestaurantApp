@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
+import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
-import { GoogleLogin } from 'react-google-login';
+import { GoogleLogin } from '@react-oauth/google';
 import { makeStyles } from '@mui/styles';
 import googleLogo from '../../assets/images/googleLogo.png';
 
@@ -32,10 +34,10 @@ const GoogleLogInButton = () => {
     const navigate = useNavigate();
 
     const responseGoogle = (response) => {
-        const { profileObj } = response;
-        if(profileObj) {
-            console.log("Google Success:: ", profileObj);
-            navigate('/signup', { state: profileObj });
+        const { credential } = response;
+        if(credential) {
+            const decoded = jwt_decode(credential);
+            navigate('/signup', { state: decoded });
         }
     }
 
@@ -62,12 +64,8 @@ const GoogleLogInButton = () => {
 
     return(
         <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
-            render={customButton}
             onSuccess={responseGoogle}
-            onFailure={errorResponseGoogle}
-            cookiePolicy={'single_host_origin'}
-            isSignedIn={true}
+            onError={errorResponseGoogle}
         />
     )
 

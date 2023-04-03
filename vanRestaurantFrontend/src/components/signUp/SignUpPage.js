@@ -37,17 +37,29 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUpPage = () => {
     const [isLoading, setIsLoading] = useState(false);
+    // const [profileObj, setProfileObj] = useState(null);
     const [email, setEmail] = useState("");
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
+    const [isProfileLoaded, setIsProfileLoaded] = useState(false);
+
     let navigate = useNavigate();
     const classes = useStyles();
     const location = useLocation();
 
-    const profileObj = location.state;
-    console.log(profileObj);
+    // TODO: Need to auto-fill email and proceed signup
+    // const profileObj = location.state;
+
+    useEffect(() => {
+        if(location.state) {
+            setIsProfileLoaded(true);
+            const profileObj = location.state;
+            setEmail(profileObj.email);
+        }
+    }, []);
+    
 
     const signUp = async() => {
         setIsLoading(true);
@@ -64,8 +76,6 @@ const SignUpPage = () => {
                 confirmPassword: confirmPassword
             })
         };
-
-        console.log(requestOptions)
         
         await fetch(`${process.env.REACT_APP_API_URL}/identity/signup`, requestOptions)
             .then(res => res.json())
@@ -118,6 +128,7 @@ const SignUpPage = () => {
                         InputProps={{
                             className: classes.textHeight,
                         }}
+                        disabled={isProfileLoaded}
                     />
                 </Grid>
                 <Grid item>

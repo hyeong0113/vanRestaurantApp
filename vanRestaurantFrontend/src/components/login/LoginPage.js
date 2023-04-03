@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GoogleLogInButton from '../button/GoogleLogInButton';
-import { gapi } from 'gapi-script';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
@@ -54,18 +53,6 @@ const LoginPage = () => {
     const [password, setPassword] = useState("");
     const classes = useStyles();
     let navigate = useNavigate();
-
-    useEffect(() => {
-        function start() {
-            gapi.client.init({
-                clientId: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
-                scope: ''
-            })
-        }
-
-        gapi.load('client:auth2', start);
-        console.log('gapi:: ', gapi);
-    })
 
     const logIn = async() => {
         setIsLoading(true);
