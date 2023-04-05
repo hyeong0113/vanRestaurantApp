@@ -120,11 +120,10 @@ const Topbar = () => {
   }, []);
 
   useEffect(() => {
-    console.log("Menu changed");
-    if(isAuthenticated) {
+    if(localStorage.getItem("authenticated") === 'true') {
       setUserMenu(userMenuMember);
     }
-    else {
+    if(localStorage.getItem("authenticated") === 'false') {
       setUserMenu(userMenuGuest);
     }
   }, [isAuthenticated])

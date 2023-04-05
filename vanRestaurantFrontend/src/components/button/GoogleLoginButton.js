@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
-import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import { makeStyles } from '@mui/styles';
 import googleLogo from '../../assets/images/googleLogo.png';
 

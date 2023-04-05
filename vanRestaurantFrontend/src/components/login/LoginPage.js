@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import GoogleLogInButton from '../button/GoogleLogInButton';
+import GoogleLogInButton from '../../components/button/GoogleLoginButton';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';

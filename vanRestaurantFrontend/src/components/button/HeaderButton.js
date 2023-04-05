@@ -78,7 +78,6 @@ const HeaderButton = ({ setIsAuthenticated, iconName, icon, handleIconStyleChang
       .then(res => res.json())
       .then(
           (result) => {
-            console.log(result);
             localStorage.setItem("authenticated", false);
             setIsAuthenticated(false);
             navigate('/');
