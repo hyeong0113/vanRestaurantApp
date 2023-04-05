@@ -1,9 +1,21 @@
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import { makeStyles } from '@mui/styles';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+
+const username = process.env.REACT_APP_USERNAME;
+const password = process.env.REACT_APP_PASSWORD;
+
+const authString = btoa(`${username}:${password}`);
+
+const requestOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Basic ${authString}`
+    }
+};
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -49,6 +61,13 @@ const HeaderButton = ({ iconName, icon, handleIconStyleChange, menu }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
+  let navigate = useNavigate();
+
+  const isAuthenticated = localStorage.getItem("authenticated");
+  useEffect(() => {
+    console.log("Menu changed");
+  }, [isAuthenticated])
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     handleIconStyleChange(iconName);
@@ -58,6 +77,24 @@ const HeaderButton = ({ iconName, icon, handleIconStyleChange, menu }) => {
     setAnchorEl(null);
     handleIconStyleChange(null);
   };
+
+  const handleLogOut = () => {
+    fetch(`${process.env.REACT_APP_API_URL}/identity/logout`, requestOptions)
+      .then(res => res.json())
+      .then(
+          (result) => {
+            console.log(result);
+            localStorage.setItem("authenticated", false);
+            navigate('/');
+            // window.location.reload();
+          },
+          (error) => {
+              console.log("Logout not worked");
+          }
+      )
+  }
+
+  console.log(menu);
 
   return (
     <div className={classes.button}>
@@ -84,7 +121,14 @@ const HeaderButton = ({ iconName, icon, handleIconStyleChange, menu }) => {
         }}        
       >
         {menu.map((element, index) => (
-          <MenuItem key={index} component={Link} className={classes.menuItem} onClick={handleClose} to={element.path}>{element.name}</MenuItem>
+          <MenuItem 
+            key={index}
+            component={Link}
+            className={classes.menuItem}
+            onClick={element.name === "LOG OUT" ? handleLogOut : handleClose}
+            to={element.path}>
+              {element.name}
+          </MenuItem>
         ))}
       </Menu>
     </div>

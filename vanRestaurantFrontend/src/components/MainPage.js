@@ -150,25 +150,6 @@ function MainPage() {
         setIsDataLoading(false);
     }
 
-    // const Item = ({item}) => {
-    //     return <div>{item.name}</div>;
-    //   };
-    // const renderMainRestaurantCard = ({restaurant, index}) => {
-    //     console.log(index);
-    //     return(
-    //         <Fade
-    //             key={index}
-    //             in={!isShrink}
-    //             style={{ transformOrigin: '0 0 0' }}
-    //             timeout={500*index}
-    //         >
-    //             <Box className={classes.cardBox} key={index}>
-    //                 <MainRestaurantCard restaurant={restaurant} index={index} />
-    //             </Box>                                
-    //         </Fade>
-    //     )
-    // }
-
     const handleDownButtonClick = () => {
         setIsShrink(!isShrink);
         setIsMedium(false);

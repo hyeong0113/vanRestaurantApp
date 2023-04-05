@@ -15,6 +15,18 @@ import TryButton from '../button/Trybutton';
 
 const images = [food1, food2, food3, food4, food5];
 
+const username = process.env.REACT_APP_USERNAME;
+const password = process.env.REACT_APP_PASSWORD;
+
+const authString = btoa(`${username}:${password}`);
+
+const requestOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Basic ${authString}`
+    }
+};
+
 const useStyles = makeStyles((theme) => ({
   background: {
     backgroundColor: 'rgba(103, 69, 18, 0.46)',
@@ -80,16 +92,22 @@ const homeMenu = [
   {name: "ABOUT US", path: "/"}
 ]
 
-const userMenu = [
+const userMenuGuest = [
   {name: "PROFILE", path: "/"},
   {name: "LOG IN", path: "/login"},
   {name: "SIGN UP", path: "/signup"}
+]
+
+const userMenuMember = [
+  {name: "PROFILE", path: "/"},
+  {name: "LOG OUT", path: "/"},
 ]
 
 const Topbar = () => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState(0);
   const [currentIcon, setCurrentIcon] = useState(null);
+  // const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem("authenticated"));
   const backgroundImage = `${images[currentImage]}`;
 
   useEffect(() => {
@@ -100,9 +118,55 @@ const Topbar = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // useEffect(() => {
+  //   console.log("identity/cookie/check useEffect::called?");
+  //   // let isMounted = true;
+  //   let cancel = false;
+  //   fetch(`${process.env.REACT_APP_API_URL}/identity/cookie/check`, requestOptions)
+  //     .then(res => res.json())
+  //     .then(
+  //         (result) => {
+  //           if (cancel) return;
+  //           const { response } = result;
+  //           console.log(result);
+  //           if(response) {
+  //             localStorage.setItem("authenticated", true);
+  //             setIsAuthenticated(true);
+  //             return;
+  //           }
+  //         },
+  //         (error) => {
+  //             console.log("Not loaded");
+  //         }
+  //     )
+  //     console.log('isAuthenticated:: ', isAuthenticated);
+  //     console.log('localStorage:: ', localStorage.getItem("authenticated"));
+  //     return () => { 
+  //       cancel = true;
+  //     }
+  // }, [])
+
+  // useEffect(() => {
+  //   console.log('localStorage:: ', localStorage.getItem("authenticated"));
+  //   if(localStorage.getItem("authenticated")) {
+  //     setIsAuthenticated(true);
+  //   }
+  //   else {
+  //     setIsAuthenticated(false);
+  //   }
+  //   console.log('isAuthenticated:: ', isAuthenticated);
+  // }, [])
+
+  const isAuthenticated = localStorage.getItem("authenticated");
+  console.log('isAuthenticated:: ', isAuthenticated);
+
   const handleIconStyleChange = (iconName) => {
     setCurrentIcon(iconName);
   }
+
+  // const handleUserMenu = () => {
+  //   if(isAuthenticated) 
+  // }
 
   return (
     <Grid className={classes.background} container>
@@ -131,7 +195,7 @@ const Topbar = () => {
           <Grid item xs={6}>
             <HeaderButton
               iconName="user"
-              menu={userMenu}
+              menu={isAuthenticated ? userMenuMember : userMenuGuest}
               icon={<PersonIcon className={`${classes.icon} ${currentIcon==="user" ? classes.iconClicked : ''}`} />}
               handleIconStyleChange={handleIconStyleChange} />
           </Grid>          

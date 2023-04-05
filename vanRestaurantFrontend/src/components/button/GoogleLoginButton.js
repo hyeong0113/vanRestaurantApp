@@ -10,13 +10,6 @@ const password = process.env.REACT_APP_PASSWORD;
 
 const authString = btoa(`${username}:${password}`);
 
-const requestOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Basic ${authString}`
-    }
-};
-
 const useStyles = makeStyles((theme) => ({
     button: {
         height: '111%',

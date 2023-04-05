@@ -26,7 +26,8 @@ app.use(cors({
 app.use(cookieSession({
   name: 'session',
   secret: process.env.COOKIE_SECRET,
-  httpOnly: true
+  httpOnly: true,
+  maxAge: 24 * 60 * 60 * 1000
 }));
 
 const userName = process.env.USERNAME;

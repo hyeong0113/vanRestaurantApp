@@ -76,11 +76,11 @@ const checkGoogleEmailRegistered = async (req, res) => {
 }
 
 const checkCookie = (req, res) => {
-    if(req.session) {
-        res.status(200).json({ response: req.session.token });
+    if(req.session.token) {
+        res.status(200).json({ message: "User logged in!", response: true });
         return;
     }
-    res.status(500).error({ response: "NOT STORED" });
+    res.status(200).json({ message: "User not logged in!", response: false });
 }
 
 module.exports = {
