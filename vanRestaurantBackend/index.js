@@ -23,6 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
   origin: 'http://localhost:3000'
 }));
+
 app.use(cookieSession({
   name: 'session',
   secret: process.env.COOKIE_SECRET,

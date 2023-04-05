@@ -8,7 +8,7 @@ const restaurantSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    addresss: {
+    address: {
         type: String,
         required: true
     },
@@ -39,5 +39,6 @@ const restaurantSchema = new mongoose.Schema({
         required: false
     }
 });
+
 const Restaurant = mongoose.model("Restaurant", restaurantSchema);
 module.exports = Restaurant;

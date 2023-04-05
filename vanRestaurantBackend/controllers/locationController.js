@@ -1,6 +1,8 @@
 const axios = require('axios');
+const jwt = require("jsonwebtoken");
 const { checkObjectExistsById } = require('../utilities/databaseUtility');
-const { saveAndReturnResponse } = require('../utilities/controllerUtility');
+const { saveAndReturnResponse } = require('../utilities/toprestaurantUtility');
+const User = require('../models/userSchema');
 require('dotenv').config();
 
 /*
@@ -83,9 +85,32 @@ const getRestaurantsWithLocationName = async (req, res) => {
     const { formatted_address, geometry } = candidates[0];
     const { lat, lng } = geometry.location;
 
-    const temp = await saveAndReturnResponse(lat, lng);
+
+    const { id } = jwt.verify(req.session.token, process.env.JWT_SECRET, function(err, decoded) {
+        if (err) {
+          console.log('Error decoding token:', err);
+        }
+        return decoded;
+    });
+
+    const temp = await saveAndReturnResponse(lat, lng, id);
 
     res.status(200).json(temp);
+}
+
+const checkDbTest = (req, res) => {
+    const { id } = jwt.verify(req.session.token, process.env.JWT_SECRET, function(err, decoded) {
+        if (err) {
+          console.log('Error decoding token:', err);
+        }
+        return decoded;
+    });
+    User.findOne({ _id: id })
+        .populate('topRestaurants')
+        .exec(function(err, parent) {
+            if (err) throw err;
+            res.status(200).json(parent);
+    });
 }
 
 /*
@@ -121,6 +146,7 @@ const getRestaurantsWithLocationName = async (req, res) => {
 module.exports = {
     getGeoLocation,
     getRestaurantsWithLocationName,
+    checkDbTest
     // getRestaurantsWithGeo,
     // getTopRestaurant
 }
