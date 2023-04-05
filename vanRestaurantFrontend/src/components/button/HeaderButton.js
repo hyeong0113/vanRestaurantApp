@@ -57,16 +57,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const HeaderButton = ({ iconName, icon, handleIconStyleChange, menu }) => {
+const HeaderButton = ({ setIsAuthenticated, iconName, icon, handleIconStyleChange, menu }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
   let navigate = useNavigate();
-
-  const isAuthenticated = localStorage.getItem("authenticated");
-  useEffect(() => {
-    console.log("Menu changed");
-  }, [isAuthenticated])
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -85,16 +80,14 @@ const HeaderButton = ({ iconName, icon, handleIconStyleChange, menu }) => {
           (result) => {
             console.log(result);
             localStorage.setItem("authenticated", false);
+            setIsAuthenticated(false);
             navigate('/');
-            // window.location.reload();
           },
           (error) => {
               console.log("Logout not worked");
           }
       )
   }
-
-  console.log(menu);
 
   return (
     <div className={classes.button}>
