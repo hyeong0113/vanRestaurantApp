@@ -15,6 +15,18 @@ import TryButton from '../button/Trybutton';
 
 const images = [food1, food2, food3, food4, food5];
 
+const username = process.env.REACT_APP_USERNAME;
+const password = process.env.REACT_APP_PASSWORD;
+
+const authString = btoa(`${username}:${password}`);
+
+const requestOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Basic ${authString}`
+    }
+};
+
 const useStyles = makeStyles((theme) => ({
   background: {
     backgroundColor: 'rgba(103, 69, 18, 0.46)',
@@ -73,13 +85,30 @@ const useStyles = makeStyles((theme) => ({
     },
   }  
 }));
-const homeMenu = ["HOME", "CONTACT", "ABOUT US"];
-const userMenu = ["PROFILE", "LOG OUT", "REGISTER"];
+
+const homeMenu = [
+  {name: "HOME", path: "/"},
+  {name: "CONTACT", path: "/"},
+  {name: "ABOUT US", path: "/"}
+]
+
+const userMenuGuest = [
+  {name: "PROFILE", path: "/"},
+  {name: "LOG IN", path: "/login"},
+  {name: "SIGN UP", path: "/signup"}
+]
+
+const userMenuMember = [
+  {name: "PROFILE", path: "/"},
+  {name: "LOG OUT", path: "/"},
+]
 
 const Topbar = () => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState(0);
   const [currentIcon, setCurrentIcon] = useState(null);
+  const [userMenu, setUserMenu] = useState(userMenuGuest);
+  const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem("authenticated"));
   const backgroundImage = `${images[currentImage]}`;
 
   useEffect(() => {
@@ -89,6 +118,16 @@ const Topbar = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    console.log("Menu changed");
+    if(isAuthenticated) {
+      setUserMenu(userMenuMember);
+    }
+    else {
+      setUserMenu(userMenuGuest);
+    }
+  }, [isAuthenticated])
 
   const handleIconStyleChange = (iconName) => {
     setCurrentIcon(iconName);
@@ -115,6 +154,7 @@ const Topbar = () => {
             <HeaderButton
               iconName="home"
               menu={homeMenu}
+              setIsAuthenticated={setIsAuthenticated}
               icon={<HomeIcon className={`${classes.icon} ${currentIcon==="home" ? classes.iconClicked : ''}`} />}
               handleIconStyleChange={handleIconStyleChange} />
           </Grid>
@@ -122,6 +162,7 @@ const Topbar = () => {
             <HeaderButton
               iconName="user"
               menu={userMenu}
+              setIsAuthenticated={setIsAuthenticated}
               icon={<PersonIcon className={`${classes.icon} ${currentIcon==="user" ? classes.iconClicked : ''}`} />}
               handleIconStyleChange={handleIconStyleChange} />
           </Grid>          

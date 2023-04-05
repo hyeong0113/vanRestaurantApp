@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { checkObjectExistsById } = require('../utilities/databaseUtility');
 const { saveAndReturnResponse } = require('../utilities/controllerUtility');
-require('dotenv').config()
+require('dotenv').config();
 
 /*
 * @title:

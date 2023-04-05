@@ -1,8 +1,21 @@
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import { makeStyles } from '@mui/styles';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+
+const username = process.env.REACT_APP_USERNAME;
+const password = process.env.REACT_APP_PASSWORD;
+
+const authString = btoa(`${username}:${password}`);
+
+const requestOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Basic ${authString}`
+    }
+};
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -44,9 +57,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const HeaderButton = ({ iconName, icon, handleIconStyleChange, menu }) => {
+const HeaderButton = ({ setIsAuthenticated, iconName, icon, handleIconStyleChange, menu }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
+
+  let navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -57,6 +72,22 @@ const HeaderButton = ({ iconName, icon, handleIconStyleChange, menu }) => {
     setAnchorEl(null);
     handleIconStyleChange(null);
   };
+
+  const handleLogOut = () => {
+    fetch(`${process.env.REACT_APP_API_URL}/identity/logout`, requestOptions)
+      .then(res => res.json())
+      .then(
+          (result) => {
+            console.log(result);
+            localStorage.setItem("authenticated", false);
+            setIsAuthenticated(false);
+            navigate('/');
+          },
+          (error) => {
+              console.log("Logout not worked");
+          }
+      )
+  }
 
   return (
     <div className={classes.button}>
@@ -82,8 +113,15 @@ const HeaderButton = ({ iconName, icon, handleIconStyleChange, menu }) => {
           horizontal: 'center',
         }}        
       >
-        {menu.map((name, index) => (
-          <MenuItem key={index} className={classes.menuItem} onClick={handleClose}>{name}</MenuItem>
+        {menu.map((element, index) => (
+          <MenuItem 
+            key={index}
+            component={Link}
+            className={classes.menuItem}
+            onClick={element.name === "LOG OUT" ? handleLogOut : handleClose}
+            to={element.path}>
+              {element.name}
+          </MenuItem>
         ))}
       </Menu>
     </div>

@@ -1,13 +1,26 @@
 import './App.css';
-import MainPage from './components/MainPage';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import customTheme from './theme/customTheme';
+import MainPage from './components/MainPage';
+import LoginPage from './components/login/LoginPage';
+import SignUpPage from './components/signUp/SignUpPage';
 
 function App() {
   return (
     <ThemeProvider theme={customTheme}>
       <div className="App">
-        <MainPage />
+        <Router>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+          </Routes>
+        </Router>        
       </div>
     </ThemeProvider>
   );
