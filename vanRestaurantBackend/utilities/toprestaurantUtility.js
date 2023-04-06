@@ -1,8 +1,6 @@
 const axios = require('axios');
-const jwt = require("jsonwebtoken");
 const { saveObjectToDB } = require('./databaseUtility');
 const { convertToRestaurantSchemaList, convertToTopRestaurant } = require('./schemaUtility');
-const User = require('../models/userSchema');
 const TopRestaurant = require('../models/topRestaurantSchema');
 require('dotenv').config()
 

@@ -46,7 +46,7 @@ const deleteTopRestaurantByPlaceId = async (req, res) => {
         const deleteTopRestaurant = user.topRestaurants.find(r => r.placeId === placeId);
 
         if(deleteTopRestaurant) {
-            await TopRestaurant.findOneAndRemove({ _id: deleteTopRestaurant._id });
+            await TopRestaurant.findOneAndRemove({ _id: deleteTopRestaurant._id, userId: id });
             user.topRestaurants.pull(deleteTopRestaurant);
             await user.save();
             console.log('Top restaurant deleted successfully.');
