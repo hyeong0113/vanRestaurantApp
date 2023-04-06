@@ -1,11 +1,10 @@
-const axios = require('axios');
 const RestaurantDto = require('../dtos/restaurantDto');
+const TopRestaurant = require('../models/topRestaurantSchema');
 const  { getPhotoByReference } = require("../utilities/photoUtility");
 
 require('dotenv').config();
 
-const convertToRestaurantSchemaList = async (results) =>
-{
+const convertToRestaurantSchemaList = async (results) => {
     const mappedResults = [];
     
     for(const elem of results)
@@ -34,6 +33,23 @@ const convertToRestaurantSchemaList = async (results) =>
     return mappedResults;
 }
 
+const convertToTopRestaurant = (topRestaurant) => {
+    return new TopRestaurant ({
+        placeId: topRestaurant.placeId,
+        name: topRestaurant.name,
+        address: topRestaurant.address,
+        businessStatus: topRestaurant.businessStatus,
+        location: topRestaurant.location,
+        openNow: topRestaurant.openNow,
+        photo: topRestaurant.photo,
+        rating: topRestaurant.rating,
+        url: topRestaurant.url
+    });
+}
+
+
+
 module.exports = {
-    convertToRestaurantSchemaList
+    convertToRestaurantSchemaList,
+    convertToTopRestaurant
 }; 

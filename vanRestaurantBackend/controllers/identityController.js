@@ -47,7 +47,7 @@ const logIn = async (req, res) => {
                 if (isMatch) {
                     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 86400 });
                     req.session.token = token;
-                    res.json({ token });
+                    res.json({ token: token, success: true });
                 } else {
                     return res.status(400).json({ message: 'Incorrect password' });
                 }

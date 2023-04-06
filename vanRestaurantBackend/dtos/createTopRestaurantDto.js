@@ -1,4 +1,4 @@
-class RestaurantDto {
+class CreateTopRestaurantDto {
     constructor(restaurant, open_now, photo) {
         this.placeId = restaurant.place_id;
         this.name = restaurant.name;
@@ -8,10 +8,10 @@ class RestaurantDto {
         this.openNow = open_now;
         this.photo = photo;
         this.rating = restaurant.rating;
-        this.url = null;
         this.isTop = false;
         this.isFavorite = false;
+        this.url = null;
     }
   }
   
-  module.exports = RestaurantDto;
+  module.exports = CreateTopRestaurantDto;
