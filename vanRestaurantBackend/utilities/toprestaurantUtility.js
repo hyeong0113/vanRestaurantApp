@@ -38,21 +38,24 @@ const saveAndReturnResponse = async(lat, long, id) => {
         return obj.rating > max.rating ? obj : max;
     });
 
-    const convertedTopRestaurant = convertToTopRestaurant(topRatedRestaurant);
+    let found = await TopRestaurant.findOne({placeId: topRatedRestaurant.placeId});
 
-    convertedTopRestaurant.userId = user._id;
+    if(!found) {
+        const convertedTopRestaurant = convertToTopRestaurant(topRatedRestaurant);
 
-    convertedTopRestaurant.save(function(err) {
-        if (err) throw err;
-        console.log('Top restaurant saved!');
-    });
-
-    user.topRestaurants.push(convertedTopRestaurant);
-    user.save(function(err) {
-        if (err) throw err;
-        console.log('Top restaurant save to user!');
-    });
-
+        convertedTopRestaurant.userId = user._id;
+    
+        convertedTopRestaurant.save(function(err) {
+            if (err) throw err;
+            console.log('Top restaurant saved!');
+        });
+    
+        user.topRestaurants.push(convertedTopRestaurant);
+        user.save(function(err) {
+            if (err) throw err;
+            console.log('Top restaurant save to user!');
+        });
+    }
 
     const index = mappedResults.findIndex(obj => obj === topRatedRestaurant);
 
