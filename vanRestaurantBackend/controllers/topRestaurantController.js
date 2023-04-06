@@ -7,7 +7,7 @@ const getTopRestaurantsByUserId = (req, res) => {
     if(req.session.token) {
         const { token } = req.body;
         if(req.session.token !== token) {
-            throw res.status(403).json({ message: "Invalid action.", success: false });
+            throw res.status(403).json({ message: "Invalid action", success: false });
         }
         const { id } = jwt.verify(req.session.token, process.env.JWT_SECRET, function(err, decoded) {
             if(err) {
