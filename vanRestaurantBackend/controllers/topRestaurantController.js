@@ -62,7 +62,39 @@ const deleteTopRestaurantByPlaceId = async (req, res) => {
     }
 }
 
+const deleteAllTopRestaurants = async (req, res) => {
+    if(req.session.token) {
+        const { token } = req.body;
+        if(req.session.token !== token) {
+            throw res.status(403).json({ message: "Unvalid action.", success: false });
+        }
+        const { id } = jwt.verify(req.session.token, process.env.JWT_SECRET, function(err, decoded) {
+            if(err) {
+              console.log('Error decoding token:', err);
+            }
+            return decoded;
+        });
+
+        try {
+            const user = await User.findOne({ _id: id }).populate('topRestaurants');
+            await TopRestaurant.deleteMany({ userId: id });
+            user.topRestaurants = [];
+            await user.save();
+            console.log('Top restaurant deleted successfully.');
+            res.status(200).json({ message: "All top restaurants deleted", success: true });
+        }
+        catch(err) {
+            res.status(403).json({ message: err, success: false });
+        }
+
+    }
+    else {
+        res.status(403).json({ message: "Unauthorized action. Need to login first!", success: false });
+    }
+}
+
 module.exports = {
     getTopRestaurantsByUserId,
-    deleteTopRestaurantByPlaceId
+    deleteTopRestaurantByPlaceId,
+    deleteAllTopRestaurants
 }
