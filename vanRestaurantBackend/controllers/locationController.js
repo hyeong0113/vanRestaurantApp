@@ -1,5 +1,6 @@
 const axios = require('axios');
 const jwt = require("jsonwebtoken");
+const User = require('../models/userSchema');
 const { checkObjectExistsById } = require('../utilities/databaseUtility');
 const { saveAndReturnResponse } = require('../utilities/toprestaurantUtility');
 require('dotenv').config();
@@ -59,7 +60,7 @@ const getGeoLocation = async (req, res) => {
 *              JSON with status 200
 */
 const getRestaurantsWithLocationName = async (req, res) => {
-    const { input } = req.params;
+    const { input, token } = req.body;
     if(!input || input.length <= 0) {
         res.status(400).send("location name is undefined.");
         return;
@@ -84,17 +85,33 @@ const getRestaurantsWithLocationName = async (req, res) => {
     const { formatted_address, geometry } = candidates[0];
     const { lat, lng } = geometry.location;
 
+    let user = null;
 
-    const { id } = jwt.verify(req.session.token, process.env.JWT_SECRET, function(err, decoded) {
-        if(err) {
-          console.log('Error decoding token:', err);
+    if(req.session.token) {
+        if(req.session.token !== token) {
+            throw res.status(403).json({ message: "Invalid action.", success: false });
         }
-        return decoded;
-    });
 
-    const temp = await saveAndReturnResponse(lat, lng, id);
+        const { id } = jwt.verify(req.session.token, process.env.JWT_SECRET, function(err, decoded) {
+            if(err) {
+              console.log('Error decoding token:', err);
+              return null;
+            }
+            return decoded;
+        });
 
-    res.status(200).json(temp);
+        user = await User.findOne({ _id: id })
+            .then(u => {
+                if (!u) {
+                    return res.status(400).json({ message: 'User not found' });
+                }
+                return u.populate('topRestaurants');
+            }).catch(err => res.status(500).json({ message: err.message }));
+    }
+
+    const response = await saveAndReturnResponse(lat, lng, user);
+
+    res.status(200).json(response);
 }
 
 

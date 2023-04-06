@@ -6,25 +6,18 @@ const User = require('../models/userSchema');
 const TopRestaurant = require('../models/topRestaurantSchema');
 require('dotenv').config()
 
-const saveAndReturnResponse = async(lat, long, id) => {
-    const user = await User.findOne({ _id: id })
-        .then(user => {
-            if (!user) {
-                return res.status(400).json({ message: 'User not found' });
-            }
-            return user;
-        }).catch(err => res.status(500).json({ message: err.message }));
+const saveAndReturnResponse = async(lat, long, user) => {
 
     const mapRes = await axios.get(process.env.NEARBY,
+    {
+        params:
         {
-            params:
-            {
-                location: `${lat},${long}`,
-                radius: 1500,
-                type: 'restaurant',
-                key: process.env.API_KEY
-            }
-        });
+            location: `${lat},${long}`,
+            radius: 1500,
+            type: 'restaurant',
+            key: process.env.API_KEY
+        }
+    });
     const { results } = mapRes.data;
     const mappedResults = await convertToRestaurantSchemaList(results);
 
@@ -38,23 +31,25 @@ const saveAndReturnResponse = async(lat, long, id) => {
         return obj.rating > max.rating ? obj : max;
     });
 
-    let found = await TopRestaurant.findOne({placeId: topRatedRestaurant.placeId});
+    if(user) {
+        let found = await user.topRestaurants.find(r => r.placeId === topRatedRestaurant.placeId);
 
-    if(!found) {
-        const convertedTopRestaurant = convertToTopRestaurant(topRatedRestaurant);
-
-        convertedTopRestaurant.userId = user._id;
+        if(!found) {
+            const convertedTopRestaurant = convertToTopRestaurant(topRatedRestaurant);
     
-        convertedTopRestaurant.save(function(err) {
-            if (err) throw err;
-            console.log('Top restaurant saved!');
-        });
-    
-        user.topRestaurants.push(convertedTopRestaurant);
-        user.save(function(err) {
-            if (err) throw err;
-            console.log('Top restaurant save to user!');
-        });
+            convertedTopRestaurant.userId = user._id;
+        
+            convertedTopRestaurant.save(function(err) {
+                if (err) throw err;
+                console.log('Top restaurant saved!');
+            });
+        
+            user.topRestaurants.push(convertedTopRestaurant);
+            user.save(function(err) {
+                if (err) throw err;
+                console.log('Top restaurant save to user!');
+            });
+        }
     }
 
     const index = mappedResults.findIndex(obj => obj === topRatedRestaurant);
