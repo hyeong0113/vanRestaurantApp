@@ -2,7 +2,7 @@ const axios = require('axios');
 const jwt = require("jsonwebtoken");
 const User = require('../models/userSchema');
 const { checkObjectExistsById } = require('../utilities/databaseUtility');
-const { saveAndReturnResponse } = require('../utilities/toprestaurantUtility');
+const { saveAndReturnResponse } = require('../utilities/topRestaurantUtility');
 require('dotenv').config();
 
 /*
@@ -101,12 +101,12 @@ const getRestaurantsWithLocationName = async (req, res) => {
         });
 
         user = await User.findOne({ _id: id })
-            .then(u => {
-                if (!u) {
-                    return res.status(400).json({ message: 'User not found' });
-                }
-                return u.populate('topRestaurants');
-            }).catch(err => res.status(500).json({ message: err.message }));
+                .then(u => {
+                    if (!u) {
+                        return res.status(400).json({ message: 'User not found' });
+                    }
+                    return u.populate('topRestaurants');
+                }).catch(err => res.status(500).json({ message: err.message }));
     }
 
     const response = await saveAndReturnResponse(lat, lng, user);

@@ -8,6 +8,6 @@ const favoriteRestaurantSchema = Restaurant.discriminator('FavoriteRestaurant', 
     }
 }));
 
-const FavoriteRestaurant =  Restaurant.discriminator('FavoriteRestaurant');
+const FavoriteRestaurant =  mongoose.model('FavoriteRestaurant');
 
 module.exports = FavoriteRestaurant;

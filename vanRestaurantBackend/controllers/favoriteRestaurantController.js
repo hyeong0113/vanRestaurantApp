@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require('../models/userSchema');
 const FavoriteRestaurant = require('../models/favoriteRestaurantSchema');
+const { saveFavoriteRestaurant } = require('../utilities/favoriteRestaurantUtility');
 require('dotenv').config();
 
 const getFavoriteRestaurantsByUserId = (req, res) => {
@@ -52,9 +53,12 @@ const createFavoriteRestaurant = async (req, res) => {
                         }).catch(err => res.status(500).json({ message: err.message }));
         
         const response = await saveFavoriteRestaurant(favoriteRestaurant, user);
+        res.status(200).json(response);
+        return;
     }
     else {
         res.status(403).json({ message: "Unauthorized action. Need to login first!", success: false });
+        return;
     }
 
 
