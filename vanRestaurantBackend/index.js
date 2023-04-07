@@ -17,6 +17,7 @@ mongoose.connect(database, {useUnifiedTopology: true, useNewUrlParser: true })
 .then(() => console.log('Mongo DB connected'))
 .catch(err => console.log(err));
 
+app.use(bodyParser({limit: '50mb'}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -42,6 +43,7 @@ const basic = basicAuth({
 app.use('/', basic, require('./routes/locationRoute'));
 app.use('/', basic, require('./routes/identityRoute'));
 app.use('/', basic, require('./routes/topRestaurantRoute'));
+app.use('/', basic, require('./routes/favoriteRestaurantRoute'));
 
 var server = app.listen(port, hostname, function () {
   var host = server.address().address
