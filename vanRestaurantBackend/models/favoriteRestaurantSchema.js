@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
-const Restaurant = require('./restaurantSchema');
+const Restaurant = mongoose.model("Restaurant");
 
-const favoriteRestaurantSchema = new mongoose.Schema({
+const favoriteRestaurantSchema = Restaurant.discriminator('FavoriteRestaurant', new mongoose.Schema ({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }
-});
+}));
 
-const FavoriteRestaurant =  Restaurant.discriminator('FavoriteRestaurant', favoriteRestaurantSchema);
+const FavoriteRestaurant =  Restaurant.discriminator('FavoriteRestaurant');
 
 module.exports = FavoriteRestaurant;

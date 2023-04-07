@@ -1,5 +1,6 @@
 const RestaurantDto = require('../dtos/restaurantDto');
 const TopRestaurant = require('../models/topRestaurantSchema');
+const FavoriteRestaurant = require('../models/favoriteRestaurantSchema');
 const  { getPhotoByReference } = require("../utilities/photoUtility");
 
 require('dotenv').config();
@@ -47,9 +48,24 @@ const convertToTopRestaurant = (topRestaurant) => {
     });
 }
 
+const convertToFavoriteRestaurant = (favoriteRestaurant) => {
+    return new FavoriteRestaurant ({
+        placeId: favoriteRestaurant.placeId,
+        name: favoriteRestaurant.name,
+        address: favoriteRestaurant.address,
+        businessStatus: favoriteRestaurant.businessStatus,
+        location: favoriteRestaurant.location,
+        openNow: favoriteRestaurant.openNow,
+        photo: favoriteRestaurant.photo,
+        rating: favoriteRestaurant.rating,
+        url: favoriteRestaurant.url
+    });
+}
+
 
 
 module.exports = {
     convertToRestaurantSchemaList,
-    convertToTopRestaurant
+    convertToTopRestaurant,
+    convertToFavoriteRestaurant
 }; 

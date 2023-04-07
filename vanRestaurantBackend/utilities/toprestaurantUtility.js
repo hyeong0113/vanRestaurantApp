@@ -2,7 +2,7 @@ const axios = require('axios');
 const { saveObjectToDB } = require('./databaseUtility');
 const { convertToRestaurantSchemaList, convertToTopRestaurant } = require('./schemaUtility');
 const TopRestaurant = require('../models/topRestaurantSchema');
-require('dotenv').config()
+require('dotenv').config();
 
 const saveAndReturnResponse = async(lat, long, user) => {
 
