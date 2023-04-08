@@ -6,9 +6,9 @@ import {
 } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import customTheme from './theme/customTheme';
-import MainPage from './components/MainPage';
-import LoginPage from './components/login/LoginPage';
-import SignUpPage from './components/signUp/SignUpPage';
+import MainPage from '../src/components/mainPage/MainPage';
+import LoginPage from '../src/components/login/LoginPage';
+import SignUpPage from '../src/components/signUp/SignUpPage';
 
 function App() {
   return (

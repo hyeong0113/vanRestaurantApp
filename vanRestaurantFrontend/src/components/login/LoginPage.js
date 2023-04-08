@@ -86,7 +86,8 @@ const LoginPage = () => {
                     console.log(result);
                     if (result) {
                         console.log(result);
-                        localStorage.setItem("authenticated", true);
+                        const { token } = result;
+                        localStorage.setItem("authenticated", token);
                         navigate('/');
                     }
                 },

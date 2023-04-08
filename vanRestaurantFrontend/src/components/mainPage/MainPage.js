@@ -9,18 +9,18 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Fade from '@mui/material/Fade';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 
-import Topbar from './header/Topbar';
-import GoogleMapComponent from './map/GoogleMapComponent';
-import { MapContext } from './context/MapContext';
-import MainRestaurantCard from './card/MainRestaurantCard';
-import MediumRestaurantCard from './card/MediumRestaurantCard';
+import Topbar from '../header/Topbar';
+import GoogleMapComponent from '../map/GoogleMapComponent';
+import { MapContext } from '../context/MapContext';
+import MainRestaurantCard from '../card/MainRestaurantCard';
+import MediumRestaurantCard from '../card/MediumRestaurantCard'
 
 const username = process.env.REACT_APP_USERNAME;
 const password = process.env.REACT_APP_PASSWORD;
 
 const authString = btoa(`${username}:${password}`);
 
-const requestOptions = {
+const geoRequestOptions = {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Basic ${authString}`
@@ -102,22 +102,24 @@ const useStyles = makeStyles((theme) => ({
 function MainPage() {
     const [currentLocation, setCurrentLocation] = useState(null);
     const [restaurants, setRestaurants] = useState(null);
+
     const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(false);
     const [isDataLoading, setIsDataLoading] = useState(false);
-
     const [isShrink, setIsShrink] = useState(false);
     const [isMedium, setIsMedium] = useState(false);
+    const [isGeoDataFetched, setIsGeoDataFetched] = useState(false);
 
     const classes = useStyles();
 
-    // // Fetch geolocation data
-    // useEffect(() => {
-    //     fetchGeoData();
-    // }, [])
+    // Fetch geolocation data
+    useEffect(() => {
+        fetchGeoData();
+        setIsGeoDataFetched(true);
+    }, [isGeoDataFetched])
 
     // fetch current geolocation of user data
     const fetchGeoData = async() => {
-        await fetch(`${process.env.REACT_APP_API_URL}/geo`, requestOptions)
+        await fetch(`${process.env.REACT_APP_API_URL}/location/geo`, geoRequestOptions)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -133,7 +135,22 @@ function MainPage() {
     // Fetch restaurants list
     const fetchRestaurantsByName = async(input) => {
         setIsDataLoading(true);
-        await fetch(`${process.env.REACT_APP_API_URL}/restaurants/search/${"9855 Austin Ave, Burnaby, BC V3J 1N4, Canada"}`, requestOptions)
+        let token = null;
+        if(localStorage.getItem("authenticated").length > 0) {
+            token = localStorage.getItem("authenticated");
+        }
+        const restaurantRequestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${authString}`
+            },
+            body: JSON.stringify({
+                token: token,
+                input: input,
+            })
+        }; 
+        await fetch(`${process.env.REACT_APP_API_URL}/location/search`, restaurantRequestOptions)
             .then(res => res.json())
             .then(
                 (result) => {

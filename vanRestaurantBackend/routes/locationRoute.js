@@ -3,11 +3,7 @@ const { getGeoLocation, getRestaurantsWithLocationName } = require('../controlle
 const { locationValidation } = require('../utilities/validationUtility');
 const router = express.Router();
 
-router.get('/geo', getGeoLocation);
-router.post('/restaurants/search', getRestaurantsWithLocationName);
-// router.get('/restaurants/lat/:lat/long/:long', async(req, res) => {
-//     locationValidation(req, res)
-// });
-// router.get('/restaurant/top/:id', getTopRestaurant);
+router.get('/location/geo', getGeoLocation);
+router.post('/location/search', getRestaurantsWithLocationName);
 
 module.exports = router;
