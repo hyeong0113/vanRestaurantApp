@@ -41,9 +41,9 @@ const signUp = async (req, res) => {
 
 const logIn = async (req, res) => {
     const { email, password } = req.body;
-    let user = null;
+
     try {
-        user = await User.findOne({ email })
+        var user = await User.findOne({ email })
         if(user === null) {
             return res.status(400).json({ message: 'User not found', success: false });
         }
@@ -55,38 +55,29 @@ const logIn = async (req, res) => {
     try {
         const matched = await bcrypt.compare(password, user.password);
         if(!matched) {
-            return res.status(400).json({ message: 'Incorrect password' });
+            return res.status(400).json({ message: "Incorrect password" });
         }
     }
     catch(err) {
         return res.status(400).json({ message: err.message, success: false });
     }
+
     user.isLoggedIn = true;
     await user.save();
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 86400 });
-    return res.json({ token: token, success: true });
+    return res.status(200).json({ message: "Logged in successful!", token: token, loggedIn: user.isLoggedIn , success: true });
 }
 
-const logOut = (req, res) => {
-    // res.clearCookie('token');
-    // return res.status(200).send({ message: "You've been signed out!" });
-    const { token } = req.body;
-    console.log(token);
-    console.log("logOut::token: ", token);
-    console.log("logOut::req.session.token 00: ", req.cookies.token);
-    if(req.cookies.token !== token) {
-        console.log("req.session.token 11:: ", req.cookies.token);
-        const temp = req.cookies.token;
-        throw res.status(403).json({ message: "Invalid action", success: false, temp });
+const logOut = async (req, res) => {
+    const { user } = req;
+
+    if(!user.isLoggedIn) {
+        return res.status(403).json({ message: "This is user is already logged out!", success: false });
     }
-    console.log("req.session.token 22:: ", req.cookies.token);
-    try {
-        // req.session = null;
-        res.clearCookie('token');
-        return res.status(200).send({ message: "You've been signed out!" });
-    } catch (err) {
-        res.status(403).err({ message: err, success: false });
-    }
+    user.isLoggedIn = false;
+    await user.save();
+
+    return res.status(200).json({ message: "Logged out successful!", loggedIn: user.isLoggedIn , success: true });
 }
 
 const checkGoogleEmailRegistered = async (req, res) => {
@@ -99,20 +90,9 @@ const checkGoogleEmailRegistered = async (req, res) => {
     return res.status(200).send({ message: "Given Google email is not registered yet!", registered: false });
 }
 
-const checkCookie = (req, res) => {
-    if(req.cookies.token) {
-        res.status(200).json({ message: "User logged in!", response: true, token: req.cookies.token });
-        return;
-    }
-    res.status(200).json({ message: "User not logged in!", response: false });
-}
-
 module.exports = {
     signUp,
     logIn,
     logOut,
-    checkGoogleEmailRegistered,
-    checkCookie
+    checkGoogleEmailRegistered
 }
-
-//
