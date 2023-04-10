@@ -2,11 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
+const cookieParser = require("cookie-parser");
 const basicAuth = require('express-basic-auth');
 const app = express();
 
 require('dotenv').config();
 
+app.set('http://localhost:3000', 1);
 const cors = require('cors');
 const database = process.env.MONGO_URL;
 
@@ -22,15 +24,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors({
-  origin: 'http://localhost:3000'
+  origin: "http://localhost:3000"
 }));
 
-app.use(cookieSession({
-  name: 'session',
-  secret: process.env.COOKIE_SECRET,
-  httpOnly: true,
-  maxAge: 24 * 60 * 60 * 1000
-}));
+app.use(cookieParser());
+// app.use(cookieSession({
+//   name: 'session',
+//   secret: process.env.COOKIE_SECRET,
+//   maxAge: 24 * 60 * 60 * 1000
+// }));
 
 const userName = process.env.USERNAME;
 const password = process.env.PASSWORD;

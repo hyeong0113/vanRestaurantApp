@@ -103,7 +103,7 @@ function MainPage() {
     const [currentLocation, setCurrentLocation] = useState(null);
     const [restaurants, setRestaurants] = useState(null);
 
-    const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(false);
+    const [isRestaurantsFetched, setIsRestaurantsFetched] = useState(false);
     const [isDataLoading, setIsDataLoading] = useState(false);
     const [isShrink, setIsShrink] = useState(false);
     const [isMedium, setIsMedium] = useState(false);
@@ -119,6 +119,7 @@ function MainPage() {
 
     // fetch current geolocation of user data
     const fetchGeoData = async() => {
+        setIsDataLoading(true);
         await fetch(`${process.env.REACT_APP_API_URL}/location/geo`, geoRequestOptions)
             .then(res => res.json())
             .then(
@@ -130,6 +131,7 @@ function MainPage() {
                     console.log("Not loaded");
                 }
         )
+        setIsDataLoading(false);
     }  
     
     // Fetch restaurants list
@@ -149,7 +151,8 @@ function MainPage() {
                 token: token,
                 input: input,
             })
-        }; 
+        };
+        setIsRestaurantsFetched(false);
         await fetch(`${process.env.REACT_APP_API_URL}/location/search`, restaurantRequestOptions)
             .then(res => res.json())
             .then(
@@ -157,7 +160,7 @@ function MainPage() {
                     console.log("restaurants by location name loaded");
                     setRestaurants(result);
                     setCurrentLocation(result[0].location);
-                    setIsRestaurantsLoading(true);
+                    setIsRestaurantsFetched(true);
                     setIsShrink(false);
                 },
                 (error) => {
@@ -197,7 +200,7 @@ function MainPage() {
                         />
                     </MapContext.Provider>}   
             </div>
-            {isRestaurantsLoading &&
+            {isRestaurantsFetched &&
                 <Fade
                     in={true}
                     timeout={{enter: 3000, exit: 5000}}

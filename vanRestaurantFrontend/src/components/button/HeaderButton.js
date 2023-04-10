@@ -10,13 +10,6 @@ const password = process.env.REACT_APP_PASSWORD;
 
 const authString = btoa(`${username}:${password}`);
 
-const requestOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Basic ${authString}`
-    }
-};
-
 const useStyles = makeStyles((theme) => ({
   button: {
     position: 'relative',
@@ -74,13 +67,32 @@ const HeaderButton = ({ setIsAuthenticated, iconName, icon, handleIconStyleChang
   };
 
   const handleLogOut = () => {
+    let token = null;
+    if(localStorage.getItem("authenticated").length > 0) {
+        token = localStorage.getItem("authenticated");
+    }    
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Basic ${authString}`
+      },
+      body: JSON.stringify({
+          token: token,
+      })
+  }; 
     fetch(`${process.env.REACT_APP_API_URL}/identity/logout`, requestOptions)
       .then(res => res.json())
       .then(
           (result) => {
-            localStorage.setItem("authenticated", "");
-            setIsAuthenticated(false);
-            navigate('/');
+            if(result.successs) {
+              localStorage.setItem("authenticated", "");
+              setIsAuthenticated(false);
+              navigate('/');
+            }
+            else {
+              console.log(result.message);
+            }
           },
           (error) => {
               console.log("Logout not worked");

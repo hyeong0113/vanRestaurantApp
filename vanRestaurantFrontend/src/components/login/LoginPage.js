@@ -73,16 +73,17 @@ const LoginPage = () => {
                 'Content-Type': 'application/json',
                 'Authorization': `Basic ${authString}`
             },
+            withCredntials: true,
             body: JSON.stringify({
                 email: email,
                 password: password,
             })
-        };        
+        };    
         await fetch(`${process.env.REACT_APP_API_URL}/identity/login`, requestOptions)
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log("User sign up successful");
+                    console.log("User log in successful");
                     console.log(result);
                     if (result) {
                         console.log(result);
@@ -92,7 +93,7 @@ const LoginPage = () => {
                     }
                 },
                 (error) => {
-                    console.log("User sign up failed");
+                    console.log("User log in failed:: ", error);
                 }
             )
         setIsLoading(false);
