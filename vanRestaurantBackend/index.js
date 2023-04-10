@@ -1,8 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const cookieSession = require('cookie-session');
-const cookieParser = require("cookie-parser");
 const basicAuth = require('express-basic-auth');
 const app = express();
 
@@ -27,13 +25,6 @@ app.use(cors({
   origin: "http://localhost:3000"
 }));
 
-app.use(cookieParser());
-// app.use(cookieSession({
-//   name: 'session',
-//   secret: process.env.COOKIE_SECRET,
-//   maxAge: 24 * 60 * 60 * 1000
-// }));
-
 const userName = process.env.USERNAME;
 const password = process.env.PASSWORD;
 
@@ -42,8 +33,8 @@ const basic = basicAuth({
   challenge: true
 });
 
-app.use('/', basic, require('./routes/locationRoute'));
-app.use('/', basic, require('./routes/identityRoute'));
+app.use('/', require('./routes/locationRoute'));
+app.use('/', require('./routes/identityRoute'));
 app.use('/', basic, require('./routes/topRestaurantRoute'));
 app.use('/', basic, require('./routes/favoriteRestaurantRoute'));
 

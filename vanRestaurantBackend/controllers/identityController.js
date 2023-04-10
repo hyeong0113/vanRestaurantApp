@@ -16,16 +16,6 @@ const signUp = async (req, res) => {
         return res.status(403).json({ message: "Email is already registered!" });
     }
 
-    // const hashedPassword = await bcrypt.genSalt(10, async (err, salt) => {
-    //     bcrypt.hash(password, salt, (err, hash) => {
-    //       if (err) {
-    //           throw err;
-    //       }
-    //       console.log('hash:: ', hash);
-    //       return hash;
-    //     });
-    // });
-
     const newUser = new User({ userName, email, password });
 
     try {
@@ -37,10 +27,6 @@ const signUp = async (req, res) => {
         return res.status(500).json({ message: err.message, success: false });
     }
 
-    // console.log(password);
-    // console.log(hashedPassword);
-
-    // newUser.password = hashedPassword;
     newUser.roles = 'user';
 
     try {
@@ -54,29 +40,30 @@ const signUp = async (req, res) => {
 }
 
 const logIn = async (req, res) => {
-    res.clearCookie('token');
-    console.log('login"" ', req.cookies.token)
     const { email, password } = req.body;
-    console.log(email);
-    await User.findOne({ email })
-        .then(user => {
-            if (!user) {
-                return res.status(400).json({ message: 'User not found' });
-            }
-            bcrypt.compare(password, user.password, (err, isMatch) => {
-                if (err) throw err;
-                if (isMatch) {
-                    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 86400 });
-                    // req.session.token = token;
-                    res.cookie('token', token, { maxAge: 900000, httpOnly: true });
-                    console.log("login::req.session.token:: ", req.cookies.token);
-                    res.json({ token: token, success: true });
-                } else {
-                    return res.status(400).json({ message: 'Incorrect password' });
-                }
-            });
-      })
-      .catch(err => res.status(500).json({ message: err.message }));
+    let user = null;
+    try {
+        user = await User.findOne({ email })
+        if(user === null) {
+            return res.status(400).json({ message: 'User not found', success: false });
+        }
+    }
+    catch(err) {
+        return res.status(500).json({ message: err.messsage, success: false });
+    }
+
+    try {
+        const matched = await bcrypt.compare(password, user.password);
+        if(!matched) {
+            return res.status(400).json({ message: 'Incorrect password' });
+        }
+    }
+    catch(err) {
+        return res.status(400).json({ message: err.message, success: false });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 86400 });
+    return res.json({ token: token, success: true });
 }
 
 const logOut = (req, res) => {
