@@ -72,7 +72,7 @@ const logOut = async (req, res) => {
     const { user } = req;
 
     if(!user.isLoggedIn) {
-        return res.status(403).json({ message: "This is user is already logged out!", success: false });
+        return res.status(403).error({ message: "This is user is already logged out!", success: false });
     }
     user.isLoggedIn = false;
     await user.save();

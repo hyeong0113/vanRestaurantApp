@@ -4,11 +4,6 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { makeStyles } from '@mui/styles';
 import googleLogo from '../../assets/images/googleLogo.png';
 
-const username = process.env.REACT_APP_USERNAME;
-const password = process.env.REACT_APP_PASSWORD;
-
-const authString = btoa(`${username}:${password}`);
-
 const useStyles = makeStyles((theme) => ({
     button: {
         height: '111%',
@@ -59,8 +54,7 @@ const GoogleLogInButton = () => {
             const requestOptions = {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Basic ${authString}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     email: email

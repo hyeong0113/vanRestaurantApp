@@ -5,10 +5,10 @@ import TextField from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
 import SubmitSignUpButton from '../button/SubmitSignUpButton';
 
-const username = process.env.REACT_APP_USERNAME;
-const password = process.env.REACT_APP_PASSWORD;
+// const username = process.env.REACT_APP_USERNAME;
+// const password = process.env.REACT_APP_PASSWORD;
 
-const authString = btoa(`${username}:${password}`);
+// const authString = btoa(`${username}:${password}`);
 
 const useStyles = makeStyles((theme) => ({
     main: {
@@ -65,8 +65,7 @@ const SignUpPage = () => {
         const requestOptions = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Basic ${authString}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 email: email,
@@ -80,14 +79,17 @@ const SignUpPage = () => {
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log("User sign up successful");
-                    console.log(result);
-                    if (result) {
+                    const { success } = result;
+                    if (success) {
+                        console.log("User sign up successful");
                         navigate('/login');
+                    }
+                    else {
+                        console.log("User sign up failed");
                     }
                 },
                 (error) => {
-                    console.log("User sign up failed");
+                    console.log("User sign up failed:: ", error);
                 }
             )
         setIsLoading(false);

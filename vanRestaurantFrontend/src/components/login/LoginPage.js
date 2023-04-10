@@ -8,10 +8,10 @@ import { Typography } from '@mui/material';
 import SignInButton from '../button/SignInButton';
 import SignUpButton from '../button/SignUpButton';
 
-const username = process.env.REACT_APP_USERNAME;
-const password = process.env.REACT_APP_PASSWORD;
+// const username = process.env.REACT_APP_USERNAME;
+// const password = process.env.REACT_APP_PASSWORD;
 
-const authString = btoa(`${username}:${password}`);
+// const authString = btoa(`${username}:${password}`);
 
 const useStyles = makeStyles((theme) => ({
     main: {
@@ -70,8 +70,7 @@ const LoginPage = () => {
         const requestOptions = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Basic ${authString}`
+                'Content-Type': 'application/json'
             },
             withCredntials: true,
             body: JSON.stringify({
@@ -83,12 +82,14 @@ const LoginPage = () => {
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log("User log in successful");
                     console.log(result);
-                    if (result) {
-                        console.log(result);
-                        const { token } = result;
+                    const { token, loggedIn } = result;
+                    if(!token) {
+                        console.log("User log in failed");
+                    }
+                    if(loggedIn) {                        
                         localStorage.setItem("authenticated", token);
+                        console.log("User log in successful");
                         navigate('/');
                     }
                 },
