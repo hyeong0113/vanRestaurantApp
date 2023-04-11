@@ -1,8 +1,5 @@
 const axios = require('axios');
-const jwt = require("jsonwebtoken");
-const User = require('../models/userSchema');
-const { checkObjectExistsById } = require('../utilities/databaseUtility');
-const { saveAndReturnResponse } = require('../utilities/topRestaurantUtility');
+const { saveAndReturnResponse, populateTopRestaurants } = require('../utilities/topRestaurantUtility');
 require('dotenv').config();
 
 /*
@@ -60,7 +57,7 @@ const getGeoLocation = async (req, res) => {
 *              JSON with status 200
 */
 const getRestaurantsWithLocationName = async (req, res) => {
-    const { input, token } = req.body;
+    const { input } = req.body;
     if(!input || input.length <= 0) {
         res.status(400).send("location name is undefined.");
         return;
@@ -85,31 +82,12 @@ const getRestaurantsWithLocationName = async (req, res) => {
     const { formatted_address, geometry } = candidates[0];
     const { lat, lng } = geometry.location;
 
-    let user = null;
-
-    if(req.session.token) {
-        if(req.session.token !== token) {
-            throw res.status(403).json({ message: "Invalid action.", success: false });
-        }
-
-        const { id } = jwt.verify(req.session.token, process.env.JWT_SECRET, function(err, decoded) {
-            if(err) {
-              console.log('Error decoding token:', err);
-              return null;
-            }
-            return decoded;
-        });
-
-        user = await User.findOne({ _id: id })
-                .then(u => {
-                    if (!u) {
-                        return res.status(400).json({ message: 'User not found' });
-                    }
-                    return u.populate('topRestaurants');
-                }).catch(err => res.status(500).json({ message: err.message }));
+    const { user } = req;
+    if(user && user.isLoggedIn) {
+        var populatedUser = await populateTopRestaurants(user);
     }
 
-    const response = await saveAndReturnResponse(lat, lng, user);
+    const response = await saveAndReturnResponse(lat, lng, populatedUser);
 
     res.status(200).json(response);
 }

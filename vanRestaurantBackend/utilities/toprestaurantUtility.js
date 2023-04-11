@@ -74,35 +74,17 @@ const fetchPlaceDetail = async (placeId) => {
     return result;
 }
 
-async function checkObjectExistsById(id) {
+const populateTopRestaurants = async(user) => {
     try {
-        const result = await TopRestaurant.findOne({ id: id }).catch((error) => {
-            console.error(error);
-        });
-         
-        return result;
-      } catch (error) {
-        console.error(error);
+        var populatedUser = await user.populate('topRestaurants');
     }
+    catch(err) {
+        throw res.status(500).json(error);
+    }
+    return populatedUser;
 }
-
-async function saveTopRestaurant(data) {
-    await checkObjectExistsById(data.id)
-        .then(async(result) => {
-            if (result) {
-                console.log('Object exists');
-            } else {
-                await data.save().catch((err) => console.log(err));
-            }
-        })
-        .catch((err) => {
-            console.error(err);
-            return null;
-        });
-        return data.id;
-}
-
 
 module.exports = {
-    saveAndReturnResponse
+    saveAndReturnResponse,
+    populateTopRestaurants
 }
