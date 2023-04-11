@@ -24,18 +24,17 @@ const signUp = async (req, res) => {
         newUser.password = hashedPassword;
     }
     catch(err) {
-        return res.status(500).json({ message: err.message, success: false });
+        throw res.status(500).json({ message: err.message, success: false });
     }
 
     newUser.roles = 'user';
 
     try {
         const saved = await newUser.save();
-        console.log(saved.email);
         return res.status(200).json({ message: "Welcome to NearBy!", success: true });
     }
     catch(err) {
-        return res.status(500).json({ message: err.message, success: false });
+        throw res.status(500).json({ message: err.message, success: false });
     }
 }
 
@@ -49,7 +48,7 @@ const logIn = async (req, res) => {
         }
     }
     catch(err) {
-        return res.status(500).json({ message: err.messsage, success: false });
+        throw res.status(500).json({ message: err.messsage, success: false });
     }
 
     try {
@@ -59,7 +58,7 @@ const logIn = async (req, res) => {
         }
     }
     catch(err) {
-        return res.status(400).json({ message: err.message, success: false });
+        throw res.status(400).json({ message: err.message, success: false });
     }
 
     user.isLoggedIn = true;

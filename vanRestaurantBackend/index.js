@@ -35,8 +35,8 @@ const basic = basicAuth({
 
 app.use('/', require('./routes/locationRoute'));
 app.use('/', require('./routes/identityRoute'));
-app.use('/', basic, require('./routes/topRestaurantRoute'));
-app.use('/', basic, require('./routes/favoriteRestaurantRoute'));
+app.use('/', require('./routes/topRestaurantRoute'));
+app.use('/', require('./routes/favoriteRestaurantRoute'));
 
 var server = app.listen(port, hostname, function () {
   var host = server.address().address
