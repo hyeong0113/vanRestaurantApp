@@ -4,12 +4,11 @@ import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardContent';
-import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import StarIcon from '@mui/icons-material/Star';
 import FavoriteButton from '../button/FavoriteButton';
 import { makeStyles } from '@mui/styles';
-import ReviewButton from '../button/GotoReviewButton';
+import HistoryReviewButton from '../button/HistoryReviewButton';
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -22,6 +21,11 @@ const useStyles = makeStyles((theme) => ({
     },
     container: {
         rowGap: '5px',
+    },
+    photo: {
+        paddingTop: '2.6% !important',
+        paddingLeft: '2% !important',
+        borderRadius: '10px'
     },
     favoriteButton: {
         textAlign: 'right',
@@ -36,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'left',
         paddingTop: '3% !important',
     },
+    nameText: {
+        fontWeight: '400 !important'
+    },
     text: {
         fontWeight: '400 !important',
         maxWidth: "100%",
@@ -49,26 +56,15 @@ const useStyles = makeStyles((theme) => ({
     },
     leftItem: {
         textAlign: 'left',
-        // paddingLeft: '3%',
-        paddingTop: '4% !important',
-
+        paddingLeft: '5%',
+        paddingTop: '2.5% !important',
     },
     rightItem: {
         textAlign: 'left',
-        paddingTop: '4% !important',
+        paddingTop: '2.5% !important',
     },
     rating: {
         display: 'flex'
-    },
-    chip: {
-        color: '#FFFEFE !important',
-        fontFamily: 'Manrope, sans-serif !important',
-        fontStyle: 'normal',
-        fontWeight: 700,
-        height: '40px !important',
-        width: '230px !important',
-        position: 'absolute',
-        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.46)'
     },
     buttonCanainer: {
         position: 'relative',
@@ -89,34 +85,32 @@ const HistoryCard = (props) => {
     return(
         <Card className={classes.card} variant="outlined">
             <CardMedia
+                className={classes.photo}
                 component="img"
                 // src={`data:image/png;base64,${photo}`}
-                src={'../../assets/images/food1.png'}
-                height="235 !important"
+                src="1.png"
+                height="240 !important"
                 width="400 !important"
-                style={{ position: 'relative' }}
             />
-            {/* <Grid className={classes.buttonCanainer} container>
-                <Grid className={classes.rightItem} item xs={6}>
-                    <FavoriteButton isSelected={isSelected} onFavoriteButtonClick={onFavoriteButtonClick} />
-                </Grid>
-            </Grid>      */}
             <CardContent>
                 <Grid className={classes.container} rowSpacing={4} container>
                     <Grid className={classes.favoriteButton} item xs={12}>
                         <FavoriteButton isSelected={isSelected} onFavoriteButtonClick={onFavoriteButtonClick} />
                     </Grid>
-                    <Grid className={classes.name} item xs={6}>
-                        <Typography variant="h5">
+                    <Grid className={classes.leftItem} item xs={6}>
+                        <Typography className={classes.nameText} variant="h4">
                             {/* {name} */}
                             Test Name
                         </Typography>
                     </Grid>
                     <Grid className={classes.rightItem} item xs={6}>
-                        <Typography variant="h5">
-                            {/* {rating} */}
-                            3.5
-                        </Typography>                            
+                        <div className={classes.rating}>
+                            <StarIcon className={classes.ratingIcon} fontSize='medium' />
+                            <Typography variant="h5">
+                                {/* {rating} */}
+                                3.5
+                            </Typography>  
+                        </div>                         
                     </Grid>
                     <Grid className={classes.leftItem} item xs={6}>
                         <Typography variant="h5">
@@ -124,7 +118,7 @@ const HistoryCard = (props) => {
                         </Typography>
                     </Grid>
                     <Grid className={classes.rightItem} item xs={6}>
-                        <ReviewButton url={"temp"} />
+                        <HistoryReviewButton url={"temp"} />
                     </Grid>
                     <Grid className={classes.leftItem} item xs={6}>
                         <Typography variant="h5">
@@ -132,7 +126,7 @@ const HistoryCard = (props) => {
                         </Typography>
                     </Grid>
                     <Grid className={classes.rightItem} item xs={6}>
-                        <Typography variant="h5">
+                        <Typography variant="h6">
                             {/* {address} */}
                             Vancouver Asdsdawd
                         </Typography>                            
