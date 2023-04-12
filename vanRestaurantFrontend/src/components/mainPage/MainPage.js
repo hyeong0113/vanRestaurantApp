@@ -40,14 +40,12 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '10px 10px 0px 0px',
         width: "100%",
         position: "absolute",
-        // transition: 'all 2s ease',
     },
     box: {
         display: "flex",
         paddingLeft: theme.spacing(5),
         overflowX: "scroll",
         overflowY: 'hidden !important',
-        // transition: 'all 2s ease',
         "&::-webkit-scrollbar": {
             width: "100px",
         },
@@ -69,7 +67,6 @@ const useStyles = makeStyles((theme) => ({
     },
     cardBox: {
         width: 400,
-        // transition: 'all 2s ease',
         marginRight: theme.spacing(21),
         paddingTop: '1%',
         paddingBottom: '3%',

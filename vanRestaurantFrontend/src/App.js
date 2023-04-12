@@ -9,6 +9,7 @@ import customTheme from './theme/customTheme';
 import MainPage from '../src/components/mainPage/MainPage';
 import LoginPage from '../src/components/login/LoginPage';
 import SignUpPage from '../src/components/signUp/SignUpPage';
+import HistoryPage from './components/history/HistoryPage';
 
 function App() {
   return (
@@ -16,9 +17,10 @@ function App() {
       <div className="App">
         <Router>
           <Routes>
-            <Route path="/" element={<MainPage />} />
+            <Route path="/" element={<HistoryPage />} />
+            {/* <Route path="/" element={<MainPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/signup" element={<SignUpPage />} /> */}
           </Routes>
         </Router>        
       </div>
