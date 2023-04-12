@@ -1,5 +1,3 @@
-const jwt = require("jsonwebtoken");
-const User = require('../models/userSchema');
 const FavoriteRestaurant = require('../models/favoriteRestaurantSchema');
 const { saveFavoriteRestaurant, populateFavoriteRestaurants } = require('../utilities/favoriteRestaurantUtility');
 require('dotenv').config();
@@ -38,8 +36,8 @@ const deleteFavoriteRestaurantByPlaceId = async (req, res) => {
         const deleteFavoriteRestaurant = populatedUser.favoriteRestaurants.find(r => r.placeId === placeId);
     
         if(deleteFavoriteRestaurant) {
-            await FavoriteRestaurant.findOneAndRemove({ _id: deleteFavoriteRestaurant._id, userId: user._id });
-            user.favoriteRestaurants.pull(deleteFavoriteRestaurant);
+            await FavoriteRestaurant.findOneAndRemove({ _id: deleteFavoriteRestaurant._id, userId: populatedUser._id });
+            populatedUser.favoriteRestaurants.pull(deleteFavoriteRestaurant);
             await populatedUser.save();
             console.log('Favorite restaurant deleted successfully.');
             res.status(200).json({ message: "Favorite restaurant deleted", success: true });
