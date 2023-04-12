@@ -6,7 +6,6 @@ const useStyles = makeStyles((theme) => ({
     button: {
         height: '100%',
         width: '20%',
-        // backgroundColor: 'rgba(239, 198, 119, 0.82) !important',
         background: '#000000 !important',
         boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
         border: 'none',
@@ -14,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
     },
     text: {
         fontSize: 17,
-        // verticalAlign: 'super',
         color: '#FFFFFF',
         fontFamily: 'Manrope, sans-serif !important',
         fontStyle: 'normal',

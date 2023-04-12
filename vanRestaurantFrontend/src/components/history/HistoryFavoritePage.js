@@ -9,6 +9,7 @@ import Grid from '@mui/material/Grid';
 
 import Topbar from '../header/Topbar';
 import ClearButton from '../button/ClearButton';
+import HistoryCard from '../card/HistoryCard';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -19,15 +20,20 @@ const useStyles = makeStyles((theme) => ({
         height: '100vh'
     },
     grid: {
-        // transform: 'translateX(20%)'
         paddingTop: '2%'
     },
     title: {
         float: 'left'
     },
+    cardContainer: {
+        paddingTop: '2%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+    }
 }));
 
-function HistoryPage() {
+function HistoryFavoritePage() {
     const [isDataLoading, setIsDataLoading] = useState(false);
 
     const classes = useStyles();
@@ -51,12 +57,18 @@ function HistoryPage() {
                         </Grid>
                         <Grid item xs={6}>
                             <ClearButton />
-                        </Grid>                        
+                        </Grid>
+                        <Grid className={classes.cardContainer} item xs={12}>
+                            <HistoryCard />
+                        </Grid>            
                     </Grid>
+                    {/* <Grid className={classes.cardContainer} container>
+ 
+                    </Grid> */}
                 </Box>
             </Container>
         </div>
     );
 }
 
-export default HistoryPage;
+export default HistoryFavoritePage;
