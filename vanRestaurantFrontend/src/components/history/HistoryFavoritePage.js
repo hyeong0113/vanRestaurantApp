@@ -10,6 +10,7 @@ import Grid from '@mui/material/Grid';
 import Topbar from '../header/Topbar';
 import ClearButton from '../button/ClearButton';
 import HistoryCard from '../card/HistoryCard';
+import SearchRestaurantButton from '../button/SearchRestaurantButton';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -25,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     title: {
         float: 'left'
     },
+    searchRestaurant: {
+        marginTop: '20% !important'
+    },
     cardContainer: {
         paddingTop: '2%',
         alignItems: 'center',
@@ -38,7 +42,7 @@ function HistoryFavoritePage() {
     const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
 
     const [isLoaded, setIsLoaded] = useState(false);
-
+    const [isEmpty, setIsEmpty] = useState(false);
     const classes = useStyles();
 
     useEffect(() => {
@@ -63,7 +67,12 @@ function HistoryFavoritePage() {
             (result) => {
                 console.log("data loaded");
                 const { favoriteRestaurants } = result;
-                setFavoriteRestaurants(favoriteRestaurants);
+                if(favoriteRestaurants.length === 0) {
+                    setIsEmpty(true);
+                }
+                else {
+                    setFavoriteRestaurants(favoriteRestaurants);
+                }
             },
             (error) => {
                 console.log("Not loaded: ", error);
@@ -92,7 +101,12 @@ function HistoryFavoritePage() {
                         <Grid item xs={6}>
                             <ClearButton />
                         </Grid>
-                            {favoriteRestaurants && favoriteRestaurants.map((restaurant, index) => {
+                            {isEmpty && 
+                                <Grid className={classes.searchRestaurant} item xs={12}>
+                                    <SearchRestaurantButton />
+                                </Grid> 
+                            }
+                            {favoriteRestaurants.length > 0 && favoriteRestaurants.map((restaurant, index) => {
                                 return (
                                     <Grid key={index} className={classes.cardContainer} item xs={12}>
                                         <HistoryCard restaurant={restaurant} index={index} />

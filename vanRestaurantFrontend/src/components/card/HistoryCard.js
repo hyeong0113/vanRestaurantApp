@@ -6,7 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import StarIcon from '@mui/icons-material/Star';
-import FavoriteButton from '../button/FavoriteButton';
+import HistoryFavoriteButton from '../button/HistoryFavoriteButton';
 import { makeStyles } from '@mui/styles';
 import HistoryReviewButton from '../button/HistoryReviewButton';
 
@@ -96,7 +96,7 @@ const HistoryCard = (props) => {
             <CardContent>
                 <Grid className={classes.container} rowSpacing={4} container>
                     <Grid className={classes.favoriteButton} item xs={12}>
-                        <FavoriteButton isSelected={isSelected} onFavoriteButtonClick={onFavoriteButtonClick} />
+                        <HistoryFavoriteButton isSelected={isSelected} onFavoriteButtonClick={onFavoriteButtonClick} />
                     </Grid>
                     <Grid className={classes.leftItem} item xs={6}>
                         <Typography className={classes.nameText} variant="h5">
