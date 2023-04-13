@@ -8,11 +8,6 @@ import { Typography } from '@mui/material';
 import SignInButton from '../button/SignInButton';
 import SignUpButton from '../button/SignUpButton';
 
-// const username = process.env.REACT_APP_USERNAME;
-// const password = process.env.REACT_APP_PASSWORD;
-
-// const authString = btoa(`${username}:${password}`);
-
 const useStyles = makeStyles((theme) => ({
     main: {
         height: '100vh',
