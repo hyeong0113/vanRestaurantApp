@@ -23,18 +23,15 @@ const useStyles = makeStyles((theme) => ({
         rowGap: '5px',
     },
     photo: {
-        paddingTop: '2.6% !important',
-        paddingLeft: '2% !important',
-        borderRadius: '10px'
+        marginTop: '1.3% !important',
+        marginLeft: '2% !important',
+        borderRadius: '10px',
+        overflow: 'hidden'
     },
     favoriteButton: {
         textAlign: 'right',
         marginRight: '3% !important',
         marginTop: '2% !important',
-    },
-    image: {
-        position: 'relateive',
-        objectFit: 'cover'
     },
     name: {
         textAlign: 'left',
@@ -73,10 +70,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HistoryCard = (props) => {
-    const [isSelected, setIsSelected] = useState(false);
-    // const { restaurant, index } = props;
+    const [isSelected, setIsSelected] = useState(true);
+    const { restaurant, index } = props;
     const classes = useStyles();
-    // const { photo, rating, name, address, url, openNow } = restaurant;
+    const { photo, rating, name, address, url, openNow } = restaurant;
     
     const onFavoriteButtonClick = () => {
         setIsSelected((isSelected) => !isSelected);
@@ -87,10 +84,9 @@ const HistoryCard = (props) => {
             <CardMedia
                 className={classes.photo}
                 component="img"
-                // src={`data:image/png;base64,${photo}`}
-                src="1.png"
-                height="240 !important"
-                width="400 !important"
+                src={`data:image/png;base64,${photo}`}
+                height={265}
+                width={400}
             />
             <CardContent>
                 <Grid className={classes.container} rowSpacing={4} container>
@@ -98,17 +94,15 @@ const HistoryCard = (props) => {
                         <FavoriteButton isSelected={isSelected} onFavoriteButtonClick={onFavoriteButtonClick} />
                     </Grid>
                     <Grid className={classes.leftItem} item xs={6}>
-                        <Typography className={classes.nameText} variant="h4">
-                            {/* {name} */}
-                            Test Name
+                        <Typography className={classes.nameText} variant="h5">
+                            {name}
                         </Typography>
                     </Grid>
                     <Grid className={classes.rightItem} item xs={6}>
                         <div className={classes.rating}>
                             <StarIcon className={classes.ratingIcon} fontSize='medium' />
                             <Typography variant="h5">
-                                {/* {rating} */}
-                                3.5
+                                {rating}
                             </Typography>  
                         </div>                         
                     </Grid>
@@ -118,7 +112,7 @@ const HistoryCard = (props) => {
                         </Typography>
                     </Grid>
                     <Grid className={classes.rightItem} item xs={6}>
-                        <HistoryReviewButton url={"temp"} />
+                        <HistoryReviewButton url={url} />
                     </Grid>
                     <Grid className={classes.leftItem} item xs={6}>
                         <Typography variant="h5">
@@ -127,8 +121,7 @@ const HistoryCard = (props) => {
                     </Grid>
                     <Grid className={classes.rightItem} item xs={6}>
                         <Typography variant="h6">
-                            {/* {address} */}
-                            Vancouver Asdsdawd
+                            {address}
                         </Typography>                            
                     </Grid>
                 </Grid>       

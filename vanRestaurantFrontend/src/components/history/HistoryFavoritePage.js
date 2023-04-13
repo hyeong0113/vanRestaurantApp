@@ -35,8 +35,42 @@ const useStyles = makeStyles((theme) => ({
 
 function HistoryFavoritePage() {
     const [isDataLoading, setIsDataLoading] = useState(false);
+    const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
+
+    const [isLoaded, setIsLoaded] = useState(false);
 
     const classes = useStyles();
+
+    useEffect(() => {
+        fetchFacoriteRestaurant();
+        setIsLoaded(true);
+    }, [isLoaded])
+
+    const fetchFacoriteRestaurant = async() => {
+        setIsDataLoading(true);
+        if(localStorage.getItem("authenticated").length > 0) {
+            var token = localStorage.getItem("authenticated");
+        }
+        const requestOptions = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        };
+        await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/all`, requestOptions)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log("data loaded");
+                const { favoriteRestaurants } = result;
+                setFavoriteRestaurants(favoriteRestaurants);
+            },
+            (error) => {
+                console.log("Not loaded: ", error);
+            }
+    )
+        setIsDataLoading(false);
+    }
 
     return (
         <div>
@@ -58,9 +92,13 @@ function HistoryFavoritePage() {
                         <Grid item xs={6}>
                             <ClearButton />
                         </Grid>
-                        <Grid className={classes.cardContainer} item xs={12}>
-                            <HistoryCard />
-                        </Grid>            
+                            {favoriteRestaurants && favoriteRestaurants.map((restaurant, index) => {
+                                return (
+                                    <Grid key={index} className={classes.cardContainer} item xs={12}>
+                                        <HistoryCard restaurant={restaurant} index={index} />
+                                    </Grid> 
+                                )
+                            })}
                     </Grid>
                     {/* <Grid className={classes.cardContainer} container>
  

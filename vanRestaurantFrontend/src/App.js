@@ -18,8 +18,8 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<HistoryFavoritePage />} />
-            {/* <Route path="/" element={<MainPage />} />
             <Route path="/login" element={<LoginPage />} />
+            {/* <Route path="/" element={<MainPage />} />
             <Route path="/signup" element={<SignUpPage />} /> */}
           </Routes>
         </Router>        
