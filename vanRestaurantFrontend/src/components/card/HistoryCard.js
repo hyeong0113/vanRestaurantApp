@@ -33,12 +33,8 @@ const useStyles = makeStyles((theme) => ({
         marginRight: '3% !important',
         marginTop: '2% !important',
     },
-    name: {
-        textAlign: 'left',
-        paddingTop: '3% !important',
-    },
     nameText: {
-        fontWeight: '400 !important'
+        fontWeight: '400 !important',
     },
     text: {
         fontWeight: '400 !important',
@@ -47,9 +43,21 @@ const useStyles = makeStyles((theme) => ({
         whiteSpace: 'nowrap',
         textOverflow: "ellipsis",
     },
+    rating: {
+        display: 'flex'
+    },
     ratingIcon: {
         paddingTop: '1.5%',
         paddingRight: '4%'
+    },
+    ratingScore: {
+        lineHeight: '1.5 !important'
+    },
+    review: {
+        lineHeight: '1.7 !important'
+    },
+    addressText: {
+        lineHeight: '1.8 !important'
     },
     leftItem: {
         textAlign: 'left',
@@ -59,9 +67,6 @@ const useStyles = makeStyles((theme) => ({
     rightItem: {
         textAlign: 'left',
         paddingTop: '2.5% !important',
-    },
-    rating: {
-        display: 'flex'
     },
     buttonCanainer: {
         position: 'relative',
@@ -101,13 +106,13 @@ const HistoryCard = (props) => {
                     <Grid className={classes.rightItem} item xs={6}>
                         <div className={classes.rating}>
                             <StarIcon className={classes.ratingIcon} fontSize='medium' />
-                            <Typography variant="h5">
+                            <Typography className={classes.ratingScore} variant="h5">
                                 {rating}
                             </Typography>  
                         </div>                         
                     </Grid>
                     <Grid className={classes.leftItem} item xs={6}>
-                        <Typography variant="h5">
+                        <Typography className={classes.review} variant="h5">
                             Reviews
                         </Typography>
                     </Grid>
@@ -120,7 +125,7 @@ const HistoryCard = (props) => {
                         </Typography>
                     </Grid>
                     <Grid className={classes.rightItem} item xs={6}>
-                        <Typography variant="h6">
+                        <Typography className={classes.addressText} variant="h6">
                             {address}
                         </Typography>                            
                     </Grid>
