@@ -5,11 +5,6 @@ import TextField from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
 import SubmitSignUpButton from '../button/SubmitSignUpButton';
 
-// const username = process.env.REACT_APP_USERNAME;
-// const password = process.env.REACT_APP_PASSWORD;
-
-// const authString = btoa(`${username}:${password}`);
-
 const useStyles = makeStyles((theme) => ({
     main: {
         height: '100vh',
@@ -37,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUpPage = () => {
     const [isLoading, setIsLoading] = useState(false);
-    // const [profileObj, setProfileObj] = useState(null);
     const [email, setEmail] = useState("");
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
@@ -48,9 +42,6 @@ const SignUpPage = () => {
     let navigate = useNavigate();
     const classes = useStyles();
     const location = useLocation();
-
-    // TODO: Need to auto-fill email and proceed signup
-    // const profileObj = location.state;
 
     useEffect(() => {
         if(location.state) {

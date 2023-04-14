@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -48,8 +50,41 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DeleteByIdModal = (props) => {
-    const { open, handleClose } = props;
+    const [isDataLoading, setIsDataLoading] = useState(false);
+    const { open, type, placeId, setIsLoaded, setOpen, handleClose } = props;
     const classes = useStyles();
+    let navigate = useNavigate();
+
+    const handleRemoveButton = async() => {
+        if(localStorage.getItem("authenticated").length > 0) {
+            var token = localStorage.getItem("authenticated");
+        }
+        const requestOptions = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                placeId: placeId
+            })
+        };
+        await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/delete`, requestOptions)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result);
+                setOpen(false);
+                setIsLoaded(false);
+                navigate('/');
+            },
+            (error) => {
+                console.log("Not loaded: ", error);
+            }
+        )
+        setIsDataLoading(false);
+    }
+
     return(
         <Modal
         className={classes.modal}
@@ -62,11 +97,11 @@ const DeleteByIdModal = (props) => {
             <Grid container>
                 <Grid className={classes.warningText} item xs={12}>
                     <Typography variant="h6">
-                        Are you sure to remove from favorite list?
+                        Are you sure to remove from {type} list?
                     </Typography>
                 </Grid>
                 <Grid className={classes.modalGridItem} item xs={6}>
-                    <Button className={classes.removeButton}>
+                    <Button className={classes.removeButton} onClick={handleRemoveButton}>
                         <Typography variant="body1">
                             Remove
                         </Typography>

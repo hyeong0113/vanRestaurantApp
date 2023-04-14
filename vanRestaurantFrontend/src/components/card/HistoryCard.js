@@ -79,21 +79,17 @@ const HistoryCard = (props) => {
     const [isSelected, setIsSelected] = useState(true);
     const [open, setOpen] = useState(false);
 
-    const { restaurant, index } = props;
+    const { restaurant, setIsLoaded } = props;
     const { photo, rating, name, address, url, placeId } = restaurant;
     const classes = useStyles();
 
-    const onFavoriteButtonClick = () => {
-        setIsSelected((isSelected) => !isSelected);
-    }
+    const handleDeleteByIdModalOpen = () => setOpen(true);
 
-    const handleOpen = () => setOpen(true);
-
-    const handleClose = () => setOpen(false);
+    const handleDeleteByIdModalClose = () => setOpen(false);
 
     return(
         <div>
-            <DeleteByIdModal open={open} handleClose={handleClose} />
+            <DeleteByIdModal open={open} type="favorite" placeId={placeId} setIsLoaded={setIsLoaded} setOpen={setOpen} handleClose={handleDeleteByIdModalClose} />
             <Card className={classes.card} variant="outlined">
                 <CardMedia
                     className={classes.photo}
@@ -105,7 +101,7 @@ const HistoryCard = (props) => {
                 <CardContent>
                     <Grid className={classes.container} rowSpacing={4} container>
                         <Grid className={classes.favoriteButton} item xs={12}>
-                            <HistoryFavoriteButton isSelected={isSelected} onFavoriteButtonClick={handleOpen} />
+                            <HistoryFavoriteButton isSelected={isSelected} onFavoriteButtonClick={handleDeleteByIdModalOpen} />
                         </Grid>
                         <Grid className={classes.leftItem} item xs={6}>
                             <Typography className={classes.nameText} variant="h5">

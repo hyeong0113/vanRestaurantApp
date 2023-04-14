@@ -43,6 +43,7 @@ function HistoryFavoritePage() {
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
+
     const classes = useStyles();
 
     useEffect(() => {
@@ -71,13 +72,15 @@ function HistoryFavoritePage() {
                     setIsEmpty(true);
                 }
                 else {
+                    setIsEmpty(false);
                     setFavoriteRestaurants(favoriteRestaurants);
                 }
+                setIsLoaded(true);
             },
             (error) => {
                 console.log("Not loaded: ", error);
             }
-    )
+        )
         setIsDataLoading(false);
     }
 
@@ -106,10 +109,10 @@ function HistoryFavoritePage() {
                                     <SearchRestaurantButton />
                                 </Grid> 
                             }
-                            {favoriteRestaurants.length > 0 && favoriteRestaurants.map((restaurant, index) => {
+                            {!isEmpty && favoriteRestaurants.map((restaurant, index) => {
                                 return (
                                     <Grid key={index} className={classes.cardContainer} item xs={12}>
-                                        <HistoryCard restaurant={restaurant} index={index} />
+                                        <HistoryCard restaurant={restaurant} index={index} setIsLoaded={setIsLoaded} />
                                     </Grid> 
                                 )
                             })}
