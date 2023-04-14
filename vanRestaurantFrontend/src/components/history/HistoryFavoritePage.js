@@ -117,9 +117,6 @@ function HistoryFavoritePage() {
                                 )
                             })}
                     </Grid>
-                    {/* <Grid className={classes.cardContainer} container>
- 
-                    </Grid> */}
                 </Box>
             </Container>
         </div>
