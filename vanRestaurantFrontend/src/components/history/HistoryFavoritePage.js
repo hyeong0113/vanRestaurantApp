@@ -11,6 +11,7 @@ import Topbar from '../header/Topbar';
 import ClearButton from '../button/ClearButton';
 import HistoryCard from '../card/HistoryCard';
 import SearchRestaurantButton from '../button/SearchRestaurantButton';
+import DeleteAllModal from '../modal/DeleteAllModal';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -40,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
 function HistoryFavoritePage() {
     const [isDataLoading, setIsDataLoading] = useState(false);
     const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
+    const [open, setOpen] = useState(false);
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
@@ -84,6 +86,10 @@ function HistoryFavoritePage() {
         setIsDataLoading(false);
     }
 
+    const handleDeleteAllModalOpen = () => setOpen(true);
+
+    const handleDeleteAllModalClose = () => setOpen(false);
+
     return (
         <div>
             <Backdrop
@@ -93,6 +99,7 @@ function HistoryFavoritePage() {
                 <CircularProgress color="inherit" />
             </Backdrop>
             <Topbar />
+            <DeleteAllModal open={open} type="favorite" setIsLoaded={setIsLoaded} setOpen={setOpen} handleClose={handleDeleteAllModalClose} />
             <Container className={classes.container} maxWidth="false">
                 <Box className={classes.box}>
                     <Grid className={classes.grid} container>
@@ -102,7 +109,7 @@ function HistoryFavoritePage() {
                             </Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <ClearButton />
+                            <ClearButton onClick={handleDeleteAllModalOpen} />
                         </Grid>
                             {isEmpty && 
                                 <Grid className={classes.searchRestaurant} item xs={12}>
