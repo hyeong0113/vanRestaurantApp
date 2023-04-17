@@ -132,6 +132,7 @@ const MainRestaurantCard = (props) => {
             }
         )
     }
+    
     return(
         <Card className={classes.card} variant="outlined">
             <CardMedia

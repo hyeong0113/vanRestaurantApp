@@ -68,10 +68,70 @@ const MediumRestaurantCard = (props) => {
     const [isSelected, setIsSelected] = useState(false);
     const { restaurant, index } = props;
     const classes = useStyles();
-    const { photo, rating, name, address, url, openNow } = restaurant;
+    const { photo, rating, name, placeId, openNow } = restaurant;
     
-    const onFavoriteButtonClick = () => {
+    const onFavoriteButtonClick = async() => {
+        if(!isSelected) {
+            await createFavoriteRestaurant();
+        }
+        else {
+            await deleteFavoriteRestaurant();
+        }
         setIsSelected((isSelected) => !isSelected);
+
+    }
+
+    const createFavoriteRestaurant = async() => {
+        if(localStorage.getItem("authenticated").length > 0) {
+            var token = localStorage.getItem("authenticated");
+        }
+        
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                favoriteRestaurant: restaurant
+            })
+        };
+        await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/create`, requestOptions)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result);
+            },
+            (error) => {
+                console.log("Not loaded: ", error);
+            }
+        )
+    }
+
+    const deleteFavoriteRestaurant = async() => {
+        if(localStorage.getItem("authenticated").length > 0) {
+            var token = localStorage.getItem("authenticated");
+        }
+        const requestOptions = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                placeId: placeId
+            })
+        };
+        await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/delete`, requestOptions)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result);
+            },
+            (error) => {
+                console.log("Not loaded: ", error);
+            }
+        )
     }
 
     return(
