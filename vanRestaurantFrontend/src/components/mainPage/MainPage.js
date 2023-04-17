@@ -162,7 +162,7 @@ function MainPage() {
                         tempSelectedList.push(false);
                     }
                     setSelectedList(tempSelectedList);
-                    setCurrentLocation(result[0].location);
+                    // setCurrentLocation(result[0].location);
                     setIsRestaurantsFetched(true);
                     setIsShrink(false);
                 },
@@ -205,6 +205,7 @@ function MainPage() {
                     >
                         <GoogleMapComponent
                             location={currentLocation}
+                            restaurants={restaurants}
                             fetchRestaurantsByName={fetchRestaurantsByName}
                         />
                     </MapContext.Provider>}   

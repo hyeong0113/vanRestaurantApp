@@ -38,6 +38,7 @@ const GoogleMapComponent = (props) => {
     const mapRef = useRef();
     const [selectedButton, setSelectedButton] = useState(null);
     const [center, setCenter] = useState({ lat: props.location.lat, lng: props.location.lng });
+    const [restaurantList, setRestaurantList] = useState([]);
     const [zoom, setZoom] = useState(14);
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
@@ -52,12 +53,22 @@ const GoogleMapComponent = (props) => {
     };
 
     useEffect(() => {
-        console.log('GoogleMapComponent::useEffect');
-        setCenter({ lat: props.location.lat, lng: props.location.lng });
-    }, [props.location])
+        if(props.restaurants) {
+            const tempRestaurantList = [];
+            for(let i = 0; i < props.restaurants.length; i++) {
+                tempRestaurantList.push({ lat: props.restaurants[i].location.lat, lng: props.restaurants[i].location.lng })
+            }
+            setRestaurantList(tempRestaurantList);
+            console.log(restaurantList);
+            setCenter(tempRestaurantList[0]);
+            console.log(restaurantList[0]);
+        }
+        else {
+            setCenter({ lat: props.location.lat, lng: props.location.lng });
+        }
+    }, [props.restaurants])
 
     const onLoad = (map) => {
-        console.log('GoogleMapComponent::onLoad');
         mapRef.current = map;
     };
 
@@ -74,6 +85,19 @@ const GoogleMapComponent = (props) => {
         disableDefaultUI: true,
         zoomControl: true
     };
+    
+    const renderMarker = () => {
+        if(props.restaurants) {
+            // console.log(isRestaurantsFetched)
+            return restaurantList.map((restaurant, index) => {
+                    console.log(restaurant);
+                    return <Marker key={index} position={restaurant} />
+                })
+        }
+        else {
+            return <Marker position={center} />
+        }
+    }
 
     return (
         <Box className={classes.mapBox}>
@@ -96,14 +120,7 @@ const GoogleMapComponent = (props) => {
                             },
                         }}
                     />
-                        {/* <Marker
-                            lat={11.0168}
-                            lng={76.9558}
-                            name="My Marker"
-                        /> */}
-                    <Marker
-                        position={center}
-                    />
+                    {renderMarker()}
                 </GoogleMap>
             }
             
