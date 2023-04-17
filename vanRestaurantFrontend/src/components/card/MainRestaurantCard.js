@@ -64,13 +64,71 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MainRestaurantCard = (props) => {
-    const [isSelected, setIsSelected] = useState(false);
-    const { restaurant, index } = props;
+    const { restaurant, index, selected, onFavoriteButtonClick } = props;
     const classes = useStyles();
-    const { photo, rating, name, address, url, openNow } = restaurant;
-    
-    const onFavoriteButtonClick = () => {
-        setIsSelected((isSelected) => !isSelected);
+    const { photo, rating, name, address, url, openNow, placeId } = restaurant;
+
+    const onClick = async() => {
+        if(!selected) {
+            await createFavoriteRestaurant();
+        }
+        else {
+            await deleteFavoriteRestaurant();
+        }
+        onFavoriteButtonClick(index);
+    }
+
+    const createFavoriteRestaurant = async() => {
+        if(localStorage.getItem("authenticated").length > 0) {
+            var token = localStorage.getItem("authenticated");
+        }
+        
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                favoriteRestaurant: restaurant
+            })
+        };
+        await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/create`, requestOptions)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result);
+            },
+            (error) => {
+                console.log("Not loaded: ", error);
+            }
+        )
+    }
+
+    const deleteFavoriteRestaurant = async() => {
+        if(localStorage.getItem("authenticated").length > 0) {
+            var token = localStorage.getItem("authenticated");
+        }
+        const requestOptions = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                placeId: placeId
+            })
+        };
+        await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/delete`, requestOptions)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result);
+            },
+            (error) => {
+                console.log("Not loaded: ", error);
+            }
+        )
     }
 
     return(
@@ -91,7 +149,7 @@ const MainRestaurantCard = (props) => {
                     }
                 </Grid>
                 <Grid className={classes.rightItem} item xs={6}>
-                    <FavoriteButton isSelected={isSelected} onFavoriteButtonClick={onFavoriteButtonClick} />
+                    <FavoriteButton isSelected={selected} onFavoriteButtonClick={onClick} />
                 </Grid>
             </Grid>     
             <CardContent>
