@@ -64,20 +64,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MainRestaurantCard = (props) => {
-    const [isSelected, setIsSelected] = useState(false);
-    const { restaurant, index } = props;
+    const { restaurant, index, selected, onFavoriteButtonClick } = props;
     const classes = useStyles();
     const { photo, rating, name, address, url, openNow, placeId } = restaurant;
 
-    const onFavoriteButtonClick = async() => {
-        if(!isSelected) {
+    const onClick = async() => {
+        if(!selected) {
             await createFavoriteRestaurant();
         }
         else {
             await deleteFavoriteRestaurant();
         }
-        setIsSelected((isSelected) => !isSelected);
-
+        onFavoriteButtonClick(index);
     }
 
     const createFavoriteRestaurant = async() => {
@@ -132,7 +130,7 @@ const MainRestaurantCard = (props) => {
             }
         )
     }
-    
+
     return(
         <Card className={classes.card} variant="outlined">
             <CardMedia
@@ -151,7 +149,7 @@ const MainRestaurantCard = (props) => {
                     }
                 </Grid>
                 <Grid className={classes.rightItem} item xs={6}>
-                    <FavoriteButton isSelected={isSelected} onFavoriteButtonClick={onFavoriteButtonClick} />
+                    <FavoriteButton isSelected={selected} onFavoriteButtonClick={onClick} />
                 </Grid>
             </Grid>     
             <CardContent>

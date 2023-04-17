@@ -105,6 +105,7 @@ function MainPage() {
     const [isShrink, setIsShrink] = useState(false);
     const [isMedium, setIsMedium] = useState(false);
     const [isGeoDataFetched, setIsGeoDataFetched] = useState(false);
+    const [selectedList, setSelectedList] = useState([]);
 
     const classes = useStyles();
 
@@ -156,6 +157,11 @@ function MainPage() {
                 (result) => {
                     console.log("restaurants by location name loaded");
                     setRestaurants(result);
+                    const tempSelectedList = [];
+                    for(let i = 0; i< result.length; i++) {
+                        tempSelectedList.push(false);
+                    }
+                    setSelectedList(tempSelectedList);
                     setCurrentLocation(result[0].location);
                     setIsRestaurantsFetched(true);
                     setIsShrink(false);
@@ -175,6 +181,12 @@ function MainPage() {
     const handleMediumButtonClick = () => {
         setIsMedium(!isMedium);
         setIsShrink(false);
+    }
+
+    const onFavoriteButtonClick = (index) => {
+        const newSelected = [...selectedList];
+        newSelected[index] = !newSelected[index];
+        setSelectedList(newSelected);
     }
 
     return (
@@ -222,7 +234,7 @@ function MainPage() {
                                             easing="ease"
                                         >
                                             <Box className={classes.cardBox} key={index}>
-                                                <MediumRestaurantCard restaurant={restaurant} index={index} />
+                                                <MediumRestaurantCard restaurant={restaurant} index={index} selected={selectedList[index]} onFavoriteButtonClick={onFavoriteButtonClick} />
                                             </Box>                              
                                         </Fade>
                                     )
@@ -241,7 +253,7 @@ function MainPage() {
                                             timeout={500*index}
                                         >
                                             <Box className={classes.cardBox} key={index}>
-                                                <MainRestaurantCard restaurant={restaurant} index={index} />
+                                                <MainRestaurantCard restaurant={restaurant} index={index} selected={selectedList[index]} onFavoriteButtonClick={onFavoriteButtonClick} />
                                             </Box>                                
                                         </Fade>
                                     )
