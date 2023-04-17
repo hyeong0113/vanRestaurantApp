@@ -27,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
         marginTop: '1.3% !important',
         marginLeft: '2% !important',
         borderRadius: '10px',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        minWidth: 289
     },
     favoriteButton: {
         textAlign: 'right',
@@ -36,10 +37,6 @@ const useStyles = makeStyles((theme) => ({
     },
     nameText: {
         fontWeight: '400 !important',
-    },
-    text: {
-        fontWeight: '400 !important',
-        maxWidth: "100%",
         overflow: "hidden",
         whiteSpace: 'nowrap',
         textOverflow: "ellipsis",
