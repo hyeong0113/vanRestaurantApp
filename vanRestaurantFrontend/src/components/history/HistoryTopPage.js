@@ -118,7 +118,7 @@ function HistoryTopPage() {
                             {!isEmpty && favoriteRestaurants.map((restaurant, index) => {
                                 return (
                                     <Grid key={index} className={classes.cardContainer} item xs={12}>
-                                        <HistoryCard restaurant={restaurant} index={index} setIsLoaded={setIsLoaded} />
+                                        <HistoryCard type="top" restaurant={restaurant} index={index} setIsLoaded={setIsLoaded} />
                                     </Grid> 
                                 )
                             })}

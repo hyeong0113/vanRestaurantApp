@@ -69,14 +69,14 @@ const DeleteByIdModal = (props) => {
                 placeId: placeId
             })
         };
-        await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/delete`, requestOptions)
+        await fetch(`${process.env.REACT_APP_API_URL}/${type}restaurant/delete`, requestOptions)
         .then(res => res.json())
         .then(
             (result) => {
                 console.log(result);
                 setOpen(false);
                 setIsLoaded(false);
-                navigate('/history');
+                navigate(`/history/${type}`);
             },
             (error) => {
                 console.log("Not loaded: ", error);

@@ -79,7 +79,7 @@ const HistoryCard = (props) => {
     const [isSelected, setIsSelected] = useState(true);
     const [open, setOpen] = useState(false);
 
-    const { restaurant, setIsLoaded } = props;
+    const { restaurant, setIsLoaded, type } = props;
     const { photo, rating, name, address, url, placeId } = restaurant;
     const classes = useStyles();
 
@@ -89,7 +89,7 @@ const HistoryCard = (props) => {
 
     return(
         <div>
-            <DeleteByIdModal open={open} type="favorite" placeId={placeId} setIsLoaded={setIsLoaded} setOpen={setOpen} handleClose={handleDeleteByIdModalClose} />
+            <DeleteByIdModal open={open} type={type} placeId={placeId} setIsLoaded={setIsLoaded} setOpen={setOpen} handleClose={handleDeleteByIdModalClose} />
             <Card className={classes.card} variant="outlined">
                 <CardMedia
                     className={classes.photo}
