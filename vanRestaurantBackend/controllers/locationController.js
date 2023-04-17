@@ -69,6 +69,7 @@ const getRestaurantsWithLocationName = async (req, res) => {
         {
             input: input,
             inputtype: 'textquery',
+            type: 'restaurant',
             fields: 'formatted_address,geometry',
             key: process.env.API_KEY
         }

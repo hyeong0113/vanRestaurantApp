@@ -53,12 +53,7 @@ const GoogleMapComponent = (props) => {
 
     useEffect(() => {
         console.log('GoogleMapComponent::useEffect');
-        if(props.isTopRestaurantLoading) {
-            setCenter(props.location);
-        }
-        else {
-            setCenter(props.location);
-        }
+        setCenter({ lat: props.location.lat, lng: props.location.lng });
     }, [props.location])
 
     const onLoad = (map) => {
@@ -79,10 +74,6 @@ const GoogleMapComponent = (props) => {
         disableDefaultUI: true,
         zoomControl: true
     };
-
-    const onClick = () => {
-        console.log('test');
-    }
 
     return (
         <Box className={classes.mapBox}>
