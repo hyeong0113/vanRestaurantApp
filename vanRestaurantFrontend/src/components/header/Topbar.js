@@ -100,6 +100,8 @@ const userMenuGuest = [
 
 const userMenuMember = [
   {name: "PROFILE", path: "/"},
+  {name: "FAVORITE", path: "/history/favorite"},
+  {name: "TOP", path: "/history/top"},
   {name: "LOG OUT", path: "/"},
 ]
 

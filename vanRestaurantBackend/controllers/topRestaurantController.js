@@ -4,11 +4,12 @@ const TopRestaurant = require('../models/topRestaurantSchema');
 const { populateTopRestaurants } = require('../utilities/toprestaurantUtility');
 require('dotenv').config();
 
-const getTopRestaurantsByUserId = async(req, res) => {
+const getTopRestaurantsByUser = async(req, res) => {
     const { user } = req;
     if(user.isLoggedIn) {
         const populatedUser = await populateTopRestaurants(user);
-        return res.status(200).json(populatedUser);
+        const { topRestaurants } = populatedUser;
+        return res.status(200).json(topRestaurants);
     }
     else {
         return res.status(401).json({ message: "Unauthorized action. Please log in first.", success: false });
@@ -63,7 +64,7 @@ const deleteAllTopRestaurants = async (req, res) => {
 }
 
 module.exports = {
-    getTopRestaurantsByUserId,
+    getTopRestaurantsByUser,
     deleteTopRestaurantByPlaceId,
     deleteAllTopRestaurants
 }

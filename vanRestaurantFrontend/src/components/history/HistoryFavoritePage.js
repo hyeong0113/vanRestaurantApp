@@ -69,13 +69,12 @@ function HistoryFavoritePage() {
         .then(
             (result) => {
                 console.log("data loaded");
-                const { favoriteRestaurants } = result;
-                if(favoriteRestaurants.length === 0) {
+                if(result.length === 0) {
                     setIsEmpty(true);
                 }
                 else {
                     setIsEmpty(false);
-                    setFavoriteRestaurants(favoriteRestaurants);
+                    setFavoriteRestaurants(result);
                 }
                 setIsLoaded(true);
             },

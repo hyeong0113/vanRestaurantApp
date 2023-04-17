@@ -42,7 +42,7 @@ const logIn = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        var user = await User.findOne({ email })
+        var user = await User.findOne({ email });
         if(user === null) {
             return res.status(400).json({ message: 'User not found', success: false });
         }

@@ -76,7 +76,7 @@ const DeleteByIdModal = (props) => {
                 console.log(result);
                 setOpen(false);
                 setIsLoaded(false);
-                navigate('/');
+                navigate('/history');
             },
             (error) => {
                 console.log("Not loaded: ", error);

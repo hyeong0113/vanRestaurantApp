@@ -2,14 +2,15 @@ const FavoriteRestaurant = require('../models/favoriteRestaurantSchema');
 const { saveFavoriteRestaurant, populateFavoriteRestaurants } = require('../utilities/favoriteRestaurantUtility');
 require('dotenv').config();
 
-const getFavoriteRestaurantsByUserId = async(req, res) => {
+const getFavoriteRestaurantsByUser = async(req, res) => {
     const { user } = req;
     if(user.isLoggedIn) {
         const populatedUser = await populateFavoriteRestaurants(user);
-        return res.status(200).json(populatedUser);
+        const { favoriteRestaurants } = populatedUser;
+        return res.status(200).json(favoriteRestaurants);
     }
     else {
-        return res.status(401).json({ message: "Unauthorized action. Please log in first.", success: false });
+        return res.status(403).json({ message: "Unauthorized action. Please log in first.", success: false });
     }
 }
 
@@ -22,7 +23,7 @@ const createFavoriteRestaurant = async (req, res) => {
         return res.status(200).json(response);
     }
     else {
-        return res.status(401).json({ message: "Unauthorized action. Please log in first.", success: false });
+        return res.status(403).json({ message: "Unauthorized action. Please log in first.", success: false });
     }
 }
     
@@ -47,7 +48,7 @@ const deleteFavoriteRestaurantByPlaceId = async (req, res) => {
         }
     }
     else {
-        return res.status(401).json({ message: "Unauthorized action. Please log in first.", success: false });
+        return res.status(403).json({ message: "Unauthorized action. Please log in first.", success: false });
     }
 }
 
@@ -63,16 +64,16 @@ const deleteAllFavoriteRestaurants = async (req, res) => {
             res.status(200).json({ message: "All favorite restaurants deleted", success: true });
         }
         catch(err) {
-            res.status(403).json({ message: err, success: false });
+            res.status(400).json({ message: err, success: false });
         }
     }
     else {
-        return res.status(401).json({ message: "Unauthorized action. Please log in first.", success: false });
+        return res.status(403).json({ message: "Unauthorized action. Please log in first.", success: false });
     }
 }
 
 module.exports = {
-    getFavoriteRestaurantsByUserId,
+    getFavoriteRestaurantsByUser,
     createFavoriteRestaurant,
     deleteFavoriteRestaurantByPlaceId,
     deleteAllFavoriteRestaurants

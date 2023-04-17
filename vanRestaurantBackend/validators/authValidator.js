@@ -30,5 +30,5 @@ const tokenValidator = async (req, res, next) => {
 }
 
 module.exports = {
-    tokenValidator
+  tokenValidator
 }

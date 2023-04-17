@@ -142,7 +142,7 @@ function MainPage() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Basic ${authString}`
+                'Authorization': 'Bearer ' + token
             },
             body: JSON.stringify({
                 token: token,
