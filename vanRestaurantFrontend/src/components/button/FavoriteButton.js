@@ -19,10 +19,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FavoriteButton = (props) => {
+    const { isSelected, onFavoriteButtonClick } = props;
     const classes = useStyles();
     return (
-        <IconButton className={classes.button} onClick={props.onFavoriteButtonClick}>
-            {props.isSelected ?
+        <IconButton className={classes.button} onClick={onFavoriteButtonClick}>
+            {isSelected ?
                 <FavoriteIcon className={classes.icon} />
                 :
                 <FavoriteBorderIcon className={classes.icon} />
