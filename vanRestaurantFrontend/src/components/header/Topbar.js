@@ -100,6 +100,8 @@ const userMenuGuest = [
 
 const userMenuMember = [
   {name: "PROFILE", path: "/"},
+  {name: "FAVORITE", path: "/history/favorite"},
+  {name: "TOP", path: "/history/top"},
   {name: "LOG OUT", path: "/"},
 ]
 
@@ -120,10 +122,10 @@ const Topbar = () => {
   }, []);
 
   useEffect(() => {
-    if(localStorage.getItem("authenticated") === 'true') {
+    if(localStorage.getItem("authenticated") && localStorage.getItem("authenticated").length > 0) {
       setUserMenu(userMenuMember);
     }
-    if(localStorage.getItem("authenticated") === 'false') {
+    else {
       setUserMenu(userMenuGuest);
     }
   }, [isAuthenticated])

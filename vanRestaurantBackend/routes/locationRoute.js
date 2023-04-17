@@ -1,13 +1,10 @@
 var express = require('express');
 const { getGeoLocation, getRestaurantsWithLocationName } = require('../controllers/locationController');
 const { locationValidation } = require('../utilities/validationUtility');
+const { tokenValidatorForLocation } = require('../validators/locationValidator');
 const router = express.Router();
 
-router.get('/geo', getGeoLocation);
-router.post('/restaurants/search', getRestaurantsWithLocationName);
-// router.get('/restaurants/lat/:lat/long/:long', async(req, res) => {
-//     locationValidation(req, res)
-// });
-// router.get('/restaurant/top/:id', getTopRestaurant);
+router.get('/location/geo', getGeoLocation);
+router.post('/location/search', tokenValidatorForLocation, getRestaurantsWithLocationName);
 
 module.exports = router;

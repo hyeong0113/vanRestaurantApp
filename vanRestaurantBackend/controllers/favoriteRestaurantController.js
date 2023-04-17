@@ -1,136 +1,79 @@
-const jwt = require("jsonwebtoken");
-const User = require('../models/userSchema');
 const FavoriteRestaurant = require('../models/favoriteRestaurantSchema');
-const { saveFavoriteRestaurant } = require('../utilities/favoriteRestaurantUtility');
+const { saveFavoriteRestaurant, populateFavoriteRestaurants } = require('../utilities/favoriteRestaurantUtility');
 require('dotenv').config();
 
-const getFavoriteRestaurantsByUserId = (req, res) => {
-    if(req.session.token) {
-        const { token } = req.body;
-        if(req.session.token !== token) {
-            throw res.status(403).json({ message: "Invalid action", success: false });
-        }
-        const { id } = jwt.verify(req.session.token, process.env.JWT_SECRET, function(err, decoded) {
-            if(err) {
-              console.log('Error decoding token:', err);
-            }
-            return decoded;
-        });
-
-        User.findOne({ _id: id })
-            .populate('favoriteRestaurants')
-            .exec(function(err, user) {
-                if(err) {
-                    throw res.status(500).json(error);
-                }
-                res.status(200).json(user);
-        });
+const getFavoriteRestaurantsByUser = async(req, res) => {
+    const { user } = req;
+    if(user.isLoggedIn) {
+        const populatedUser = await populateFavoriteRestaurants(user);
+        const { favoriteRestaurants } = populatedUser;
+        return res.status(200).json(favoriteRestaurants);
     }
     else {
-        res.status(403).json({ message: "Unauthorized action. Need to login first!", success: false });
+        return res.status(403).json({ message: "Unauthorized action. Please log in first.", success: false });
     }
 }
 
 const createFavoriteRestaurant = async (req, res) => {
-    if(req.session.token) {
-        const { token, favoriteRestaurant } = req.body;
-        if(req.session.token !== token) {
-            throw res.status(403).json({ message: "Invalid action", success: false });
-        }
-        const { id } = jwt.verify(req.session.token, process.env.JWT_SECRET, function(err, decoded) {
-            if(err) {
-              console.log('Error decoding token:', err);
-            }
-            return decoded;
-        });
-
-        const user = await User.findOne({ _id: id })
-                        .then(u => {
-                            if (!u) {
-                                return res.status(400).json({ message: 'User not found' });
-                            }
-                            return u.populate('favoriteRestaurants');
-                        }).catch(err => res.status(500).json({ message: err.message }));
-        
-        const response = await saveFavoriteRestaurant(favoriteRestaurant, user);
-        res.status(200).json(response);
-        return;
+    const { user } = req;
+    if(user.isLoggedIn) {
+        const populatedUser = await populateFavoriteRestaurants(user);
+        const { favoriteRestaurant } = req.body;
+        const response = await saveFavoriteRestaurant(favoriteRestaurant, populatedUser);
+        return res.status(200).json(response);
     }
     else {
-        res.status(403).json({ message: "Unauthorized action. Need to login first!", success: false });
-        return;
+        return res.status(403).json({ message: "Unauthorized action. Please log in first.", success: false });
     }
-
-
-
-
 }
+    
 
 const deleteFavoriteRestaurantByPlaceId = async (req, res) => {
-    if(req.session.token) {
-        const { token, placeId } = req.body;
-        if(req.session.token !== token) {
-            throw res.status(403).json({ message: "Unvalid action.", success: false });
-        }
-        const { id } = jwt.verify(req.session.token, process.env.JWT_SECRET, function(err, decoded) {
-            if(err) {
-              console.log('Error decoding token:', err);
-            }
-            return decoded;
-        });
-        const user = await User.findOne({ _id: id }).populate('favoriteRestaurants');
-        const deleteFavoriteRestaurant = user.favoriteRestaurants.find(r => r.placeId === placeId);
+    const { user } = req;
+    if(user.isLoggedIn) {
+        const populatedUser = await populateFavoriteRestaurants(user);
+        const { placeId } = req.body;
 
+        const deleteFavoriteRestaurant = populatedUser.favoriteRestaurants.find(r => r.placeId === placeId);
+    
         if(deleteFavoriteRestaurant) {
-            await FavoriteRestaurant.findOneAndRemove({ _id: deleteFavoriteRestaurant._id, userId: id });
-            user.favoriteRestaurants.pull(deleteFavoriteRestaurant);
-            await user.save();
+            await FavoriteRestaurant.findOneAndRemove({ _id: deleteFavoriteRestaurant._id, userId: populatedUser._id });
+            populatedUser.favoriteRestaurants.pull(deleteFavoriteRestaurant);
+            await populatedUser.save();
             console.log('Favorite restaurant deleted successfully.');
             res.status(200).json({ message: "Favorite restaurant deleted", success: true });
         } else {
             console.log('Favorite restaurant not found.');
             res.status(200).json({ message: "Favorite restaurant not found", success: false });
         }
-
     }
     else {
-        res.status(403).json({ message: "Unauthorized action. Need to login first!", success: false });
+        return res.status(403).json({ message: "Unauthorized action. Please log in first.", success: false });
     }
 }
 
 const deleteAllFavoriteRestaurants = async (req, res) => {
-    if(req.session.token) {
-        const { token } = req.body;
-        if(req.session.token !== token) {
-            throw res.status(403).json({ message: "Unvalid action.", success: false });
-        }
-        const { id } = jwt.verify(req.session.token, process.env.JWT_SECRET, function(err, decoded) {
-            if(err) {
-              console.log('Error decoding token:', err);
-            }
-            return decoded;
-        });
-
+    const { user } = req;
+    if(user.isLoggedIn) {
+        const populatedUser = await populateFavoriteRestaurants(user);
         try {
-            const user = await User.findOne({ _id: id }).populate('favoriteRestaurants');
-            await FavoriteRestaurant.deleteMany({ userId: id });
-            user.favoriteRestaurants = [];
-            await user.save();
+            await FavoriteRestaurant.deleteMany({ userId: populatedUser._id });
+            populatedUser.favoriteRestaurants = [];
+            await populatedUser.save();
             console.log('Favorite restaurant deleted successfully.');
             res.status(200).json({ message: "All favorite restaurants deleted", success: true });
         }
         catch(err) {
-            res.status(403).json({ message: err, success: false });
+            res.status(400).json({ message: err, success: false });
         }
-
     }
     else {
-        res.status(403).json({ message: "Unauthorized action. Need to login first!", success: false });
+        return res.status(403).json({ message: "Unauthorized action. Please log in first.", success: false });
     }
 }
 
 module.exports = {
-    getFavoriteRestaurantsByUserId,
+    getFavoriteRestaurantsByUser,
     createFavoriteRestaurant,
     deleteFavoriteRestaurantByPlaceId,
     deleteAllFavoriteRestaurants

@@ -1,4 +1,3 @@
-const FavoriteRestaurant = require('../models/favoriteRestaurantSchema');
 const { convertToFavoriteRestaurant } = require('./schemaUtility');
 
 require('dotenv').config();
@@ -29,6 +28,17 @@ const saveFavoriteRestaurant = async (favoriteRestaurant, user) => {
     return { message: "Favorite restaurant exist!", success: true }
 }
 
+const populateFavoriteRestaurants = async(user) => {
+    try {
+        var populatedUser = await user.populate('favoriteRestaurants');
+    }
+    catch(err) {
+        throw res.status(500).json(error);
+    }
+    return populatedUser;
+}
+
 module.exports = {
-    saveFavoriteRestaurant
+    saveFavoriteRestaurant,
+    populateFavoriteRestaurants
 }

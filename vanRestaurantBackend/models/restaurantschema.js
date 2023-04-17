@@ -37,6 +37,10 @@ const restaurantSchema = new mongoose.Schema({
     rating: {
         type: Number,
         required: false
+    },
+    url: {
+        type: String,
+        required: true
     }
 });
 

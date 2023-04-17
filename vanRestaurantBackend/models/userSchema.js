@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
         enum: ['admin', 'user'],
         default: 'guest'
     },
+    isLoggedIn: {
+        type: Boolean,
+        default: false
+    },
     topRestaurants: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -28,7 +32,7 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'FavoriteRestaurant'
         }
-    ], 
+    ],
 });
 const User = mongoose.model('User', userSchema);
 module.exports = User;

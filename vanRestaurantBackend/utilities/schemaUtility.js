@@ -10,7 +10,10 @@ const convertToRestaurantSchemaList = async (results) => {
     
     for(const elem of results)
     {
-        const photo = await getPhotoByReference(elem.photos[0].photo_reference);
+        let photo = null;
+        if(elem.photos) {
+            photo = await getPhotoByReference(elem.photos[0].photo_reference);
+        }
         const { place_id, business_status, name, rating, opening_hours } = elem;
         let permanently_closed = false;
         const { lat, lng } = elem.geometry.location;

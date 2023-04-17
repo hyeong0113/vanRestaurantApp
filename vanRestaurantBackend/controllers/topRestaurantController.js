@@ -1,61 +1,40 @@
 const jwt = require("jsonwebtoken");
 const User = require('../models/userSchema');
 const TopRestaurant = require('../models/topRestaurantSchema');
+const { populateTopRestaurants } = require('../utilities/toprestaurantUtility');
 require('dotenv').config();
 
-const getTopRestaurantsByUserId = (req, res) => {
-    if(req.session.token) {
-        const { token } = req.body;
-        if(req.session.token !== token) {
-            throw res.status(403).json({ message: "Invalid action", success: false });
-        }
-        const { id } = jwt.verify(req.session.token, process.env.JWT_SECRET, function(err, decoded) {
-            if(err) {
-              console.log('Error decoding token:', err);
-            }
-            return decoded;
-        });
-
-        User.findOne({ _id: id })
-            .populate('topRestaurants')
-            .exec(function(err, user) {
-                if(err) {
-                    throw res.status(500).json(error);
-                }
-                res.status(200).json(user);
-        });
+const getTopRestaurantsByUser = async(req, res) => {
+    const { user } = req;
+    if(user.isLoggedIn) {
+        const populatedUser = await populateTopRestaurants(user);
+        const { topRestaurants } = populatedUser;
+        return res.status(200).json(topRestaurants);
     }
     else {
-        res.status(403).json({ message: "Unauthorized action. Need to login first!", success: false });
+        return res.status(401).json({ message: "Unauthorized action. Please log in first.", success: false });
     }
 }
 
 const deleteTopRestaurantByPlaceId = async (req, res) => {
-    if(req.session.token) {
-        const { token, placeId } = req.body;
-        if(req.session.token !== token) {
-            throw res.status(403).json({ message: "Unvalid action.", success: false });
-        }
-        const { id } = jwt.verify(req.session.token, process.env.JWT_SECRET, function(err, decoded) {
-            if(err) {
-              console.log('Error decoding token:', err);
-            }
-            return decoded;
-        });
-        const user = await User.findOne({ _id: id }).populate('topRestaurants');
-        const deleteTopRestaurant = user.topRestaurants.find(r => r.placeId === placeId);
+    const { user } = req;
+
+    if(user.isLoggedIn) {
+        const populatedUser = await populateTopRestaurants(user);
+        const { placeId } = req.body;
+
+        const deleteTopRestaurant = populatedUser.topRestaurants.find(r => r.placeId === placeId);
 
         if(deleteTopRestaurant) {
-            await TopRestaurant.findOneAndRemove({ _id: deleteTopRestaurant._id, userId: id });
-            user.topRestaurants.pull(deleteTopRestaurant);
-            await user.save();
+            await TopRestaurant.findOneAndRemove({ _id: deleteTopRestaurant._id, userId: populatedUser._id });
+            populatedUser.topRestaurants.pull(deleteTopRestaurant);
+            await populatedUser.save();
             console.log('Top restaurant deleted successfully.');
             res.status(200).json({ message: "Top restaurant deleted", success: true });
         } else {
             console.log('Top restaurant not found.');
             res.status(200).json({ message: "Top restaurant not found", success: false });
         }
-
     }
     else {
         res.status(403).json({ message: "Unauthorized action. Need to login first!", success: false });
@@ -63,24 +42,15 @@ const deleteTopRestaurantByPlaceId = async (req, res) => {
 }
 
 const deleteAllTopRestaurants = async (req, res) => {
-    if(req.session.token) {
-        const { token } = req.body;
-        if(req.session.token !== token) {
-            throw res.status(403).json({ message: "Unvalid action.", success: false });
-        }
-        const { id } = jwt.verify(req.session.token, process.env.JWT_SECRET, function(err, decoded) {
-            if(err) {
-              console.log('Error decoding token:', err);
-            }
-            return decoded;
-        });
+    const { user } = req;
+    if(user.isLoggedIn) {
+        const populatedUser = await populateTopRestaurants(user);
 
         try {
-            const user = await User.findOne({ _id: id }).populate('topRestaurants');
-            await TopRestaurant.deleteMany({ userId: id });
-            user.topRestaurants = [];
-            await user.save();
-            console.log('Top restaurant deleted successfully.');
+            await TopRestaurant.deleteMany({ userId: populatedUser._id });
+            populatedUser.topRestaurants = [];
+            await populatedUser.save();
+            console.log('All top restaurants deleted successfully.');
             res.status(200).json({ message: "All top restaurants deleted", success: true });
         }
         catch(err) {
@@ -94,7 +64,7 @@ const deleteAllTopRestaurants = async (req, res) => {
 }
 
 module.exports = {
-    getTopRestaurantsByUserId,
+    getTopRestaurantsByUser,
     deleteTopRestaurantByPlaceId,
     deleteAllTopRestaurants
 }

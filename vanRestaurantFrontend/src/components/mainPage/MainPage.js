@@ -9,18 +9,18 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Fade from '@mui/material/Fade';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 
-import Topbar from './header/Topbar';
-import GoogleMapComponent from './map/GoogleMapComponent';
-import { MapContext } from './context/MapContext';
-import MainRestaurantCard from './card/MainRestaurantCard';
-import MediumRestaurantCard from './card/MediumRestaurantCard';
+import Topbar from '../header/Topbar';
+import GoogleMapComponent from '../map/GoogleMapComponent';
+import { MapContext } from '../context/MapContext';
+import MainRestaurantCard from '../card/MainRestaurantCard';
+import MediumRestaurantCard from '../card/MediumRestaurantCard'
 
 const username = process.env.REACT_APP_USERNAME;
 const password = process.env.REACT_APP_PASSWORD;
 
 const authString = btoa(`${username}:${password}`);
 
-const requestOptions = {
+const geoRequestOptions = {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Basic ${authString}`
@@ -40,14 +40,12 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '10px 10px 0px 0px',
         width: "100%",
         position: "absolute",
-        // transition: 'all 2s ease',
     },
     box: {
         display: "flex",
         paddingLeft: theme.spacing(5),
         overflowX: "scroll",
         overflowY: 'hidden !important',
-        // transition: 'all 2s ease',
         "&::-webkit-scrollbar": {
             width: "100px",
         },
@@ -69,7 +67,6 @@ const useStyles = makeStyles((theme) => ({
     },
     cardBox: {
         width: 400,
-        // transition: 'all 2s ease',
         marginRight: theme.spacing(21),
         paddingTop: '1%',
         paddingBottom: '3%',
@@ -102,22 +99,25 @@ const useStyles = makeStyles((theme) => ({
 function MainPage() {
     const [currentLocation, setCurrentLocation] = useState(null);
     const [restaurants, setRestaurants] = useState(null);
-    const [isRestaurantsLoading, setIsRestaurantsLoading] = useState(false);
-    const [isDataLoading, setIsDataLoading] = useState(false);
 
+    const [isRestaurantsFetched, setIsRestaurantsFetched] = useState(false);
+    const [isDataLoading, setIsDataLoading] = useState(false);
     const [isShrink, setIsShrink] = useState(false);
     const [isMedium, setIsMedium] = useState(false);
+    const [isGeoDataFetched, setIsGeoDataFetched] = useState(false);
 
     const classes = useStyles();
 
-    // // Fetch geolocation data
-    // useEffect(() => {
-    //     fetchGeoData();
-    // }, [])
+    // Fetch geolocation data
+    useEffect(() => {
+        fetchGeoData();
+        setIsGeoDataFetched(true);
+    }, [isGeoDataFetched])
 
     // fetch current geolocation of user data
     const fetchGeoData = async() => {
-        await fetch(`${process.env.REACT_APP_API_URL}/geo`, requestOptions)
+        setIsDataLoading(true);
+        await fetch(`${process.env.REACT_APP_API_URL}/location/geo`, geoRequestOptions)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -128,19 +128,36 @@ function MainPage() {
                     console.log("Not loaded");
                 }
         )
+        setIsDataLoading(false);
     }  
     
     // Fetch restaurants list
     const fetchRestaurantsByName = async(input) => {
         setIsDataLoading(true);
-        await fetch(`${process.env.REACT_APP_API_URL}/restaurants/search/${"9855 Austin Ave, Burnaby, BC V3J 1N4, Canada"}`, requestOptions)
+        let token = null;
+        if(localStorage.getItem("authenticated").length > 0) {
+            token = localStorage.getItem("authenticated");
+        }
+        const restaurantRequestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                token: token,
+                input: input,
+            })
+        };
+        setIsRestaurantsFetched(false);
+        await fetch(`${process.env.REACT_APP_API_URL}/location/search`, restaurantRequestOptions)
             .then(res => res.json())
             .then(
                 (result) => {
                     console.log("restaurants by location name loaded");
                     setRestaurants(result);
                     setCurrentLocation(result[0].location);
-                    setIsRestaurantsLoading(true);
+                    setIsRestaurantsFetched(true);
                     setIsShrink(false);
                 },
                 (error) => {
@@ -180,7 +197,7 @@ function MainPage() {
                         />
                     </MapContext.Provider>}   
             </div>
-            {isRestaurantsLoading &&
+            {isRestaurantsFetched &&
                 <Fade
                     in={true}
                     timeout={{enter: 3000, exit: 5000}}

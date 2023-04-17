@@ -52,6 +52,7 @@ const GoogleMapComponent = (props) => {
     };
 
     useEffect(() => {
+        console.log('GoogleMapComponent::useEffect');
         if(props.isTopRestaurantLoading) {
             setCenter(props.location);
         }
@@ -61,9 +62,9 @@ const GoogleMapComponent = (props) => {
     }, [props.location])
 
     const onLoad = (map) => {
+        console.log('GoogleMapComponent::onLoad');
         mapRef.current = map;
     };
-    console.log('asd');
 
     if (loadError) return "Error";
     if (!isLoaded) return "Loading...";

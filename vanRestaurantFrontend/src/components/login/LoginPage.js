@@ -8,11 +8,6 @@ import { Typography } from '@mui/material';
 import SignInButton from '../button/SignInButton';
 import SignUpButton from '../button/SignUpButton';
 
-const username = process.env.REACT_APP_USERNAME;
-const password = process.env.REACT_APP_PASSWORD;
-
-const authString = btoa(`${username}:${password}`);
-
 const useStyles = makeStyles((theme) => ({
     main: {
         height: '100vh',
@@ -70,28 +65,31 @@ const LoginPage = () => {
         const requestOptions = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Basic ${authString}`
+                'Content-Type': 'application/json'
             },
+            withCredntials: true,
             body: JSON.stringify({
                 email: email,
                 password: password,
             })
-        };        
+        };    
         await fetch(`${process.env.REACT_APP_API_URL}/identity/login`, requestOptions)
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log("User sign up successful");
                     console.log(result);
-                    if (result) {
-                        console.log(result);
-                        localStorage.setItem("authenticated", true);
+                    const { token, loggedIn } = result;
+                    if(!token) {
+                        console.log("User log in failed");
+                    }
+                    if(loggedIn) {                        
+                        localStorage.setItem("authenticated", token);
+                        console.log("User log in successful");
                         navigate('/');
                     }
                 },
                 (error) => {
-                    console.log("User sign up failed");
+                    console.log("User log in failed:: ", error);
                 }
             )
         setIsLoading(false);
