@@ -65,7 +65,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MediumRestaurantCard = (props) => {
-    // const [isSelected, setIsSelected] = useState(false);
     const { restaurant, index, selected, onFavoriteButtonClick } = props;
     const classes = useStyles();
     const { photo, rating, name, placeId, openNow } = restaurant;
