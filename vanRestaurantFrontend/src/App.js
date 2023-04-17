@@ -10,6 +10,7 @@ import MainPage from '../src/components/mainPage/MainPage';
 import LoginPage from '../src/components/login/LoginPage';
 import SignUpPage from '../src/components/signUp/SignUpPage';
 import HistoryFavoritePage from './components/history/HistoryFavoritePage';
+import HistoryTopPage from './components/history/HistoryTopPage';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/history/favorite" element={<HistoryFavoritePage />} />
+            <Route path="/history/top" element={<HistoryTopPage />} />
           </Routes>
         </Router>        
       </div>
