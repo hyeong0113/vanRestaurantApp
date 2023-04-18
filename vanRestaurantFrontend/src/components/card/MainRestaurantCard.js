@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 const MainRestaurantCard = (props) => {
     const { restaurant, index, selected, onFavoriteButtonClick } = props;
     const classes = useStyles();
-    const { photo, rating, name, address, url, openNow, placeId } = restaurant;
+    const { photo, rating, name, address, url, openNow, placeId, isTop } = restaurant;
 
     const onClick = async() => {
         if(!selected) {
@@ -142,7 +142,7 @@ const MainRestaurantCard = (props) => {
             />
             <Grid className={classes.buttonCanainer} container>
                 <Grid className={classes.leftItem} item xs={6}>
-                    {index === 0 ?
+                    {index === 0 && isTop  ?
                         <Chip className={classes.chip} color="primary" label="TOP 1 in your location" />
                         :
                         <Chip className={classes.chip} color={openNow ? "primary" : "error"} label={openNow ? "OPEN" : "CLOSED"} />

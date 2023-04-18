@@ -53,11 +53,9 @@ const GoogleMapComponent = (props) => {
         setSelectedButton(buttonName);
         switch(buttonName) {
             case "myLocation":
-                props.setRestaurants(null);
                 props.setIsRestaurantsFetched(false);
                 return;
             case "restaurants":
-                props.setRestaurants(currentRestaurants);
                 props.setIsRestaurantsFetched(true);
             default:
                 return;
@@ -65,7 +63,7 @@ const GoogleMapComponent = (props) => {
     };
 
     useEffect(() => {
-        if(props.restaurants) {
+        if(props.isRestaurantsFetched) {
             setCurrentRestaurants(props.restaurants);
             const tempRestaurantList = [];
             for(let i = 0; i < props.restaurants.length; i++) {
@@ -77,7 +75,7 @@ const GoogleMapComponent = (props) => {
         else {
             setCenter({ lat: props.location.lat, lng: props.location.lng });
         }
-    }, [props.restaurants])
+    }, [props.isRestaurantsFetched])
 
     const onLoad = (map) => {
         mapRef.current = map;
@@ -98,7 +96,7 @@ const GoogleMapComponent = (props) => {
     };
     
     const renderMarker = () => {
-        if(props.restaurants) {
+        if(props.isRestaurantsFetched) {
             return restaurantList.map((restaurant, index) => {
                     return <Marker
                                 key={index}

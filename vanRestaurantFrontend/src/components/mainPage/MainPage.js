@@ -205,6 +205,7 @@ function MainPage() {
                         <GoogleMapComponent
                             location={currentLocation}
                             restaurants={restaurants}
+                            isRestaurantsFetched={isRestaurantsFetched}
                             fetchRestaurantsByName={fetchRestaurantsByName}
                             setRestaurants={setRestaurants}
                             setIsRestaurantsFetched={setIsRestaurantsFetched}
