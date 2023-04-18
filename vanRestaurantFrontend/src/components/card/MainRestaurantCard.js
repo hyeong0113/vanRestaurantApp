@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 const MainRestaurantCard = (props) => {
     const { restaurant, index, selected, onFavoriteButtonClick } = props;
     const classes = useStyles();
-    const { photo, rating, name, address, url, openNow, placeId, isTop } = restaurant;
+    const { photo, rating, name, address, url, openNow, placeId, isTop, isFavorite } = restaurant;
 
     const onClick = async() => {
         if(!selected) {
