@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { saveAndReturnResponse, populateTopRestaurants } = require('../utilities/topRestaurantUtility');
+const { saveAndReturnResponse, populateAllRestaurants } = require('../utilities/topRestaurantUtility');
 require('dotenv').config();
 
 /*
@@ -84,11 +84,15 @@ const getRestaurantsWithLocationName = async (req, res) => {
     const { lat, lng } = geometry.location;
 
     const { user } = req;
+    let populatedUser = null;
+    let savedFavoriteRestaurants = null;
     if(user && user.isLoggedIn) {
-        var populatedUser = await populateTopRestaurants(user);
+        populatedUser = await populateAllRestaurants(user, res);
+        const { favoriteRestaurants } = populatedUser;
+        savedFavoriteRestaurants = favoriteRestaurants;
     }
 
-    const response = await saveAndReturnResponse(lat, lng, populatedUser);
+    const response = await saveAndReturnResponse(lat, lng, populatedUser, savedFavoriteRestaurants);
 
     res.status(200).json(response);
 }

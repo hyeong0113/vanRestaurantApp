@@ -4,7 +4,7 @@ const { convertToRestaurantSchemaList, convertToTopRestaurant } = require('./sch
 const TopRestaurant = require('../models/topRestaurantSchema');
 require('dotenv').config();
 
-const saveAndReturnResponse = async(lat, long, user) => {
+const saveAndReturnResponse = async(lat, long, user, favoriteRestaurants) => {
 
     const mapRes = await axios.get(process.env.NEARBY,
     {
@@ -57,6 +57,20 @@ const saveAndReturnResponse = async(lat, long, user) => {
     const sortedResult = [...removedObject, ...mappedResults];
     sortedResult[0].isTop = true;
 
+    if(favoriteRestaurants !== null && favoriteRestaurants.length > 0) {
+        const updatedResult = sortedResult.map((r) => {
+            const index = favoriteRestaurants.findIndex((f) => f.placeId === r.placeId);
+            if (index !== -1) {
+                r.isFavorite = true;
+                return r;
+            }
+            else {
+                return r;
+            }
+        });
+        return updatedResult;
+    }
+
     return sortedResult;
 }
 
@@ -74,17 +88,30 @@ const fetchPlaceDetail = async (placeId) => {
     return result;
 }
 
-const populateTopRestaurants = async(user) => {
+const populateTopRestaurants = async(user, res) => {
     try {
         var populatedUser = await user.populate('topRestaurants');
     }
     catch(err) {
-        throw res.status(500).json(error);
+        throw res.status(500).json(err);
     }
     return populatedUser;
 }
 
+const populateAllRestaurants = async(user, res) => {
+    try {
+        var populatedUser = await user.populate('topRestaurants');
+        var temp = await populatedUser.populate('favoriteRestaurants', 'placeId');
+    }
+    catch(err) {
+        console.log(err);
+        throw res.status(500).json(err);
+    }
+    return temp;
+}
+
 module.exports = {
     saveAndReturnResponse,
-    populateTopRestaurants
+    populateTopRestaurants,
+    populateAllRestaurants
 }

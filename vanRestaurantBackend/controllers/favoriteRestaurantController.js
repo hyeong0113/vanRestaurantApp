@@ -5,7 +5,7 @@ require('dotenv').config();
 const getFavoriteRestaurantsByUser = async(req, res) => {
     const { user } = req;
     if(user.isLoggedIn) {
-        const populatedUser = await populateFavoriteRestaurants(user);
+        const populatedUser = await populateFavoriteRestaurants(user, res);
         const { favoriteRestaurants } = populatedUser;
         return res.status(200).json(favoriteRestaurants);
     }
@@ -17,7 +17,7 @@ const getFavoriteRestaurantsByUser = async(req, res) => {
 const createFavoriteRestaurant = async (req, res) => {
     const { user } = req;
     if(user.isLoggedIn) {
-        const populatedUser = await populateFavoriteRestaurants(user);
+        const populatedUser = await populateFavoriteRestaurants(user, res);
         const { favoriteRestaurant } = req.body;
         const response = await saveFavoriteRestaurant(favoriteRestaurant, populatedUser);
         return res.status(200).json(response);
@@ -31,7 +31,7 @@ const createFavoriteRestaurant = async (req, res) => {
 const deleteFavoriteRestaurantByPlaceId = async (req, res) => {
     const { user } = req;
     if(user.isLoggedIn) {
-        const populatedUser = await populateFavoriteRestaurants(user);
+        const populatedUser = await populateFavoriteRestaurants(user, res);
         const { placeId } = req.body;
 
         const deleteFavoriteRestaurant = populatedUser.favoriteRestaurants.find(r => r.placeId === placeId);
@@ -55,7 +55,7 @@ const deleteFavoriteRestaurantByPlaceId = async (req, res) => {
 const deleteAllFavoriteRestaurants = async (req, res) => {
     const { user } = req;
     if(user.isLoggedIn) {
-        const populatedUser = await populateFavoriteRestaurants(user);
+        const populatedUser = await populateFavoriteRestaurants(user, res);
         try {
             await FavoriteRestaurant.deleteMany({ userId: populatedUser._id });
             populatedUser.favoriteRestaurants = [];
