@@ -90,12 +90,30 @@ const GoogleMapComponent = (props) => {
         if(props.restaurants) {
             // console.log(isRestaurantsFetched)
             return restaurantList.map((restaurant, index) => {
-                    console.log(restaurant);
-                    return <Marker key={index} position={restaurant} />
+                    // if(index === 0) {
+                    //     return
+                    //         <Marker key={index} position={restaurant}>
+                                
+                    //         </Marker>
+                    // }
+                    return <Marker
+                                key={index}
+                                position={restaurant}
+                                icon={ index === 0 && {
+                                    url: `https://maps.google.com/mapfiles/ms/icons/orange-dot.png`,
+                                    scaledSize: new window.google.maps.Size(40, 40),
+                                }}
+                            />
                 })
         }
         else {
-            return <Marker position={center} />
+            return <Marker
+                        position={center}
+                        icon={{
+                            url: `https://maps.google.com/mapfiles/ms/icons/orange-dot.png`,
+                            scaledSize: new window.google.maps.Size(40, 40),
+                        }}
+                    />
         }
     }
 
