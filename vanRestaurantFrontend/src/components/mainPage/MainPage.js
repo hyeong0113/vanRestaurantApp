@@ -162,7 +162,6 @@ function MainPage() {
                         tempSelectedList.push(false);
                     }
                     setSelectedList(tempSelectedList);
-                    // setCurrentLocation(result[0].location);
                     setIsRestaurantsFetched(true);
                     setIsShrink(false);
                 },
@@ -207,6 +206,8 @@ function MainPage() {
                             location={currentLocation}
                             restaurants={restaurants}
                             fetchRestaurantsByName={fetchRestaurantsByName}
+                            setRestaurants={setRestaurants}
+                            setIsRestaurantsFetched={setIsRestaurantsFetched}
                         />
                     </MapContext.Provider>}   
             </div>

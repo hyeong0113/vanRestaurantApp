@@ -49,7 +49,16 @@ const GoogleMapComponent = (props) => {
     const classes = useStyles();
 
     const handleButtonClick = (buttonName) => {
+        console.log(buttonName);
         setSelectedButton(buttonName);
+        switch(buttonName) {
+            case "myLocation":
+                props.setRestaurants(null);
+                props.setIsRestaurantsFetched(false);
+                return;
+            default:
+                return;
+        }
     };
 
     useEffect(() => {
@@ -59,9 +68,7 @@ const GoogleMapComponent = (props) => {
                 tempRestaurantList.push({ lat: props.restaurants[i].location.lat, lng: props.restaurants[i].location.lng })
             }
             setRestaurantList(tempRestaurantList);
-            console.log(restaurantList);
             setCenter(tempRestaurantList[0]);
-            console.log(restaurantList[0]);
         }
         else {
             setCenter({ lat: props.location.lat, lng: props.location.lng });
@@ -88,14 +95,7 @@ const GoogleMapComponent = (props) => {
     
     const renderMarker = () => {
         if(props.restaurants) {
-            // console.log(isRestaurantsFetched)
             return restaurantList.map((restaurant, index) => {
-                    // if(index === 0) {
-                    //     return
-                    //         <Marker key={index} position={restaurant}>
-                                
-                    //         </Marker>
-                    // }
                     return <Marker
                                 key={index}
                                 position={restaurant}
@@ -146,15 +146,15 @@ const GoogleMapComponent = (props) => {
                 <MapIconButton
                     index={0}
                     selectedButton={selectedButton}
-                    icon={<HomeIcon className={`${classes.icon} ${selectedButton === "address" ? classes.iconSelected : ''}`} />}
+                    icon={<HomeIcon className={`${classes.icon} ${selectedButton === "myLocation" ? classes.iconSelected : ''}`} />}
                     handleButtonClick={handleButtonClick}
-                    type="address" />
+                    type="myLocation" />
                 <MapIconButton
                     index={1}
                     selectedButton={selectedButton}
-                    icon={<LocationOnIcon className={`${classes.icon} ${selectedButton === "myLocation" ? classes.iconSelected : ''}`} />}
+                    icon={<LocationOnIcon className={`${classes.icon} ${selectedButton === "restaurants" ? classes.iconSelected : ''}`} />}
                     handleButtonClick={handleButtonClick}
-                    type="myLocation" />
+                    type="restaurants" />
                 <MapIconButton
                     index={2}
                     selectedButton={selectedButton}
