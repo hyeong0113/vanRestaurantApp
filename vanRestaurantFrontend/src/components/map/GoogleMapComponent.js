@@ -39,6 +39,7 @@ const GoogleMapComponent = (props) => {
     const [selectedButton, setSelectedButton] = useState(null);
     const [center, setCenter] = useState({ lat: props.location.lat, lng: props.location.lng });
     const [restaurantList, setRestaurantList] = useState([]);
+    const [currentRestaurants, setCurrentRestaurants] = useState([]);
     const [zoom, setZoom] = useState(14);
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
@@ -49,13 +50,15 @@ const GoogleMapComponent = (props) => {
     const classes = useStyles();
 
     const handleButtonClick = (buttonName) => {
-        console.log(buttonName);
         setSelectedButton(buttonName);
         switch(buttonName) {
             case "myLocation":
                 props.setRestaurants(null);
                 props.setIsRestaurantsFetched(false);
                 return;
+            case "restaurants":
+                props.setRestaurants(currentRestaurants);
+                props.setIsRestaurantsFetched(true);
             default:
                 return;
         }
@@ -63,6 +66,7 @@ const GoogleMapComponent = (props) => {
 
     useEffect(() => {
         if(props.restaurants) {
+            setCurrentRestaurants(props.restaurants);
             const tempRestaurantList = [];
             for(let i = 0; i < props.restaurants.length; i++) {
                 tempRestaurantList.push({ lat: props.restaurants[i].location.lat, lng: props.restaurants[i].location.lng })
@@ -110,7 +114,7 @@ const GoogleMapComponent = (props) => {
             return <Marker
                         position={center}
                         icon={{
-                            url: `https://maps.google.com/mapfiles/ms/icons/orange-dot.png`,
+                            url: "https://maps.google.com/mapfiles/ms/icons/orange-dot.png",
                             scaledSize: new window.google.maps.Size(40, 40),
                         }}
                     />
