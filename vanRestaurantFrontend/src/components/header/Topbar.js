@@ -88,8 +88,9 @@ const useStyles = makeStyles((theme) => ({
 
 const homeMenu = [
   {name: "HOME", path: "/"},
-  {name: "CONTACT", path: "/"},
-  {name: "ABOUT US", path: "/"}
+  // TODO: These pages will be updated after deploying beta version
+  // {name: "CONTACT", path: "/"},
+  // {name: "ABOUT US", path: "/"}
 ]
 
 const userMenuGuest = [
@@ -143,7 +144,7 @@ const Topbar = () => {
         <Typography className={classes.phrase} variant="h4">
           <span className={classes.colored}>Find</span>
           <span className={classes.whiteColored}> favorite</span>
-          <span className={classes.colored}>restaurants</span>
+          <span className={classes.colored}> restaurants</span>
           <span className={classes.whiteColored}> near your</span>
           <span className={classes.colored}> location</span>
         </Typography>

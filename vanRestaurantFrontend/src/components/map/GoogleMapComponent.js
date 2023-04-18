@@ -47,24 +47,33 @@ const GoogleMapComponent = (props) => {
         libraries: libary
     })
 
+    const [isFavoriteClicked, setIsFavoriteClicked] = useState(false);
     const classes = useStyles();
 
-    const handleButtonClick = (buttonName) => {
+    const handleButtonClick = async(buttonName) => {
         setSelectedButton(buttonName);
         switch(buttonName) {
             case "myLocation":
                 props.setIsRestaurantsFetched(false);
-                return;
+                setIsFavoriteClicked(false);
+                break;;
             case "restaurants":
                 props.setIsRestaurantsFetched(true);
+                props.setRestaurants(currentRestaurants);
+                setIsFavoriteClicked(false);
+                break;
+            case "favorite":
+                await fetchFavoriteRestaurant();
+                props.setIsRestaurantsFetched(true);
+                setIsFavoriteClicked(true);
+                break;                
             default:
-                return;
+                break;
         }
     };
 
     useEffect(() => {
         if(props.isRestaurantsFetched) {
-            setCurrentRestaurants(props.restaurants);
             const tempRestaurantList = [];
             for(let i = 0; i < props.restaurants.length; i++) {
                 tempRestaurantList.push({ lat: props.restaurants[i].location.lat, lng: props.restaurants[i].location.lng })
@@ -75,7 +84,36 @@ const GoogleMapComponent = (props) => {
         else {
             setCenter({ lat: props.location.lat, lng: props.location.lng });
         }
-    }, [props.isRestaurantsFetched])
+
+    }, [props.isRestaurantsFetched, isFavoriteClicked])
+
+    const fetchFavoriteRestaurant = async() => {
+        if(localStorage.getItem("authenticated").length > 0) {
+            const token = localStorage.getItem("authenticated");
+            const requestOptions = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            };
+            await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/all`, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log("data loaded");
+                    if(result.length > 0) {
+                        props.setRestaurants(result);
+                    }
+                    else {
+                        props.setRestaurants([]);
+                    }
+                },
+                (error) => {
+                    console.log("Not loaded: ", error);
+                }
+            )
+        }
+    }
 
     const onLoad = (map) => {
         mapRef.current = map;
