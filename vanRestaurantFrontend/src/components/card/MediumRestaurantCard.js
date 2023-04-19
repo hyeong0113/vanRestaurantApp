@@ -70,12 +70,13 @@ const MediumRestaurantCard = (props) => {
     const { photo, rating, name, placeId, openNow, isTop, isFavorite } = restaurant;
     
     const onClick = async() => {
-        if(!selected) {
-            await createFavoriteRestaurant();
-        }
-        else {
+        if(isFavorite || selected) {
             await deleteFavoriteRestaurant();
         }
+        else if(!selected) {
+            await createFavoriteRestaurant();
+        }
+
         onFavoriteButtonClick(index);
     }
 
@@ -150,7 +151,7 @@ const MediumRestaurantCard = (props) => {
                     }
                 </Grid>
                 <Grid className={classes.rightItem} item xs={6}>
-                    <FavoriteButton isSelected={selected} onFavoriteButtonClick={onClick} />
+                    <FavoriteButton isSelected={isFavorite ? isFavorite : selected} onFavoriteButtonClick={onClick} />
                 </Grid>
             </Grid>     
             <CardContent>
