@@ -39,7 +39,8 @@ const GoogleMapComponent = (props) => {
     const [selectedButton, setSelectedButton] = useState(null);
     const [center, setCenter] = useState({ lat: props.location.lat, lng: props.location.lng });
     const [restaurantList, setRestaurantList] = useState([]);
-    const [currentRestaurants, setCurrentRestaurants] = useState([]);
+    // const [searchResult, setSearchResult] = useState(props.resultRestaurants);
+    // const [favoriteList, setFavoriteList] = useState([]);
     const [zoom, setZoom] = useState(14);
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
@@ -47,72 +48,40 @@ const GoogleMapComponent = (props) => {
         libraries: libary
     })
 
-    const [isFavoriteClicked, setIsFavoriteClicked] = useState(false);
+    // const [isFavoriteClicked, setIsFavoriteClicked] = useState(false);
     const classes = useStyles();
 
     const handleButtonClick = async(buttonName) => {
         setSelectedButton(buttonName);
-        switch(buttonName) {
-            case "myLocation":
-                props.setIsRestaurantsFetched(false);
-                setIsFavoriteClicked(false);
-                break;;
-            case "restaurants":
-                props.setIsRestaurantsFetched(true);
-                props.setRestaurants(currentRestaurants);
-                setIsFavoriteClicked(false);
-                break;
-            case "favorite":
-                await fetchFavoriteRestaurant();
-                props.setIsRestaurantsFetched(true);
-                setIsFavoriteClicked(true);
-                break;                
-            default:
-                break;
-        }
     };
 
     useEffect(() => {
+        console.log("selectedButton:: ", selectedButton);
+        if(selectedButton) {
+            switch(selectedButton) {
+                case "restaurants":
+                    props.setRestaurants(props.resultRestaurants);
+                    convertRestaurantsToLocationList(props.resultRestaurants);
+                    break;
+                case "favorite":
+                    props.setRestaurants(props.favoriteList);
+                    convertRestaurantsToLocationList(props.favoriteList);
+                    break;                
+                default:
+                    setCenter({ lat: props.location.lat, lng: props.location.lng });
+                    break;
+            }
+        }
+    }, [selectedButton])
+
+    const convertRestaurantsToLocationList = (restaurants) => {
         if(props.isRestaurantsFetched) {
             const tempRestaurantList = [];
-            for(let i = 0; i < props.restaurants.length; i++) {
-                tempRestaurantList.push({ lat: props.restaurants[i].location.lat, lng: props.restaurants[i].location.lng })
+            for(let i = 0; i < restaurants.length; i++) {
+                tempRestaurantList.push({ lat: restaurants[i].location.lat, lng: restaurants[i].location.lng })
             }
             setRestaurantList(tempRestaurantList);
-            setCenter(tempRestaurantList[0]);
-        }
-        else {
-            setSelectedButton("myLocation");
-            setCenter({ lat: props.location.lat, lng: props.location.lng });
-        }
-
-    }, [props.isRestaurantsFetched, isFavoriteClicked])
-
-    const fetchFavoriteRestaurant = async() => {
-        if(localStorage.getItem("authenticated").length > 0) {
-            const token = localStorage.getItem("authenticated");
-            const requestOptions = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                }
-            };
-            await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/all`, requestOptions)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log("data loaded");
-                    if(result.length > 0) {
-                        props.setRestaurants(result);
-                    }
-                    else {
-                        props.setRestaurants([]);
-                    }
-                },
-                (error) => {
-                    console.log("Not loaded: ", error);
-                }
-            )
+            setCenter(tempRestaurantList[0]);   
         }
     }
 
@@ -135,26 +104,26 @@ const GoogleMapComponent = (props) => {
     };
     
     const renderMarker = () => {
-        if(props.isRestaurantsFetched) {
-            return restaurantList.map((restaurant, index) => {
-                    return <Marker
-                                key={index}
-                                position={restaurant}
-                                icon={ index === 0 && {
-                                    url: `https://maps.google.com/mapfiles/ms/icons/orange-dot.png`,
-                                    scaledSize: new window.google.maps.Size(40, 40),
-                                }}
-                            />
-                })
-        }
-        else {
+        if(selectedButton === "myLocation") {
             return <Marker
                         position={center}
                         icon={{
                             url: "https://maps.google.com/mapfiles/ms/icons/orange-dot.png",
                             scaledSize: new window.google.maps.Size(40, 40),
                         }}
-                    />
+                    />            
+        }
+        else {
+            return restaurantList.map((restaurant, index) => {
+                return <Marker
+                            key={index}
+                            position={restaurant}
+                            icon={ index === 0 && {
+                                url: `https://maps.google.com/mapfiles/ms/icons/orange-dot.png`,
+                                scaledSize: new window.google.maps.Size(40, 40),
+                            }}
+                        />
+            })
         }
     }
 
@@ -204,7 +173,7 @@ const GoogleMapComponent = (props) => {
                     type="favorite" />
             </div>    
             <div className={classes.search}>
-                {isLoaded && <Search />}
+                {isLoaded && <Search setSelectedButton={setSelectedButton} />}
             </div>
             
         </Box>
