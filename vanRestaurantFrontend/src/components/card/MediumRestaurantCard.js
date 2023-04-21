@@ -67,10 +67,10 @@ const useStyles = makeStyles((theme) => ({
 const MediumRestaurantCard = (props) => {
     const { restaurant, index, selected, onFavoriteButtonClick } = props;
     const classes = useStyles();
-    const { photo, rating, name, placeId, openNow, isTop, isFavorite } = restaurant;
-    
+    const { photo, rating, name, placeId, openNow, isTop } = restaurant;
+
     const onClick = async() => {
-        if(isFavorite || selected) {
+        if(selected) {
             await deleteFavoriteRestaurant();
         }
         else if(!selected) {
@@ -151,7 +151,7 @@ const MediumRestaurantCard = (props) => {
                     }
                 </Grid>
                 <Grid className={classes.rightItem} item xs={6}>
-                    <FavoriteButton isSelected={isFavorite ? isFavorite : selected} onFavoriteButtonClick={onClick} />
+                    <FavoriteButton isSelected={selected} onFavoriteButtonClick={onClick} />
                 </Grid>
             </Grid>     
             <CardContent>

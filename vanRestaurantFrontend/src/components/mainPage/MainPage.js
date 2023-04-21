@@ -159,7 +159,7 @@ function MainPage() {
                     setRestaurants(result);
                     const tempSelectedList = [];
                     for(let i = 0; i< result.length; i++) {
-                        tempSelectedList.push(false);
+                        tempSelectedList.push(result[i].isFavorite);
                     }
                     setSelectedList(tempSelectedList);
                     setIsRestaurantsFetched(true);
