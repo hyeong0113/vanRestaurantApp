@@ -99,6 +99,8 @@ const useStyles = makeStyles((theme) => ({
 function MainPage() {
     const [currentLocation, setCurrentLocation] = useState(null);
     const [restaurants, setRestaurants] = useState(null);
+    const [resultRestaurants, setResultRestaurants] = useState(null);
+    const [favoriteList, setFavoriteList] = useState([]);
 
     const [isRestaurantsFetched, setIsRestaurantsFetched] = useState(false);
     const [isDataLoading, setIsDataLoading] = useState(false);
@@ -106,6 +108,7 @@ function MainPage() {
     const [isMedium, setIsMedium] = useState(false);
     const [isGeoDataFetched, setIsGeoDataFetched] = useState(false);
     const [selectedList, setSelectedList] = useState([]);
+    const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
     const classes = useStyles();
 
@@ -113,6 +116,7 @@ function MainPage() {
     useEffect(() => {
         fetchGeoData();
         setIsGeoDataFetched(true);
+        fetchFavoriteRestaurant();
     }, [isGeoDataFetched])
 
     // fetch current geolocation of user data
@@ -157,12 +161,12 @@ function MainPage() {
                 (result) => {
                     console.log("restaurants by location name loaded");
                     setRestaurants(result);
+                    setResultRestaurants(result);
                     const tempSelectedList = [];
-                    for(let i = 0; i< result.length; i++) {
-                        tempSelectedList.push(false);
+                    for(let i = 0; i < result.length; i++) {
+                        tempSelectedList.push(result[i].isFavorite);
                     }
                     setSelectedList(tempSelectedList);
-                    setCurrentLocation(result[0].location);
                     setIsRestaurantsFetched(true);
                     setIsShrink(false);
                 },
@@ -171,6 +175,34 @@ function MainPage() {
                 }
             )
         setIsDataLoading(false);
+    }
+
+    const fetchFavoriteRestaurant = async() => {
+        if(localStorage.getItem("authenticated").length > 0) {
+            const token = localStorage.getItem("authenticated");
+            const requestOptions = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            };
+            await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/all`, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log("data loaded");
+                    if(result.length > 0) {
+                        setFavoriteList(result);
+                    }
+                    else {
+                        setFavoriteList([]);
+                    }
+                },
+                (error) => {
+                    console.log("Not loaded: ", error);
+                }
+            )
+        }
     }
 
     const handleDownButtonClick = () => {
@@ -189,6 +221,13 @@ function MainPage() {
         setSelectedList(newSelected);
     }
 
+    const onBoxClick = (restaurant) => {
+        setSelectedRestaurant(restaurant);
+    }
+
+    console.log("restaurants:: ", restaurants);
+    console.log("isRestaurantsFetched:: ", isRestaurantsFetched);
+
     return (
         <div className={classes.main}>
             <Backdrop
@@ -205,7 +244,14 @@ function MainPage() {
                     >
                         <GoogleMapComponent
                             location={currentLocation}
+                            restaurants={restaurants}
+                            isRestaurantsFetched={isRestaurantsFetched}
+                            selectedRestaurant={selectedRestaurant}
+                            resultRestaurants={resultRestaurants}
+                            favoriteList={favoriteList}
                             fetchRestaurantsByName={fetchRestaurantsByName}
+                            setRestaurants={setRestaurants}
+                            setIsRestaurantsFetched={setIsRestaurantsFetched}
                         />
                     </MapContext.Provider>}   
             </div>
@@ -233,7 +279,7 @@ function MainPage() {
                                             timeout={500*index}
                                             easing="ease"
                                         >
-                                            <Box className={classes.cardBox} key={index}>
+                                            <Box className={classes.cardBox} key={index} onClick={() => onBoxClick(restaurant)}>
                                                 <MediumRestaurantCard restaurant={restaurant} index={index} selected={selectedList[index]} onFavoriteButtonClick={onFavoriteButtonClick} />
                                             </Box>                              
                                         </Fade>

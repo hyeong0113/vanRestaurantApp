@@ -7,7 +7,7 @@ require('dotenv').config();
 const getTopRestaurantsByUser = async(req, res) => {
     const { user } = req;
     if(user.isLoggedIn) {
-        const populatedUser = await populateTopRestaurants(user);
+        const populatedUser = await populateTopRestaurants(user, res);
         const { topRestaurants } = populatedUser;
         return res.status(200).json(topRestaurants);
     }
@@ -20,7 +20,7 @@ const deleteTopRestaurantByPlaceId = async (req, res) => {
     const { user } = req;
 
     if(user.isLoggedIn) {
-        const populatedUser = await populateTopRestaurants(user);
+        const populatedUser = await populateTopRestaurants(user, res);
         const { placeId } = req.body;
 
         const deleteTopRestaurant = populatedUser.topRestaurants.find(r => r.placeId === placeId);
@@ -44,7 +44,7 @@ const deleteTopRestaurantByPlaceId = async (req, res) => {
 const deleteAllTopRestaurants = async (req, res) => {
     const { user } = req;
     if(user.isLoggedIn) {
-        const populatedUser = await populateTopRestaurants(user);
+        const populatedUser = await populateTopRestaurants(user, res);
 
         try {
             await TopRestaurant.deleteMany({ userId: populatedUser._id });

@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Search = () => {
+const Search = (props) => {
     const { fetchRestaurantsByName } = useContext(MapContext);
     const classes = useStyles();
     const style = {
@@ -43,11 +43,13 @@ const Search = () => {
         setPlace(event.target.value);
     }
     const onClickHandler = async() => {
+        props.setSelectedButton("restaurants");
         await fetchRestaurantsByName(place);
     }
 
     const onKeyPressHandler = async(event) => {
         if (event.key === 'Enter') {
+            props.setSelectedButton("restaurants");
             await fetchRestaurantsByName(place);
         }  
     }    

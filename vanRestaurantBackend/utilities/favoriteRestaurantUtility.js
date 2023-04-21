@@ -28,7 +28,7 @@ const saveFavoriteRestaurant = async (favoriteRestaurant, user) => {
     return { message: "Favorite restaurant exist!", success: true }
 }
 
-const populateFavoriteRestaurants = async(user) => {
+const populateFavoriteRestaurants = async(user, res) => {
     try {
         var populatedUser = await user.populate('favoriteRestaurants');
     }

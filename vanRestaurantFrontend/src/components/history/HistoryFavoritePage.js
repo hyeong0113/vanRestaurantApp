@@ -49,11 +49,11 @@ function HistoryFavoritePage() {
     const classes = useStyles();
 
     useEffect(() => {
-        fetchFacoriteRestaurant();
+        fetchFavoriteRestaurant();
         setIsLoaded(true);
     }, [isLoaded])
 
-    const fetchFacoriteRestaurant = async() => {
+    const fetchFavoriteRestaurant = async() => {
         setIsDataLoading(true);
         if(localStorage.getItem("authenticated").length > 0) {
             var token = localStorage.getItem("authenticated");

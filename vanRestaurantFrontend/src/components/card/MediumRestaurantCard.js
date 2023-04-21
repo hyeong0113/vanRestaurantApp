@@ -67,15 +67,16 @@ const useStyles = makeStyles((theme) => ({
 const MediumRestaurantCard = (props) => {
     const { restaurant, index, selected, onFavoriteButtonClick } = props;
     const classes = useStyles();
-    const { photo, rating, name, placeId, openNow } = restaurant;
-    
+    const { photo, rating, name, placeId, openNow, isTop } = restaurant;
+
     const onClick = async() => {
-        if(!selected) {
-            await createFavoriteRestaurant();
-        }
-        else {
+        if(selected) {
             await deleteFavoriteRestaurant();
         }
+        else if(!selected) {
+            await createFavoriteRestaurant();
+        }
+
         onFavoriteButtonClick(index);
     }
 
@@ -143,7 +144,7 @@ const MediumRestaurantCard = (props) => {
             />
             <Grid className={classes.buttonCanainer} container>
                 <Grid className={classes.leftItem} item xs={6}>
-                    {index === 0 ?
+                    {index === 0 && isTop ?
                         <Chip className={classes.chip} color="primary" label="#1" />
                         :
                         <Chip className={classes.chip} color={openNow ? "primary" : "error"} label={openNow ? "OPEN" : "CLOSED"} />
