@@ -82,6 +82,7 @@ const GoogleMapComponent = (props) => {
             setCenter(tempRestaurantList[0]);
         }
         else {
+            setSelectedButton("myLocation");
             setCenter({ lat: props.location.lat, lng: props.location.lng });
         }
 
