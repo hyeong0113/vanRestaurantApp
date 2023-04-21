@@ -39,8 +39,7 @@ const GoogleMapComponent = (props) => {
     const [selectedButton, setSelectedButton] = useState(null);
     const [center, setCenter] = useState({ lat: props.location.lat, lng: props.location.lng });
     const [restaurantList, setRestaurantList] = useState([]);
-    // const [searchResult, setSearchResult] = useState(props.resultRestaurants);
-    // const [favoriteList, setFavoriteList] = useState([]);
+
     const [zoom, setZoom] = useState(14);
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
@@ -48,7 +47,6 @@ const GoogleMapComponent = (props) => {
         libraries: libary
     })
 
-    // const [isFavoriteClicked, setIsFavoriteClicked] = useState(false);
     const classes = useStyles();
 
     const handleButtonClick = async(buttonName) => {
@@ -57,22 +55,25 @@ const GoogleMapComponent = (props) => {
 
     useEffect(() => {
         console.log("selectedButton:: ", selectedButton);
-        if(selectedButton) {
-            switch(selectedButton) {
-                case "restaurants":
-                    props.setRestaurants(props.resultRestaurants);
-                    convertRestaurantsToLocationList(props.resultRestaurants);
-                    break;
-                case "favorite":
-                    props.setRestaurants(props.favoriteList);
-                    convertRestaurantsToLocationList(props.favoriteList);
-                    break;                
-                default:
-                    setCenter({ lat: props.location.lat, lng: props.location.lng });
-                    break;
-            }
+        switch(selectedButton) {
+            case "restaurants":
+                props.setRestaurants(props.resultRestaurants);
+                convertRestaurantsToLocationList(props.resultRestaurants);
+                setCenter(restaurantList[0]);
+                break;
+            case "favorite":
+                props.setIsRestaurantsFetched(true);
+                props.setRestaurants(props.favoriteList);
+                convertRestaurantsToLocationList(props.favoriteList);
+                setCenter(restaurantList[0]);
+                break;                
+            default:
+                setSelectedButton("myLocation");
+                props.setIsRestaurantsFetched(false);
+                setCenter({ lat: props.location.lat, lng: props.location.lng });
+                break;
         }
-    }, [selectedButton])
+    }, [selectedButton, props.isRestaurantsFetched])
 
     const convertRestaurantsToLocationList = (restaurants) => {
         if(props.isRestaurantsFetched) {
@@ -81,7 +82,7 @@ const GoogleMapComponent = (props) => {
                 tempRestaurantList.push({ lat: restaurants[i].location.lat, lng: restaurants[i].location.lng })
             }
             setRestaurantList(tempRestaurantList);
-            setCenter(tempRestaurantList[0]);   
+            setCenter(tempRestaurantList[0]);
         }
     }
 
