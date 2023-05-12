@@ -47,7 +47,7 @@ app.get('/', function(req, res) {
 
 var server = app.listen(port, hostname, function () {
   var host = server.address().address
-  var port = server.address().port
+  var port = 4001
 
   console.log("Server runnig at at http://%s:%s", host, port)
 })
