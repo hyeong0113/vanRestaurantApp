@@ -225,9 +225,6 @@ function MainPage() {
         setSelectedRestaurant(restaurant);
     }
 
-    console.log("restaurants:: ", restaurants);
-    console.log("isRestaurantsFetched:: ", isRestaurantsFetched);
-
     return (
         <div className={classes.main}>
             <Backdrop
