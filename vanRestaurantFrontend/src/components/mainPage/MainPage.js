@@ -122,7 +122,7 @@ function MainPage() {
     // fetch current geolocation of user data
     const fetchGeoData = async() => {
         setIsDataLoading(true);
-        await fetch(`${process.env.REACT_APP_API_URL}/location/geo`, geoRequestOptions)
+        await fetch(`/location/geo`, geoRequestOptions)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -155,7 +155,7 @@ function MainPage() {
             })
         };
         setIsRestaurantsFetched(false);
-        await fetch(`${process.env.REACT_APP_API_URL}/location/search`, restaurantRequestOptions)
+        await fetch(`/location/search`, restaurantRequestOptions)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -186,7 +186,7 @@ function MainPage() {
                     'Authorization': 'Bearer ' + token
                 }
             };
-            await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/all`, requestOptions)
+            await fetch(`/favoriterestaurant/all`, requestOptions)
             .then(res => res.json())
             .then(
                 (result) => {
