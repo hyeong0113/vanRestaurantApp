@@ -38,13 +38,6 @@ app.use('/', require('./routes/identityRoute'));
 app.use('/', require('./routes/topRestaurantRoute'));
 app.use('/', require('./routes/favoriteRestaurantRoute'));
 
-// Making Build Folder as Public 
-app.use(express.static(path.join(__dirname, 'build')));
-
-app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-
 var server = app.listen(port, hostname, function () {
   var host = server.address().address
   var port = server.address().port
