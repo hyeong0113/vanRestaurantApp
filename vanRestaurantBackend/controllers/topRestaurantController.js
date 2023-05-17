@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require('../models/userSchema');
 const TopRestaurant = require('../models/topRestaurantSchema');
-const { populateTopRestaurants } = require('../utilities/toprestaurantUtility');
+const { populateTopRestaurants } = require('../utilities/topRestaurantUtility');
 require('dotenv').config();
 
 const getTopRestaurantsByUser = async(req, res) => {
