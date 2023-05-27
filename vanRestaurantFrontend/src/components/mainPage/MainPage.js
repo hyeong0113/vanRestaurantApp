@@ -122,7 +122,7 @@ function MainPage() {
     // fetch current geolocation of user data
     const fetchGeoData = async() => {
         setIsDataLoading(true);
-        await fetch(`/location/geo`, geoRequestOptions)
+        await fetch(`${process.env.REACT_APP_API_URL}/location/geo`, geoRequestOptions)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -130,6 +130,7 @@ function MainPage() {
                     setCurrentLocation(result.location);
                 },
                 (error) => {
+                    console.log(error);
                     console.log("Not loaded");
                 }
         )
@@ -155,7 +156,7 @@ function MainPage() {
             })
         };
         setIsRestaurantsFetched(false);
-        await fetch(`/location/search`, restaurantRequestOptions)
+        await fetch(`${process.env.REACT_APP_API_URL}/location/search`, restaurantRequestOptions)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -186,7 +187,7 @@ function MainPage() {
                     'Authorization': 'Bearer ' + token
                 }
             };
-            await fetch(`/favoriterestaurant/all`, requestOptions)
+            await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/all`, requestOptions)
             .then(res => res.json())
             .then(
                 (result) => {

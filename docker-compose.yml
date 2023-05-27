@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  mongodb:
+    image: "mongo"
+    volumes:
+      - data: /data/db
+  backend:
+    build: ./vanRestaurantBackend
+    ports:
+      - "80:80"
+    volumes:
+      - logs:/app/logs
+      - ./vanRestaurantBackend:/app
+      - /app/node_modules
+
+    depends_on:
+      - mongodb
+
+  frondend:
+    build: ./vanRestaurantFrontend
+    ports:
+      - "3000:3000"
+    volumes:
+      ./vanRestaurantFrontend/src:/app/src
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+volumes:
+  data:
+    

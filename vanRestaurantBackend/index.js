@@ -4,6 +4,10 @@ const mongoose = require('mongoose');
 const basicAuth = require('express-basic-auth');
 const app = express();
 
+const environment = process.env.environment;
+
+console.log('environment:: ', environment);
+
 require('dotenv').config();
 
 app.set('http://localhost:3000', 1);
