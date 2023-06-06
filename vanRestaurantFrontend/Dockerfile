@@ -8,6 +8,8 @@ RUN npm install --force
 
 COPY . .
 
+RUN npm run build
+
 ENV REACT_APP_USERNAME=juneKwak
 ENV REACT_APP_PASSWORD=qwe123
 ENV REACT_APP_API_URL=https://nearby-mlbu.onrender.com
