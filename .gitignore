@@ -1,3 +1,6 @@
 .DS_Store
 vanRestaurantBackend/.env
 vanRestaurantFrontend/.env
+docker-compose.yml
+vanRestaurantBackend/Dockerfile
+vanRestaurantFrontend/Dockerfile

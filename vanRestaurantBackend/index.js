@@ -4,17 +4,13 @@ const mongoose = require('mongoose');
 const basicAuth = require('express-basic-auth');
 const app = express();
 
-const environment = process.env.environment;
-
-console.log('environment:: ', environment);
-
 require('dotenv').config();
 
 app.set('http://localhost:3000', 1);
 const cors = require('cors');
 const database = process.env.MONGO_URL;
 
-const hostname = '127.0.0.1';
+const hostname = '0.0.0.0';
 const port = process.env.PORT || 8080;
 
 mongoose.connect(database, {useUnifiedTopology: true, useNewUrlParser: true })

@@ -142,16 +142,15 @@ function MainPage() {
         setIsDataLoading(true);
         let token = null;
         if(localStorage.getItem("authenticated").length > 0) {
-            token = localStorage.getItem("authenticated");
+            token = 'Bearer ' + localStorage.getItem("authenticated");
         }
         const restaurantRequestOptions = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
+                'Authorization': token
             },
             body: JSON.stringify({
-                token: token,
                 input: input,
             })
         };
