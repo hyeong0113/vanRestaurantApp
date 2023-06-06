@@ -12,7 +12,7 @@ services:
     image: backend
     build: ./vanRestaurantBackend
     ports:
-      - "8080:8080"
+      - "80:80"
     networks:
       - mern-app      
     depends_on:

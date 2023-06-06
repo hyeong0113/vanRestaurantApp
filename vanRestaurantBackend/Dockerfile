@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-ENV PORT=8080
+ENV PORT=80
 ENV API_KEY=AIzaSyCJIXILlzJej95f-EotXQTvre7iLq3t8cE
 ENV MONGO_URL=mongodb+srv://hyeong0113:03010913tK^@nearby-cluster.88jrjsa.mongodb.net/?retryWrites=true&w=majority
 ENV USERNAME=juneKwak
@@ -22,6 +22,6 @@ ENV DETAIL=https://maps.googleapis.com/maps/api/place/details/json
 ENV GOOGLE_OAUTH_CLIENT_ID=1020319852889-n8m5470c345pqrjgroo3aasdmjglkqts.apps.googleusercontent.com
 ENV GOOGLE_OAUTH_CLIENT_SECRET=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
 
-EXPOSE 8080
+EXPOSE 80
 
 CMD ["npm", "run", "develop"]
