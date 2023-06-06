@@ -5,11 +5,8 @@ WORKDIR /app
 COPY package.json .
 
 RUN npm install --force
-RUN npm install react@17.0.2
 
 COPY . .
-
-RUN npm run build --prod
 
 ENV REACT_APP_USERNAME=juneKwak
 ENV REACT_APP_PASSWORD=qwe123
