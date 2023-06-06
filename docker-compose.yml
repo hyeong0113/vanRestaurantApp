@@ -21,7 +21,7 @@ services:
     image: frontend
     build: ./vanRestaurantFrontend
     ports:
-      - "3000:3000"
+      - "3001:3001"
     environment:
       - NODE_ENV=production
     restart: always      
