@@ -6,7 +6,7 @@ const app = express();
 
 require('dotenv').config();
 
-app.set('http://localhost:3000', 1);
+app.set('https://nearby-mtp5.onrender.com', 1);
 const cors = require('cors');
 const database = process.env.MONGO_URL;
 
@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors({
-  origin: "http://localhost:3000"
+  origin: "https://nearby-mtp5.onrender.com"
 }));
 
 const userName = process.env.USERNAME;
