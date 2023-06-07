@@ -9,6 +9,7 @@ RUN npm install
 COPY . .
 
 ENV NODE_ENV=production
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 ENV REACT_APP_USERNAME=juneKwak
 ENV REACT_APP_PASSWORD=qwe123
 ENV REACT_APP_API_URL=https://nearby-mlbu.onrender.com
