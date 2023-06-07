@@ -140,9 +140,11 @@ function MainPage() {
     // Fetch restaurants list
     const fetchRestaurantsByName = async(input) => {
         setIsDataLoading(true);
+        let tokenValue = null;
         let token = null;
         if(localStorage.getItem("authenticated").length > 0) {
-            token = 'Bearer ' + localStorage.getItem("authenticated");
+            tokenValue = localStorage.getItem("authenticated");
+            token = 'Bearer ' + tokenValue;
         }
         const restaurantRequestOptions = {
             method: 'POST',
@@ -151,6 +153,7 @@ function MainPage() {
                 'Authorization': token
             },
             body: JSON.stringify({
+                token: tokenValue,
                 input: input,
             })
         };
