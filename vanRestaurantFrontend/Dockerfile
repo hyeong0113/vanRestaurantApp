@@ -8,8 +8,6 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
-
 ENV NODE_ENV=production
 ENV REACT_APP_USERNAME=juneKwak
 ENV REACT_APP_PASSWORD=qwe123
