@@ -78,15 +78,18 @@ const MainRestaurantCard = (props) => {
     }
 
     const createFavoriteRestaurant = async() => {
+        let tokenValue = null;
+        let token = null;
         if(localStorage.getItem("authenticated").length > 0) {
-            var token = localStorage.getItem("authenticated");
+            tokenValue = localStorage.getItem("authenticated");
+            token = 'Bearer ' + tokenValue;
         }
         
         const requestOptions = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
+                'Authorization': token
             },
             body: JSON.stringify({
                 favoriteRestaurant: restaurant

@@ -56,14 +56,17 @@ const DeleteByIdModal = (props) => {
     let navigate = useNavigate();
 
     const handleRemoveButton = async() => {
+        let tokenValue = null;
+        let token = null;
         if(localStorage.getItem("authenticated").length > 0) {
-            var token = localStorage.getItem("authenticated");
+            tokenValue = localStorage.getItem("authenticated");
+            token = 'Bearer ' + tokenValue;
         }
         const requestOptions = {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
+                'Authorization': token
             },
             body: JSON.stringify({
                 placeId: placeId

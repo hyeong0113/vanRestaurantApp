@@ -182,12 +182,17 @@ function MainPage() {
 
     const fetchFavoriteRestaurant = async() => {
         if(localStorage.getItem("authenticated").length > 0) {
-            const token = localStorage.getItem("authenticated");
+            let tokenValue = null;
+            let token = null;
+            if(localStorage.getItem("authenticated").length > 0) {
+                tokenValue = localStorage.getItem("authenticated");
+                token = 'Bearer ' + tokenValue;
+            }
             const requestOptions = {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                }
+                    'Authorization': token
+                },
             };
             await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/all`, requestOptions)
             .then(res => res.json())

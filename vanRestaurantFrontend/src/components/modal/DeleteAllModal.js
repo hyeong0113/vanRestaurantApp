@@ -56,14 +56,17 @@ const DeleteAllModal = (props) => {
     let navigate = useNavigate();
 
     const handleRemoveButton = async() => {
+        let tokenValue = null;
+        let token = null;
         if(localStorage.getItem("authenticated").length > 0) {
-            var token = localStorage.getItem("authenticated");
+            tokenValue = localStorage.getItem("authenticated");
+            token = 'Bearer ' + tokenValue;
         }
         const requestOptions = {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
+                'Authorization': token
             }
         };
         await fetch(`${process.env.REACT_APP_API_URL}/${type}restaurant/delete/all`, requestOptions)
