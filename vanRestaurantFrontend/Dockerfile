@@ -1,14 +1,16 @@
-FROM node
+FROM node:14-alpine
 
 WORKDIR /app
 
 COPY package.json .
 
-RUN npm install --force
-RUN npm install react-scripts@5.0.1 -g --silent
+RUN npm install
 
 COPY . .
 
+RUN npm run build
+
+ENV NODE_ENV=production
 ENV REACT_APP_USERNAME=juneKwak
 ENV REACT_APP_PASSWORD=qwe123
 ENV REACT_APP_API_URL=https://nearby-mlbu.onrender.com
