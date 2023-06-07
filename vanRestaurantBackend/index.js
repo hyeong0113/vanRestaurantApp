@@ -6,7 +6,6 @@ const app = express();
 
 require('dotenv').config();
 
-app.set('https://nearby-mtp5.onrender.com', 1);
 const cors = require('cors');
 const database = process.env.MONGO_URL;
 
