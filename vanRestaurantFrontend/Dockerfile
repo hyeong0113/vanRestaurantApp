@@ -5,7 +5,8 @@ WORKDIR /usr/src/app
 COPY package.json .
 COPY package-lock.json .
 
-RUN sudo npm install
+RUN npm install react
+RUN npm install react-dom
 
 COPY . .
 
