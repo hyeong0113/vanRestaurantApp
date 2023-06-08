@@ -9,7 +9,7 @@ ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 RUN npm install
 
-COPY . ./
+COPY . /
 
 ENV NODE_ENV=production
 ENV REACT_APP_USERNAME=juneKwak
