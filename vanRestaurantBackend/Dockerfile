@@ -1,13 +1,13 @@
 FROM node
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package.json .
-COPY package-lock.json .
+COPY package.json ./
+COPY package-lock.json ./
 
 RUN npm install
 
-COPY . .
+COPY . ./
 
 ENV PORT=80
 ENV API_KEY=AIzaSyCJIXILlzJej95f-EotXQTvre7iLq3t8cE

@@ -1,14 +1,14 @@
 FROM node:14-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package.json .
-COPY package-lock.json .
+COPY package.json ./
+COPY package-lock.json ./
 
 RUN npm install
 RUN npm install --save react react-dom react-scripts
 
-COPY . .
+COPY . ./
 
 ENV NODE_ENV=production
 ENV NODE_OPTIONS="--max-old-space-size=4096"
