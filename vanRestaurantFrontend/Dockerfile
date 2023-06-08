@@ -7,6 +7,7 @@ COPY package-lock.json .
 
 RUN npm install react
 RUN npm install react-dom
+RUN npm install
 
 COPY . .
 
