@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:14-alpine3.13
 
 WORKDIR /app
 
@@ -7,9 +7,9 @@ COPY package-lock.json ./
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
-RUN npm install
+RUN npm install --production --verbose
 
-COPY . /
+COPY . ./
 
 ENV NODE_ENV=production
 ENV REACT_APP_USERNAME=juneKwak
