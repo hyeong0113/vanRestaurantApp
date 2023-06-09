@@ -2,12 +2,12 @@ FROM node
 
 WORKDIR /app
 
-COPY package.json ./
-COPY package-lock.json ./
+COPY package.json /vanRestaurantApp/vanRestaurantBackend
+COPY package-lock.json /vanRestaurantApp/vanRestaurantBackend
 
 RUN npm install
 
-COPY . ./
+COPY . /vanRestaurantApp/vanRestaurantBackend
 
 ENV PORT=80
 ENV API_KEY=AIzaSyCJIXILlzJej95f-EotXQTvre7iLq3t8cE
