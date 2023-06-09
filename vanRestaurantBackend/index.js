@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors({
-  origin: "https://nearby-mtp5.onrender.com"
+  origin: "http://13.57.191.198:5000"
 }));
 
 const userName = process.env.USERNAME;
