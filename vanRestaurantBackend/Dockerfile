@@ -1,6 +1,6 @@
 FROM node
 
-WORKDIR /app
+WORKDIR /vanRestaurantApp/vanRestaurantBackend
 
 COPY package.json /vanRestaurantApp/vanRestaurantBackend
 COPY package-lock.json /vanRestaurantApp/vanRestaurantBackend

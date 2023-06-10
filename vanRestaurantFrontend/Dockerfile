@@ -7,7 +7,7 @@ COPY package-lock.json /vanRestaurantApp/vanRestaurantFrontend
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
-RUN npm install --production --verbose
+RUN npm install --production
 
 COPY . /vanRestaurantApp/vanRestaurantFrontend
 

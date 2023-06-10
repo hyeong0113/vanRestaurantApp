@@ -10,7 +10,7 @@ services:
       - mongo-data:/data/db
   backend:
     image: backend
-    build: ./vanRestaurantApp/vanRestaurantBackend
+    build: ./vanRestaurantBackend
     ports:
       - "80:80"
     networks:
@@ -19,7 +19,7 @@ services:
       - mongodb
   frontend:
     image: frontend
-    build: ./vanRestaurantApp/vanRestaurantFrontend
+    build: ./vanRestaurantFrontend
     ports:
       - "3000:3000"
     environment:
