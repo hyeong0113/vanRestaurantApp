@@ -1,15 +1,15 @@
 FROM node:14-alpine3.13
 
-WORKDIR /vanRestaurantApp/vanRestaurantFrontend
+WORKDIR /vanRestaurantFrontend
 
-COPY package.json /vanRestaurantApp/vanRestaurantFrontend
-COPY package-lock.json /vanRestaurantApp/vanRestaurantFrontend
+COPY package.json /vanRestaurantFrontend
+COPY package-lock.json /vanRestaurantFrontend
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 RUN npm install --production
 
-COPY . /vanRestaurantApp/vanRestaurantFrontend
+COPY . /vanRestaurantFrontend
 
 ENV NODE_ENV=production
 ENV REACT_APP_USERNAME=juneKwak
