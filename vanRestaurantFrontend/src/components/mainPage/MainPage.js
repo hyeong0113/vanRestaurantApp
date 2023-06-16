@@ -8,12 +8,14 @@ import IconButton from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Fade from '@mui/material/Fade';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
+import { useNavigate } from 'react-router-dom';
 
 import Topbar from '../header/Topbar';
 import GoogleMapComponent from '../map/GoogleMapComponent';
 import { MapContext } from '../context/MapContext';
 import MainRestaurantCard from '../card/MainRestaurantCard';
 import MediumRestaurantCard from '../card/MediumRestaurantCard'
+import { LogoutHandler } from '../../utilities/LogOut';
 
 const username = process.env.REACT_APP_USERNAME;
 const password = process.env.REACT_APP_PASSWORD;
@@ -111,13 +113,45 @@ function MainPage() {
     const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
     const classes = useStyles();
+    let navigate = useNavigate();
 
     // Fetch geolocation data
     useEffect(() => {
+        validateToken();
         fetchGeoData();
         setIsGeoDataFetched(true);
         fetchFavoriteRestaurant();
     }, [isGeoDataFetched])
+
+    const validateToken = async() => {
+        if(localStorage.getItem("authenticated").length > 0) {
+            let tokenValue = localStorage.getItem("authenticated");
+            const decodedJwt = parseJwt(tokenValue);
+            if (decodedJwt.exp * 1000 < Date.now()) {
+                console.log("decodedJwt.exp:: ", decodedJwt.exp);
+                let token = null;
+                if(localStorage.getItem("authenticated").length > 0) {
+                    token = 'Bearer ' + tokenValue;
+                }
+                const result = await LogoutHandler(token);
+                if(!result) {
+                    localStorage.setItem("authenticated", "");
+                    window.location.reload(false);
+                }
+                else {
+                    console.log("Unavailable to logout");
+                }
+            }
+        }
+    }
+
+    const parseJwt = (token) => {
+        try {
+          return JSON.parse(atob(token.split('.')[1]));
+        } catch (e) {
+          return null;
+        }
+    };
 
     // fetch current geolocation of user data
     const fetchGeoData = async() => {

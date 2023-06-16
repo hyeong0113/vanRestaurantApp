@@ -4,6 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import { makeStyles } from '@mui/styles';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { LogoutHandler } from '../../utilities/LogOut';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -61,39 +62,23 @@ const HeaderButton = ({ setIsAuthenticated, iconName, icon, handleIconStyleChang
     handleIconStyleChange(null);
   };
 
-  const handleLogOut = () => {
+  const handleLogOut = async() => {
     let tokenValue = null;
     let token = null;
     if(localStorage.getItem("authenticated").length > 0) {
         tokenValue = localStorage.getItem("authenticated");
         token = 'Bearer ' + tokenValue;
-    }  
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token
-      }
-    };
+    }
+    const result = await LogoutHandler(token);
 
-    fetch(`${process.env.REACT_APP_API_URL}/identity/logout`, requestOptions)
-      .then(res => res.json())
-      .then(
-          (result) => {
-            const { loggedIn } = result;
-            if(!loggedIn) {
-              localStorage.setItem("authenticated", "");
-              setIsAuthenticated(false);
-              navigate('/');
-            }
-            else {
-              console.log("Unavailable to logout");
-            }
-          },
-          (error) => {
-              console.log("Logout not worked");
-          }
-      )
+    if(!result) {
+        localStorage.setItem("authenticated", "");
+        setIsAuthenticated(false);
+        navigate('/');
+    }
+    else {
+        console.log("Unavailable to logout");
+    }
   }
 
   return (
