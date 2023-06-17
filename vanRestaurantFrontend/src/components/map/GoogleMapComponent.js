@@ -47,6 +47,8 @@ const GoogleMapComponent = (props) => {
         libraries: libary
     })
 
+    console.log("center:: ", center);
+
     const classes = useStyles();
 
     const handleButtonClick = async(buttonName) => {
@@ -59,7 +61,7 @@ const GoogleMapComponent = (props) => {
             case "restaurants":
                 props.setRestaurants(props.resultRestaurants);
                 convertRestaurantsToLocationList(props.resultRestaurants);
-                setCenter(restaurantList[0]);
+                // setCenter(restaurantList[0]);
                 break;
             case "favorite":
                 props.setIsRestaurantsFetched(true);

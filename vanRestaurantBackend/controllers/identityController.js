@@ -63,7 +63,7 @@ const logIn = async (req, res) => {
 
     user.isLoggedIn = true;
     await user.save();
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 30 });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 86400 });
     return res.status(200).json({ message: "Logged in successful!", token: token, loggedIn: user.isLoggedIn , success: true });
 }
 
