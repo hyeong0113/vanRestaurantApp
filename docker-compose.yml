@@ -4,6 +4,7 @@ services:
     image: "mongo"
     ports:
       - "27017:27017"
+    restart: always
     networks:
       - mern-app
     volumes:
@@ -11,6 +12,7 @@ services:
   backend:
     image: backend
     build: ./vanRestaurantBackend
+    restart: always
     ports:
       - "80:80"
     networks:
