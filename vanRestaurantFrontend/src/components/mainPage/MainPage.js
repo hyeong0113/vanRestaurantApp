@@ -121,14 +121,13 @@ function MainPage() {
         fetchGeoData();
         setIsGeoDataFetched(true);
         fetchFavoriteRestaurant();
-    }, [isGeoDataFetched])
+    }, [isGeoDataFetched, isRestaurantsFetched])
 
     const validateToken = async() => {
         if(localStorage.getItem("authenticated").length > 0) {
             let tokenValue = localStorage.getItem("authenticated");
             const decodedJwt = parseJwt(tokenValue);
             if (decodedJwt.exp * 1000 < Date.now()) {
-                console.log("decodedJwt.exp:: ", decodedJwt.exp);
                 let token = null;
                 if(localStorage.getItem("authenticated").length > 0) {
                     token = 'Bearer ' + tokenValue;

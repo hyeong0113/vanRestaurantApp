@@ -7,6 +7,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Search from '../search/Search';
+import OrangePin from '../../assets/orange-dot.png'
 
 const useStyles = makeStyles((theme) => ({
     mapBox: {
@@ -46,9 +47,6 @@ const GoogleMapComponent = (props) => {
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
         libraries: libary
     })
-
-    console.log("center:: ", center);
-
     const classes = useStyles();
 
     const handleButtonClick = async(buttonName) => {
@@ -56,36 +54,30 @@ const GoogleMapComponent = (props) => {
     };
 
     useEffect(() => {
-        console.log("selectedButton:: ", selectedButton);
         switch(selectedButton) {
             case "restaurants":
                 props.setRestaurants(props.resultRestaurants);
-                convertRestaurantsToLocationList(props.resultRestaurants);
-                // setCenter(restaurantList[0]);
-                break;
+                convertRestaurantsToLocationList(props.resultRestaurants);                break;
             case "favorite":
-                props.setIsRestaurantsFetched(true);
                 props.setRestaurants(props.favoriteList);
                 convertRestaurantsToLocationList(props.favoriteList);
-                setCenter(restaurantList[0]);
-                break;                
+                break;
             default:
                 setSelectedButton("myLocation");
-                props.setIsRestaurantsFetched(false);
                 setCenter({ lat: props.location.lat, lng: props.location.lng });
+                props.setIsRestaurantsFetched(false);
                 break;
         }
     }, [selectedButton, props.isRestaurantsFetched])
-
-    const convertRestaurantsToLocationList = (restaurants) => {
-        if(props.isRestaurantsFetched) {
-            const tempRestaurantList = [];
-            for(let i = 0; i < restaurants.length; i++) {
-                tempRestaurantList.push({ lat: restaurants[i].location.lat, lng: restaurants[i].location.lng })
-            }
-            setRestaurantList(tempRestaurantList);
-            setCenter(tempRestaurantList[0]);
+    
+const convertRestaurantsToLocationList = (restaurants) => {
+        const tempRestaurantList = [];
+        for(let i = 0; i < restaurants.length; i++) {
+            tempRestaurantList.push({ lat: restaurants[i].location.lat, lng: restaurants[i].location.lng })
         }
+        setRestaurantList(tempRestaurantList);
+        setCenter({ lat: tempRestaurantList[0].lat, lng: tempRestaurantList[0].lng });
+        props.setIsRestaurantsFetched(true);
     }
 
     const onLoad = (map) => {
@@ -111,22 +103,24 @@ const GoogleMapComponent = (props) => {
             return <Marker
                         position={center}
                         icon={{
-                            url: "https://maps.google.com/mapfiles/ms/icons/orange-dot.png",
+                            url: OrangePin,
                             scaledSize: new window.google.maps.Size(40, 40),
                         }}
                     />            
         }
         else {
-            return restaurantList.map((restaurant, index) => {
-                return <Marker
-                            key={index}
-                            position={restaurant}
-                            icon={ index === 0 && {
-                                url: `https://maps.google.com/mapfiles/ms/icons/orange-dot.png`,
-                                scaledSize: new window.google.maps.Size(40, 40),
-                            }}
-                        />
-            })
+            if(restaurantList.length  > 0) {
+                return restaurantList.map((restaurant, index) => {
+                    return <Marker
+                                key={index}
+                                position={restaurant}
+                                icon={ index === 0 && {
+                                    url: OrangePin,
+                                    scaledSize: new window.google.maps.Size(40, 40),
+                                }}
+                            />
+                })
+            }
         }
     }
 
