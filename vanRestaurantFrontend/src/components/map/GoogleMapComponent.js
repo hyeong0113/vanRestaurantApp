@@ -70,14 +70,17 @@ const GoogleMapComponent = (props) => {
         }
     }, [selectedButton, props.isRestaurantsFetched])
     
-const convertRestaurantsToLocationList = (restaurants) => {
-        const tempRestaurantList = [];
-        for(let i = 0; i < restaurants.length; i++) {
-            tempRestaurantList.push({ lat: restaurants[i].location.lat, lng: restaurants[i].location.lng })
+    const convertRestaurantsToLocationList = (restaurants) => {
+        if(restaurants !== undefined && restaurants !== null) {
+            const tempRestaurantList = [];
+            for(let i = 0; i < restaurants.length; i++) {
+                tempRestaurantList.push({ lat: restaurants[i].location.lat, lng: restaurants[i].location.lng })
+            }
+            setRestaurantList(tempRestaurantList);
+            setCenter({ lat: tempRestaurantList[0].lat, lng: tempRestaurantList[0].lng });
+            props.setIsRestaurantsFetched(true);
         }
-        setRestaurantList(tempRestaurantList);
-        setCenter({ lat: tempRestaurantList[0].lat, lng: tempRestaurantList[0].lng });
-        props.setIsRestaurantsFetched(true);
+
     }
 
     const onLoad = (map) => {

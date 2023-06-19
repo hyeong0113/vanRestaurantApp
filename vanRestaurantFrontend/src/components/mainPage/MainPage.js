@@ -8,7 +8,6 @@ import IconButton from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Fade from '@mui/material/Fade';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
-import { useNavigate } from 'react-router-dom';
 
 import Topbar from '../header/Topbar';
 import GoogleMapComponent from '../map/GoogleMapComponent';
@@ -113,7 +112,6 @@ function MainPage() {
     const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
     const classes = useStyles();
-    let navigate = useNavigate();
 
     // Fetch geolocation data
     useEffect(() => {
@@ -124,12 +122,13 @@ function MainPage() {
     }, [isGeoDataFetched, isRestaurantsFetched])
 
     const validateToken = async() => {
-        if(localStorage.getItem("authenticated").length > 0) {
-            let tokenValue = localStorage.getItem("authenticated");
+        let token = localStorage.getItem("authenticated");
+        if(token && token.length > 0) {
+            let tokenValue = token;
             const decodedJwt = parseJwt(tokenValue);
             if (decodedJwt.exp * 1000 < Date.now()) {
                 let token = null;
-                if(localStorage.getItem("authenticated").length > 0) {
+                if(token.length > 0) {
                     token = 'Bearer ' + tokenValue;
                 }
                 const result = await LogoutHandler(token);
