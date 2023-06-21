@@ -14,7 +14,7 @@ COPY . /vanRestaurantFrontend
 ENV NODE_ENV=production
 ENV REACT_APP_USERNAME=juneKwak
 ENV REACT_APP_PASSWORD=qwe123
-ENV REACT_APP_API_URL=http://ec2-13-56-156-127.us-west-1.compute.amazonaws.com:80
+ENV REACT_APP_API_URL=https://neaby-api.onrender.com
 ENV REACT_APP_GOOGLE_MAP_API_KEY=AIzaSyCJIXILlzJej95f-EotXQTvre7iLq3t8cE
 ENV REACT_APP_GOOGLE_OAUTH_CLIENT_ID=1020319852889-n8m5470c345pqrjgroo3aasdmjglkqts.apps.googleusercontent.com
 ENV REACT_APP_GOOGLE_OAUTH_CLIENT_SECRET=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
