@@ -1,24 +1,24 @@
-version: "3.8"
+version: "2.2"
 services:
-  # mongodb:
-  #   image: "mongo"
-  #   ports:
-  #     - "27017:27017"
-  #   restart: always
-  #   networks:
-  #     - mern-app
-  #   volumes:
-  #     - mongo-data:/data/db
-  # backend:
-  #   image: backend
-  #   build: ./vanRestaurantBackend
-  #   restart: always
-  #   ports:
-  #     - "80:80"
-  #   networks:
-  #     - mern-app      
-  #   depends_on:
-  #     - mongodb
+  mongodb:
+    image: "mongo"
+    ports:
+      - "27017:27017"
+    restart: always
+    networks:
+      - mern-app
+    volumes:
+      - mongo-data:/data/db
+  backend:
+    image: backend
+    build: ./vanRestaurantBackend
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      - mern-app      
+    depends_on:
+      - mongodb
   frontend:
     image: frontend
     build: ./vanRestaurantFrontend
@@ -30,8 +30,8 @@ services:
     networks:
       - mern-app
     stdin_open: true
-    # depends_on:
-    #   - backend
+    depends_on:
+      - backend
 networks:
   mern-app:
     driver: bridge
