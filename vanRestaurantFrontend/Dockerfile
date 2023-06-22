@@ -18,8 +18,8 @@ ENV REACT_APP_API_URL=https://neaby-api.onrender.com
 ENV REACT_APP_GOOGLE_MAP_API_KEY=AIzaSyCJIXILlzJej95f-EotXQTvre7iLq3t8cE
 ENV REACT_APP_GOOGLE_OAUTH_CLIENT_ID=1020319852889-n8m5470c345pqrjgroo3aasdmjglkqts.apps.googleusercontent.com
 ENV REACT_APP_GOOGLE_OAUTH_CLIENT_SECRET=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
-ENV REACT_APP_GOOGLE_OAUTH_ENDPOINT=http://ec2-13-56-156-127.us-west-1.compute.amazonaws.com:3000
-ENV REACT_APP_GOOGLE_OAUTH_REDIRECT_URL=http://ec2-13-56-156-127.us-west-1.compute.amazonaws.com:3000/api/sessions/oauth/google
+ENV REACT_APP_GOOGLE_OAUTH_ENDPOINT=http://ec2-52-8-80-35.us-west-1.compute.amazonaws.com:3000
+ENV REACT_APP_GOOGLE_OAUTH_REDIRECT_URL=http://ec2-52-8-80-35.us-west-1.compute.amazonaws.com:3000/api/sessions/oauth/google
 
 EXPOSE 3000
 
