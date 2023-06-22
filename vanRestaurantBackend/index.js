@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors({
-  origin: "http://ec2-18-144-61-121.us-west-1.compute.amazonaws.com:3000"
+  origin: "http://ec2-13-56-161-83.us-west-1.compute.amazonaws.com:3000"
 }));
 
 const userName = process.env.USERNAME;
