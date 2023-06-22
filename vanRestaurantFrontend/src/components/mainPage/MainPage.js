@@ -108,6 +108,7 @@ function MainPage() {
     const [isShrink, setIsShrink] = useState(false);
     const [isMedium, setIsMedium] = useState(false);
     const [isGeoDataFetched, setIsGeoDataFetched] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [selectedList, setSelectedList] = useState([]);
     const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
@@ -140,6 +141,7 @@ function MainPage() {
                     console.log("Unavailable to logout");
                 }
             }
+            setIsAuthenticated(true);
         }
     }
 
@@ -174,7 +176,7 @@ function MainPage() {
         setIsDataLoading(true);
         let tokenValue = null;
         let token = null;
-        if(localStorage.getItem("authenticated").length > 0) {
+        if(isAuthenticated) {
             tokenValue = localStorage.getItem("authenticated");
             token = 'Bearer ' + tokenValue;
         }
@@ -213,13 +215,12 @@ function MainPage() {
     }
 
     const fetchFavoriteRestaurant = async() => {
-        if(localStorage.getItem("authenticated").length > 0) {
-            let tokenValue = null;
-            let token = null;
-            if(localStorage.getItem("authenticated").length > 0) {
-                tokenValue = localStorage.getItem("authenticated");
-                token = 'Bearer ' + tokenValue;
-            }
+        setIsDataLoading(true);
+        let tokenValue = null;
+        let token = null;
+        if(isAuthenticated) {
+            tokenValue = localStorage.getItem("authenticated");
+            token = 'Bearer ' + tokenValue;
             const requestOptions = {
                 headers: {
                     'Content-Type': 'application/json',
@@ -242,6 +243,7 @@ function MainPage() {
                     console.log("Not loaded: ", error);
                 }
             )
+            setIsDataLoading(false);
         }
     }
 
