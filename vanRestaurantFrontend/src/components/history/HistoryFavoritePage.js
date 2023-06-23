@@ -55,36 +55,40 @@ function HistoryFavoritePage() {
 
     const fetchFavoriteRestaurant = async() => {
         setIsDataLoading(true);
-        let tokenValue = null;
-        let token = null;
+
         if(localStorage.getItem("authenticated").length > 0) {
+            let tokenValue = null;
+            let token = null;
             tokenValue = localStorage.getItem("authenticated");
             token = 'Bearer ' + tokenValue;
-        }
-        const requestOptions = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            }
-        };
-        await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/all`, requestOptions)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log("data loaded");
-                if(result.length === 0) {
-                    setIsEmpty(true);
+            const requestOptions = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
                 }
-                else {
+            };
+            try {
+                let response = await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/all`, requestOptions);
+                let convertedResponse  = await response.json();
+                if(!convertedResponse.success) {
+                    throw new Error(convertedResponse.message);
+                }
+                console.log("data loaded");
+                let result = convertedResponse.response;
+                if(result.length > 0) {
                     setIsEmpty(false);
                     setFavoriteRestaurants(result);
                 }
+                else {
+                    setIsEmpty(true);
+                    setFavoriteRestaurants([]);
+                }
                 setIsLoaded(true);
-            },
-            (error) => {
-                console.log("Not loaded: ", error);
             }
-        )
+            catch(error) {
+                console.log("Not loaded:: ", error.message);
+            }
+        }
         setIsDataLoading(false);
     }
 

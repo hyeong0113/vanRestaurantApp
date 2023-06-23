@@ -69,55 +69,55 @@ const DeleteAllModal = (props) => {
                 'Authorization': token
             }
         };
-        await fetch(`${process.env.REACT_APP_API_URL}/${type}restaurant/delete/all`, requestOptions)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log(result);
-                setOpen(false);
-                setIsLoaded(false);
-                navigate(`/history/${type}`);
-            },
-            (error) => {
-                console.log("Not loaded: ", error);
+
+        try {
+            let response = await fetch(`${process.env.REACT_APP_API_URL}/${type}restaurant/delete/all`, requestOptions)
+            let convertedResponse = await response.json();
+            if(!convertedResponse.success) {
+                throw new Error(convertedResponse.message);
             }
-        )
+            console.log(convertedResponse.message);
+            setOpen(false);
+            setIsLoaded(false);
+            navigate(`/history/${type}`);
+        }
+        catch(error) {
+            console.log("Failed to delete:: ", error.message);
+        }
         setIsDataLoading(false);
     }
 
     return(
         <Modal
-        className={classes.modal}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-    >
-        <Box className={classes.modalBox}>
-            <Grid container>
-                <Grid className={classes.warningText} item xs={12}>
-                    <Typography variant="h6">
-                        Are you sure to clear all {type} list?
-                    </Typography>
-                </Grid>
-                <Grid className={classes.modalGridItem} item xs={6}>
-                    <Button className={classes.removeButton} onClick={handleRemoveButton}>
-                        <Typography variant="body1">
-                            Remove
+            className={classes.modal}
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box className={classes.modalBox}>
+                <Grid container>
+                    <Grid className={classes.warningText} item xs={12}>
+                        <Typography variant="h6">
+                            Are you sure to clear all {type} list?
                         </Typography>
-                    </Button>
+                    </Grid>
+                    <Grid className={classes.modalGridItem} item xs={6}>
+                        <Button className={classes.removeButton} onClick={handleRemoveButton}>
+                            <Typography variant="body1">
+                                Remove
+                            </Typography>
+                        </Button>
+                    </Grid>
+                    <Grid className={classes.modalGridItem} item xs={6}>
+                        <Button className={classes.cancelButton} onClick={handleClose}>
+                            <Typography variant="body1">
+                                Cancel
+                            </Typography>
+                        </Button>
+                    </Grid>                                          
                 </Grid>
-                <Grid className={classes.modalGridItem} item xs={6}>
-                    <Button className={classes.cancelButton} onClick={handleClose}>
-                        <Typography variant="body1">
-                            Cancel
-                        </Typography>
-                    </Button>
-                </Grid>                                          
-            </Grid>
-
-
-        </Box>
+            </Box>
         </Modal>
     )
 

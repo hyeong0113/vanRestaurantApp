@@ -14,7 +14,7 @@ import GoogleMapComponent from '../map/GoogleMapComponent';
 import { MapContext } from '../context/MapContext';
 import MainRestaurantCard from '../card/MainRestaurantCard';
 import MediumRestaurantCard from '../card/MediumRestaurantCard'
-import { LogoutHandler } from '../../utilities/LogOut';
+import { logoutHandler } from '../../utilities/LogOut';
 
 const username = process.env.REACT_APP_USERNAME;
 const password = process.env.REACT_APP_PASSWORD;
@@ -132,7 +132,7 @@ function MainPage() {
                 if(token.length > 0) {
                     token = 'Bearer ' + tokenValue;
                 }
-                const result = await LogoutHandler(token);
+                const result = await logoutHandler(token);
                 if(!result) {
                     localStorage.setItem("authenticated", "");
                     window.location.reload(false);
@@ -212,8 +212,7 @@ function MainPage() {
             setIsShrink(false);
         }
         catch(error) {
-            console.log(error.message);
-            console.log("Not loaded");
+            console.log("Not loaded:: ", error.message);
         }
         setIsDataLoading(false);
     }
@@ -247,8 +246,7 @@ function MainPage() {
                 }
             }
             catch(error) {
-                console.log(error.message);
-                console.log("Not loaded");
+                console.log("Not loaded:: ", error.message);
             }
         }
         setIsDataLoading(false);

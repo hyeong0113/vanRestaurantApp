@@ -1,4 +1,4 @@
-export const LogoutHandler = async(token) => {
+export const logoutHandler = async(token) => {
     const requestOptions = {
         method: 'POST',
         headers: {

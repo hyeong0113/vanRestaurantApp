@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import StarIcon from '@mui/icons-material/Star';
 import FavoriteButton from '../button/FavoriteButton';
 import { makeStyles } from '@mui/styles';
+import { createFavoriteRestaurant, deleteFavoriteRestaurant } from '../../utilities/CardButtonHandler';
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -71,69 +72,13 @@ const MediumRestaurantCard = (props) => {
 
     const onClick = async() => {
         if(selected) {
-            await deleteFavoriteRestaurant();
+            await deleteFavoriteRestaurant(placeId);
         }
         else if(!selected) {
-            await createFavoriteRestaurant();
+            await createFavoriteRestaurant(restaurant);
         }
 
         onFavoriteButtonClick(index);
-    }
-
-    const createFavoriteRestaurant = async() => {
-        let tokenValue = null;
-        let token = null;
-        if(localStorage.getItem("authenticated").length > 0) {
-            tokenValue = localStorage.getItem("authenticated");
-            token = 'Bearer ' + tokenValue;
-        }
-        
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                favoriteRestaurant: restaurant
-            })
-        };
-        await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/create`, requestOptions)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log(result);
-            },
-            (error) => {
-                console.log("Not loaded: ", error);
-            }
-        )
-    }
-
-    const deleteFavoriteRestaurant = async() => {
-        if(localStorage.getItem("authenticated").length > 0) {
-            var token = localStorage.getItem("authenticated");
-        }
-        const requestOptions = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            },
-            body: JSON.stringify({
-                placeId: placeId
-            })
-        };
-        await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/delete`, requestOptions)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log(result);
-            },
-            (error) => {
-                console.log("Not loaded: ", error);
-            }
-        )
     }
 
     return(

@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import { makeStyles } from '@mui/styles';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { LogoutHandler } from '../../utilities/LogOut';
+import { logoutHandler } from '../../utilities/LogOut';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -69,7 +69,7 @@ const HeaderButton = ({ setIsAuthenticated, iconName, icon, handleIconStyleChang
         tokenValue = localStorage.getItem("authenticated");
         token = 'Bearer ' + tokenValue;
     }
-    const result = await LogoutHandler(token);
+    const result = await logoutHandler(token);
 
     if(!result) {
         localStorage.setItem("authenticated", "");

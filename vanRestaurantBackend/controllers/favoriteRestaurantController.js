@@ -10,7 +10,7 @@ const getFavoriteRestaurantsByUser = async(req, res) => {
         return res.status(200).json({ response: favoriteRestaurants, success: true });
     }
     else {
-        return res.status(403).json({ message: "Unauthorized action. Please log in first.", success: false });
+        return res.status(403).json({ message: "Get::FavoriteRestaurant::Unauthorized action. Please log in first.", success: false });
     }
 }
 
@@ -23,7 +23,7 @@ const createFavoriteRestaurant = async (req, res) => {
         return res.status(200).json({ response: response, success: true });
     }
     else {
-        return res.status(403).json({ message: "Unauthorized action. Please log in first.", success: false });
+        return res.status(403).json({ message: "Get::FavoriteRestaurant::Unauthorized action. Please log in first.", success: false });
     }
 }
     
@@ -40,15 +40,15 @@ const deleteFavoriteRestaurantByPlaceId = async (req, res) => {
             await FavoriteRestaurant.findOneAndRemove({ _id: deleteFavoriteRestaurant._id, userId: populatedUser._id });
             populatedUser.favoriteRestaurants.pull(deleteFavoriteRestaurant);
             await populatedUser.save();
-            console.log('Favorite restaurant deleted successfully.');
-            res.status(200).json({ message: "Favorite restaurant deleted", success: true });
+            console.log('DeleteById::Favorite restaurant deleted successfully.');
+            res.status(200).json({ message: "DeleteById::FavoriteRestaurant::Favorite restaurant deleted", success: true });
         } else {
-            console.log('Favorite restaurant not found.');
-            res.status(200).json({ message: "Favorite restaurant not found", success: false });
+            console.log('DeleteById::Favorite restaurant not found.');
+            res.status(200).json({ message: "DeleteById::FavoriteRestaurant::Favorite restaurant not found", success: false });
         }
     }
     else {
-        return res.status(403).json({ message: "Unauthorized action. Please log in first.", success: false });
+        return res.status(403).json({ message: "DeleteById::FavoriteRestaurant::Unauthorized action. Please log in first.", success: false });
     }
 }
 
@@ -60,15 +60,15 @@ const deleteAllFavoriteRestaurants = async (req, res) => {
             await FavoriteRestaurant.deleteMany({ userId: populatedUser._id });
             populatedUser.favoriteRestaurants = [];
             await populatedUser.save();
-            console.log('Favorite restaurant deleted successfully.');
-            res.status(200).json({ message: "All favorite restaurants deleted", success: true });
+            console.log('DeleteAll::Favorite restaurant deleted successfully.');
+            res.status(200).json({ message: "DeleteAll::FavoriteRestaurant::All favorite restaurants deleted", success: true });
         }
         catch(err) {
-            res.status(400).json({ message: err, success: false });
+            res.status(400).json({ message: `DeleteAll::FavoriteRestaurant::${err}`, success: false });
         }
     }
     else {
-        return res.status(403).json({ message: "Unauthorized action. Please log in first.", success: false });
+        return res.status(403).json({ message: "DeleteAll::FavoriteRestaurant::Unauthorized action. Please log in first.", success: false });
     }
 }
 

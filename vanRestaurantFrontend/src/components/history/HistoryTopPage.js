@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 function HistoryTopPage() {
     const [isDataLoading, setIsDataLoading] = useState(false);
-    const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
+    const [topRestaurants, setTopRestaurants] = useState([]);
     const [open, setOpen] = useState(false);
 
     const [isLoaded, setIsLoaded] = useState(false);
@@ -67,24 +67,27 @@ function HistoryTopPage() {
                 'Authorization': token
             }
         };
-        await fetch(`${process.env.REACT_APP_API_URL}/toprestaurant/all`, requestOptions)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log("data loaded");
-                if(result.length === 0) {
-                    setIsEmpty(true);
-                }
-                else {
-                    setIsEmpty(false);
-                    setFavoriteRestaurants(result);
-                }
-                setIsLoaded(true);
-            },
-            (error) => {
-                console.log("Not loaded: ", error);
+        try {
+            let response = await fetch(`${process.env.REACT_APP_API_URL}/toprestaurant/all`, requestOptions);
+            let convertedResponse  = await response.json();
+            if(!convertedResponse.success) {
+                throw new Error(convertedResponse.message);
             }
-        )
+            console.log("data loaded");
+            let result = convertedResponse.response;
+            if(result.length > 0) {
+                setIsEmpty(false);
+                setTopRestaurants(result);
+            }
+            else {
+                setIsEmpty(true);
+                setTopRestaurants([]);
+            }
+            setIsLoaded(true);
+        }
+        catch(error) {
+            console.log("Not loaded:: ", error.message);
+        }
         setIsDataLoading(false);
     }
 
@@ -118,7 +121,7 @@ function HistoryTopPage() {
                                     <SearchRestaurantButton />
                                 </Grid> 
                             }
-                            {!isEmpty && favoriteRestaurants.map((restaurant, index) => {
+                            {!isEmpty && topRestaurants.map((restaurant, index) => {
                                 return (
                                     <Grid key={index} className={classes.cardContainer} item xs={12}>
                                         <HistoryCard type="top" restaurant={restaurant} index={index} setIsLoaded={setIsLoaded} />

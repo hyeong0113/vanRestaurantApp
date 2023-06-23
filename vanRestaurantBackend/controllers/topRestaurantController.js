@@ -12,7 +12,7 @@ const getTopRestaurantsByUser = async(req, res) => {
         return res.status(200).json({ response: topRestaurants, success: true });
     }
     else {
-        return res.status(401).json({ message: "Unauthorized action. Please log in first.", success: false });
+        return res.status(401).json({ message: "Get::TopRestaurant::Unauthorized action. Please log in first.", success: false });
     }
 }
 
@@ -29,15 +29,15 @@ const deleteTopRestaurantByPlaceId = async (req, res) => {
             await TopRestaurant.findOneAndRemove({ _id: deleteTopRestaurant._id, userId: populatedUser._id });
             populatedUser.topRestaurants.pull(deleteTopRestaurant);
             await populatedUser.save();
-            console.log('Top restaurant deleted successfully.');
-            res.status(200).json({ message: "Top restaurant deleted", success: true });
+            console.log('DeleteById::TopRestaurant::Top restaurant deleted successfully.');
+            res.status(200).json({ message: "DeleteById::TopRestaurant::Top restaurant deleted", success: true });
         } else {
-            console.log('Top restaurant not found.');
-            res.status(200).json({ message: "Top restaurant not found", success: false });
+            console.log('DeleteById::TopRestaurant::Top restaurant not found.');
+            res.status(200).json({ message: "DeleteById::TopRestaurant::Top restaurant not found", success: false });
         }
     }
     else {
-        res.status(403).json({ message: "Unauthorized action. Need to login first!", success: false });
+        res.status(403).json({ message: "Get::TopRestaurant::Unauthorized action. Need to login first!", success: false });
     }
 }
 
@@ -50,16 +50,16 @@ const deleteAllTopRestaurants = async (req, res) => {
             await TopRestaurant.deleteMany({ userId: populatedUser._id });
             populatedUser.topRestaurants = [];
             await populatedUser.save();
-            console.log('All top restaurants deleted successfully.');
-            res.status(200).json({ message: "All top restaurants deleted", success: true });
+            console.log('DeleteAll::TopRestaurant::All top restaurants deleted successfully.');
+            res.status(200).json({ message: "DeleteAll::TopRestaurant::All top restaurants deleted", success: true });
         }
         catch(err) {
-            res.status(403).json({ message: err, success: false });
+            res.status(403).json({ message: `DeleteAll::TopRestaurant::${err}`, success: false });
         }
 
     }
     else {
-        res.status(403).json({ message: "Unauthorized action. Need to login first!", success: false });
+        res.status(403).json({ message: "DeleteAll::TopRestaurant::Unauthorized action. Need to login first!", success: false });
     }
 }
 

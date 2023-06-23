@@ -56,71 +56,75 @@ const DeleteByIdModal = (props) => {
     let navigate = useNavigate();
 
     const handleRemoveButton = async() => {
-        let tokenValue = null;
-        let token = null;
+        setIsDataLoading(true);
+
         if(localStorage.getItem("authenticated").length > 0) {
+            let tokenValue = null;
+            let token = null;
             tokenValue = localStorage.getItem("authenticated");
             token = 'Bearer ' + tokenValue;
-        }
-        const requestOptions = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                placeId: placeId
-            })
-        };
-        await fetch(`${process.env.REACT_APP_API_URL}/${type}restaurant/delete`, requestOptions)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log(result);
+
+            const requestOptions = {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify({
+                    placeId: placeId
+                })
+            };
+    
+            try {
+                let response = await fetch(`${process.env.REACT_APP_API_URL}/${type}restaurant/delete`, requestOptions);
+                let convertedResponse = await response.json();
+                if(!convertedResponse.success) {
+                    throw new Error(convertedResponse.message);
+                }
+                console.log(convertedResponse.message);
                 setOpen(false);
                 setIsLoaded(false);
                 navigate(`/history/${type}`);
-            },
-            (error) => {
-                console.log("Not loaded: ", error);
             }
-        )
+            catch(error) {
+                console.log("Failed to delete:: ", error.message);
+            }
+        }
         setIsDataLoading(false);
     }
 
     return(
         <Modal
-        className={classes.modal}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-    >
-        <Box className={classes.modalBox}>
-            <Grid container>
-                <Grid className={classes.warningText} item xs={12}>
-                    <Typography variant="h6">
-                        Are you sure to remove from {type} list?
-                    </Typography>
-                </Grid>
-                <Grid className={classes.modalGridItem} item xs={6}>
-                    <Button className={classes.removeButton} onClick={handleRemoveButton}>
-                        <Typography variant="body1">
-                            Remove
+            className={classes.modal}
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box className={classes.modalBox}>
+                <Grid container>
+                    <Grid className={classes.warningText} item xs={12}>
+                        <Typography variant="h6">
+                            Are you sure to remove from {type} list?
                         </Typography>
-                    </Button>
+                    </Grid>
+                    <Grid className={classes.modalGridItem} item xs={6}>
+                        <Button className={classes.removeButton} onClick={handleRemoveButton}>
+                            <Typography variant="body1">
+                                Remove
+                            </Typography>
+                        </Button>
+                    </Grid>
+                    <Grid className={classes.modalGridItem} item xs={6}>
+                        <Button className={classes.cancelButton} onClick={handleClose}>
+                            <Typography variant="body1">
+                                Cancel
+                            </Typography>
+                        </Button>
+                    </Grid>                                          
                 </Grid>
-                <Grid className={classes.modalGridItem} item xs={6}>
-                    <Button className={classes.cancelButton} onClick={handleClose}>
-                        <Typography variant="body1">
-                            Cancel
-                        </Typography>
-                    </Button>
-                </Grid>                                          
-            </Grid>
 
-
-        </Box>
+            </Box>
         </Modal>
     )
 
