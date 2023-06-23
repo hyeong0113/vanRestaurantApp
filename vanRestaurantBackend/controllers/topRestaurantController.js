@@ -9,7 +9,7 @@ const getTopRestaurantsByUser = async(req, res) => {
     if(user.isLoggedIn) {
         const populatedUser = await populateTopRestaurants(user, res);
         const { topRestaurants } = populatedUser;
-        return res.status(200).json(topRestaurants);
+        return res.status(200).json({ response: topRestaurants, success: true });
     }
     else {
         return res.status(401).json({ message: "Unauthorized action. Please log in first.", success: false });

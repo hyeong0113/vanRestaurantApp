@@ -193,19 +193,19 @@ function MainPage() {
         };
         setIsRestaurantsFetched(false);
         try {
-            let result = await fetch(`${process.env.REACT_APP_API_URL}/location/search`, restaurantRequestOptions);
-            let convertedResponse  = await result.json();
+            let response = await fetch(`${process.env.REACT_APP_API_URL}/location/search`, restaurantRequestOptions);
+            let convertedResponse  = await response.json();
             
             if(!convertedResponse.success) {
                 throw new Error(convertedResponse.message);
             }
             console.log("restaurants by location name loaded");
-            let response = convertedResponse.response;
-            setRestaurants(response);
-            setResultRestaurants(response);
+            let result = convertedResponse.response;
+            setRestaurants(result);
+            setResultRestaurants(result);
             const tempSelectedList = [];
-            for(let i = 0; i < response.length; i++) {
-                tempSelectedList.push(response[i].isFavorite);
+            for(let i = 0; i < result.length; i++) {
+                tempSelectedList.push(result[i].isFavorite);
             }
             setSelectedList(tempSelectedList);
             setIsRestaurantsFetched(true);
@@ -220,9 +220,9 @@ function MainPage() {
 
     const fetchFavoriteRestaurant = async() => {
         setIsDataLoading(true);
-        let tokenValue = null;
-        let token = null;
         if(isAuthenticated) {
+            let tokenValue = null;
+            let token = null;
             tokenValue = localStorage.getItem("authenticated");
             token = 'Bearer ' + tokenValue;
             const requestOptions = {
@@ -231,24 +231,27 @@ function MainPage() {
                     'Authorization': token
                 },
             };
-            await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/all`, requestOptions)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log("data loaded");
-                    if(result.length > 0) {
-                        setFavoriteList(result);
-                    }
-                    else {
-                        setFavoriteList([]);
-                    }
-                },
-                (error) => {
-                    console.log("Not loaded: ", error);
+            try {
+                let response = await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/all`, requestOptions);
+                let convertedResponse  = await response.json();
+                if(!convertedResponse.success) {
+                    throw new Error(convertedResponse.message);
                 }
-            )
-            setIsDataLoading(false);
+                console.log("data loaded");
+                let result = convertedResponse.response;
+                if(result.length > 0) {
+                    setFavoriteList(result);
+                }
+                else {
+                    setFavoriteList([]);
+                }
+            }
+            catch(error) {
+                console.log(error.message);
+                console.log("Not loaded");
+            }
         }
+        setIsDataLoading(false);
     }
 
     const handleDownButtonClick = () => {

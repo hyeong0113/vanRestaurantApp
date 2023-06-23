@@ -7,7 +7,7 @@ const getFavoriteRestaurantsByUser = async(req, res) => {
     if(user.isLoggedIn) {
         const populatedUser = await populateFavoriteRestaurants(user, res);
         const { favoriteRestaurants } = populatedUser;
-        return res.status(200).json(favoriteRestaurants);
+        return res.status(200).json({ response: favoriteRestaurants, success: true });
     }
     else {
         return res.status(403).json({ message: "Unauthorized action. Please log in first.", success: false });
@@ -20,7 +20,7 @@ const createFavoriteRestaurant = async (req, res) => {
         const populatedUser = await populateFavoriteRestaurants(user, res);
         const { favoriteRestaurant } = req.body;
         const response = await saveFavoriteRestaurant(favoriteRestaurant, populatedUser);
-        return res.status(200).json(response);
+        return res.status(200).json({ response: response, success: true });
     }
     else {
         return res.status(403).json({ message: "Unauthorized action. Please log in first.", success: false });
