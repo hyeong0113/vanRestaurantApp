@@ -22,7 +22,7 @@ export const createFavoriteRestaurant = async(restaurant) => {
             if(!convertedResponse.success) {
                 throw new Error(convertedResponse.message);
             }
-            console.log(convertedResponse.response);
+            console.log(convertedResponse.response.message);
         }
         catch(error) {
             console.log("Not loaded:: ", error.message);
@@ -46,15 +46,17 @@ export const deleteFavoriteRestaurant = async(placeId) => {
                 placeId: placeId
             })
         };
-        await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/delete`, requestOptions)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log(result);
-            },
-            (error) => {
-                console.log("Not loaded: ", error);
+
+        try {
+            let response = await fetch(`${process.env.REACT_APP_API_URL}/favoriterestaurant/delete`, requestOptions);
+            let convertedResponse  = await response.json();
+            if(!convertedResponse.success) {
+                throw new Error(convertedResponse.message);
             }
-        )
+            console.log(convertedResponse.response);
+        }
+        catch(error) {
+            console.log("Not loaded:: ", error.message);
+        }
     }
 }

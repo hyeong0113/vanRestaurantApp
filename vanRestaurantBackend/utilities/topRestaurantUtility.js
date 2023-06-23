@@ -43,13 +43,13 @@ const saveAndReturnResponse = async(lat, long, user, favoriteRestaurants) => {
         
             convertedTopRestaurant.save(function(err) {
                 if (err) throw err;
-                console.log('Top restaurant saved!');
+                console.log('Create::TopRestaurant::Top restaurant saved!');
             });
         
             user.topRestaurants.push(convertedTopRestaurant);
             user.save(function(err) {
                 if (err) throw err;
-                console.log('Top restaurant save to user!');
+                console.log('Create::TopRestaurant::Top restaurant save to user!');
             });
         }
     }

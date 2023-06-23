@@ -59,8 +59,7 @@ const getGeoLocation = async (req, res) => {
 const getRestaurantsWithLocationName = async (req, res) => {
     const { input } = req.body;
     if(!input || input.length <= 0) {
-        res.status(400).send("location name is undefined.");
-        return;
+        return res.status(400).json({ message: "Search::location name is undefined.", success: false});
     }
 
     const placeRes = await axios.get(process.env.PLACE,
@@ -77,7 +76,7 @@ const getRestaurantsWithLocationName = async (req, res) => {
     const { candidates } = placeRes.data;
 
     if(!candidates || candidates.length <= 0) {
-        return res.status(400).json({ message: "Place::Some values are invalid. Please try it again.", success: false});
+        return res.status(400).json({ message: "Search::Some values are invalid. Please try it again.", success: false});
     }
 
     const { geometry } = candidates[0];
@@ -95,7 +94,7 @@ const getRestaurantsWithLocationName = async (req, res) => {
     const response = await saveAndReturnResponse(lat, lng, populatedUser, savedFavoriteRestaurants);
 
     if(response == null) {
-        return res.status(400).json({ message: "Place::There are no restaurants. Please try other locations.", success: false});
+        return res.status(400).json({ message: "Search::There are no restaurants. Please try other locations.", success: false});
     }
     res.status(200).json({ response: response, success: true});
 }

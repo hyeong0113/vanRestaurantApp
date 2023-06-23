@@ -20,13 +20,12 @@ const createFavoriteRestaurant = async (req, res) => {
         const populatedUser = await populateFavoriteRestaurants(user, res);
         const { favoriteRestaurant } = req.body;
         const response = await saveFavoriteRestaurant(favoriteRestaurant, populatedUser);
-        return res.status(200).json({ response: response, success: true });
+        return res.status(200).json({ response: `Create::FavoriteRestaurant::${response}`, success: true });
     }
     else {
-        return res.status(403).json({ message: "Get::FavoriteRestaurant::Unauthorized action. Please log in first.", success: false });
+        return res.status(403).json({ message: "Create::FavoriteRestaurant::Unauthorized action. Please log in first.", success: false });
     }
 }
-    
 
 const deleteFavoriteRestaurantByPlaceId = async (req, res) => {
     const { user } = req;
@@ -41,7 +40,7 @@ const deleteFavoriteRestaurantByPlaceId = async (req, res) => {
             populatedUser.favoriteRestaurants.pull(deleteFavoriteRestaurant);
             await populatedUser.save();
             console.log('DeleteById::Favorite restaurant deleted successfully.');
-            res.status(200).json({ message: "DeleteById::FavoriteRestaurant::Favorite restaurant deleted", success: true });
+            res.status(200).json({ response: "DeleteById::FavoriteRestaurant::Favorite restaurant deleted", success: true });
         } else {
             console.log('DeleteById::Favorite restaurant not found.');
             res.status(200).json({ message: "DeleteById::FavoriteRestaurant::Favorite restaurant not found", success: false });
@@ -61,7 +60,7 @@ const deleteAllFavoriteRestaurants = async (req, res) => {
             populatedUser.favoriteRestaurants = [];
             await populatedUser.save();
             console.log('DeleteAll::Favorite restaurant deleted successfully.');
-            res.status(200).json({ message: "DeleteAll::FavoriteRestaurant::All favorite restaurants deleted", success: true });
+            res.status(200).json({ response: "DeleteAll::FavoriteRestaurant::All favorite restaurants deleted", success: true });
         }
         catch(err) {
             res.status(400).json({ message: `DeleteAll::FavoriteRestaurant::${err}`, success: false });

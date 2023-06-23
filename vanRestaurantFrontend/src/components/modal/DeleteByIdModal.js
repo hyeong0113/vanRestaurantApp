@@ -81,7 +81,7 @@ const DeleteByIdModal = (props) => {
                 if(!convertedResponse.success) {
                     throw new Error(convertedResponse.message);
                 }
-                console.log(convertedResponse.message);
+                console.log(convertedResponse.response);
                 setOpen(false);
                 setIsLoaded(false);
                 navigate(`/history/${type}`);
