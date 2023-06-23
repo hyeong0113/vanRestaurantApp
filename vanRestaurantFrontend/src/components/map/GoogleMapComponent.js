@@ -57,7 +57,8 @@ const GoogleMapComponent = (props) => {
         switch(selectedButton) {
             case "restaurants":
                 props.setRestaurants(props.resultRestaurants);
-                convertRestaurantsToLocationList(props.resultRestaurants);                break;
+                convertRestaurantsToLocationList(props.resultRestaurants);
+                break;
             case "favorite":
                 props.setRestaurants(props.favoriteList);
                 convertRestaurantsToLocationList(props.favoriteList);
@@ -72,15 +73,19 @@ const GoogleMapComponent = (props) => {
     
     const convertRestaurantsToLocationList = (restaurants) => {
         if(restaurants !== undefined && restaurants !== null) {
-            const tempRestaurantList = [];
-            for(let i = 0; i < restaurants.length; i++) {
-                tempRestaurantList.push({ lat: restaurants[i].location.lat, lng: restaurants[i].location.lng })
+            if(restaurants.length <= 0) {
+                console.log("There are no results!");
             }
-            setRestaurantList(tempRestaurantList);
-            setCenter({ lat: tempRestaurantList[0].lat, lng: tempRestaurantList[0].lng });
-            props.setIsRestaurantsFetched(true);
+            else {
+                const tempRestaurantList = [];
+                for(let i = 0; i < restaurants.length; i++) {
+                    tempRestaurantList.push({ lat: restaurants[i].location.lat, lng: restaurants[i].location.lng })
+                }
+                setRestaurantList(tempRestaurantList);
+                setCenter({ lat: tempRestaurantList[0].lat, lng: tempRestaurantList[0].lng });
+                props.setIsRestaurantsFetched(true);
+            }
         }
-
     }
 
     const onLoad = (map) => {

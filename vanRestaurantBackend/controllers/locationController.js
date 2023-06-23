@@ -76,11 +76,11 @@ const getRestaurantsWithLocationName = async (req, res) => {
     });
     const { candidates } = placeRes.data;
 
-    if(!candidates) {
-        return res.status(400).send("Place::Some values are invalid. Please try it again");
+    if(!candidates || candidates.length <= 0) {
+        return res.status(400).json({ message: "Place::Some values are invalid. Please try it again.", success: false});
     }
 
-    const { formatted_address, geometry } = candidates[0];
+    const { geometry } = candidates[0];
     const { lat, lng } = geometry.location;
 
     const { user } = req;
@@ -94,44 +94,13 @@ const getRestaurantsWithLocationName = async (req, res) => {
 
     const response = await saveAndReturnResponse(lat, lng, populatedUser, savedFavoriteRestaurants);
 
-    res.status(200).json(response);
+    if(response == null) {
+        return res.status(400).json({ message: "Place::There are no restaurants. Please try other locations.", success: false});
+    }
+    res.status(200).json({ response: response, success: true});
 }
-
-
-
-/*
-* @title:
-*              Get a stored top restaurant from Mongo DB.
-* @pre-condition:
-*              parameters: {
-*                   id: string
-*              }
-* @post-condition:
-*              Google Map API response object
-* @description:
-*              Get id from the request paramters.
-*              Call checkObjectExistsById(id) to get the top rated restaurant from Mongo DB.
-*              If the restaurant does not exist, send error message with status 400.
-*              If exists, send the response with status 200.
-* @param:
-*              id: string
-* @return:
-*              JSON with status 200
-*/
-// const getTopRestaurant = async (req, res) => {
-//     const { id } = req.params;
-//     const topRestaurant = await checkObjectExistsById(id);
-
-//     if(!topRestaurant)
-//     {
-//         res.status(400).send("Invalid id, object not found.");
-//     }
-//     res.status(200).json(topRestaurant);
-// }
 
 module.exports = {
     getGeoLocation,
     getRestaurantsWithLocationName,
-    // getRestaurantsWithGeo,
-    // getTopRestaurant
 }

@@ -25,6 +25,10 @@ const saveAndReturnResponse = async(lat, long, user, favoriteRestaurants) => {
         elem.url = detail.url;
     }
 
+    if(mappedResults.length <= 0) {
+        return null;
+    }
+
     const topRatedRestaurant = mappedResults.reduce((max, obj) => {
         return obj.rating > max.rating ? obj : max;
     });

@@ -192,25 +192,29 @@ function MainPage() {
             })
         };
         setIsRestaurantsFetched(false);
-        await fetch(`${process.env.REACT_APP_API_URL}/location/search`, restaurantRequestOptions)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log("restaurants by location name loaded");
-                    setRestaurants(result);
-                    setResultRestaurants(result);
-                    const tempSelectedList = [];
-                    for(let i = 0; i < result.length; i++) {
-                        tempSelectedList.push(result[i].isFavorite);
-                    }
-                    setSelectedList(tempSelectedList);
-                    setIsRestaurantsFetched(true);
-                    setIsShrink(false);
-                },
-                (error) => {
-                    console.log("Not loaded");
-                }
-            )
+        try {
+            let result = await fetch(`${process.env.REACT_APP_API_URL}/location/search`, restaurantRequestOptions);
+            let convertedResponse  = await result.json();
+            
+            if(!convertedResponse.success) {
+                throw new Error(convertedResponse.message);
+            }
+            console.log("restaurants by location name loaded");
+            let response = convertedResponse.response;
+            setRestaurants(response);
+            setResultRestaurants(response);
+            const tempSelectedList = [];
+            for(let i = 0; i < response.length; i++) {
+                tempSelectedList.push(response[i].isFavorite);
+            }
+            setSelectedList(tempSelectedList);
+            setIsRestaurantsFetched(true);
+            setIsShrink(false);
+        }
+        catch(error) {
+            console.log(error.message);
+            console.log("Not loaded");
+        }
         setIsDataLoading(false);
     }
 
