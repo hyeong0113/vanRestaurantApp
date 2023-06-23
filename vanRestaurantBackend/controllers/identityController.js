@@ -8,12 +8,12 @@ const signUp = async (req, res) => {
     const { userName, email, password, confirmPassword } = req.body;
     if(password !== confirmPassword)
     {
-        return res.status(403).json({ message: "Password is not matched!" });
+        return res.status(403).json({ message: "Sign up::Password is not matched!", success: false });
     }
 
     if(await User.findOne({ email: email }))
     {
-        return res.status(403).json({ message: "Email is already registered!" });
+        return res.status(403).json({ message: "Sign up::Email is already registered!", success: false });
     }
 
     const newUser = new User({ userName, email, password });
@@ -24,17 +24,17 @@ const signUp = async (req, res) => {
         newUser.password = hashedPassword;
     }
     catch(err) {
-        throw res.status(500).json({ message: err.message, success: false });
+        throw res.status(500).json({ message: `Sign up::${err.message}`, success: false });
     }
 
     newUser.roles = 'user';
 
     try {
         const saved = await newUser.save();
-        return res.status(200).json({ message: "Welcome to NearBy!", success: true });
+        return res.status(200).json({ message: "Sign up::Welcome to NearBy!", success: true });
     }
     catch(err) {
-        throw res.status(500).json({ message: err.message, success: false });
+        throw res.status(500).json({ message: `Sign up::${err.message}`, success: false });
     }
 }
 
@@ -44,7 +44,7 @@ const logIn = async (req, res) => {
     try {
         var user = await User.findOne({ email });
         if(user === null) {
-            return res.status(400).json({ message: 'User not found', success: false });
+            return res.status(400).json({ message: 'Log in::User not found', success: false });
         }
     }
     catch(err) {
@@ -54,7 +54,7 @@ const logIn = async (req, res) => {
     try {
         const matched = await bcrypt.compare(password, user.password);
         if(!matched) {
-            return res.status(400).json({ message: "Incorrect password" });
+            return res.status(400).json({ message: "Log in::Incorrect password" });
         }
     }
     catch(err) {
@@ -64,19 +64,19 @@ const logIn = async (req, res) => {
     user.isLoggedIn = true;
     await user.save();
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 86400 });
-    return res.status(200).json({ message: "Logged in successful!", token: token, loggedIn: user.isLoggedIn , success: true });
+    return res.status(200).json({ message: "Log in::Logged in successful!", token: token, loggedIn: user.isLoggedIn , success: true });
 }
 
 const logOut = async (req, res) => {
     const { user } = req;
 
     if(!user.isLoggedIn) {
-        return res.status(403).error({ message: "This is user is already logged out!", success: false });
+        return res.status(403).error({ message: "Log Out::This is user is already logged out!", success: false });
     }
     user.isLoggedIn = false;
     await user.save();
 
-    return res.status(200).json({ message: "Logged out successful!", loggedIn: user.isLoggedIn , success: true });
+    return res.status(200).json({ message: "Log Out::Logged out successful!", loggedIn: user.isLoggedIn , success: true });
 }
 
 const checkGoogleEmailRegistered = async (req, res) => {

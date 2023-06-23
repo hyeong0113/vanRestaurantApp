@@ -72,26 +72,29 @@ const LoginPage = () => {
                 email: email,
                 password: password,
             })
-        };    
-        await fetch(`${process.env.REACT_APP_API_URL}/identity/login`, requestOptions)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log(result);
-                    const { token, loggedIn } = result;
-                    if(!token) {
-                        console.log("User log in failed");
-                    }
-                    if(loggedIn) {                        
-                        localStorage.setItem("authenticated", token);
-                        console.log("User log in successful");
-                        navigate('/');
-                    }
-                },
-                (error) => {
-                    console.log("User log in failed:: ", error);
-                }
-            )
+        };
+
+        try {
+            let response = await fetch(`${process.env.REACT_APP_API_URL}/identity/login`, requestOptions)
+            let convertedResponse  = await response.json();
+            if(!convertedResponse.success) {
+                throw new Error(convertedResponse.message);
+            }
+            console.log(convertedResponse);
+            const { token, loggedIn } = convertedResponse;
+            if(!token) {
+                console.log("User log in failed");
+            }
+            if(loggedIn) {                        
+                localStorage.setItem("authenticated", token);
+                console.log("User log in successful");
+                navigate('/');
+            }
+        }
+        catch(error) {
+            console.log("User log in failed:: ", error.message);
+        }
+
         setIsLoading(false);
     }
 

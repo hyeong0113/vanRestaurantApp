@@ -66,23 +66,19 @@ const SignUpPage = () => {
             })
         };
         
-        await fetch(`${process.env.REACT_APP_API_URL}/identity/signup`, requestOptions)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    const { success } = result;
-                    if (success) {
-                        console.log("User sign up successful");
-                        navigate('/login');
-                    }
-                    else {
-                        console.log("User sign up failed");
-                    }
-                },
-                (error) => {
-                    console.log("User sign up failed:: ", error);
-                }
-            )
+        try {
+            let response = await fetch(`${process.env.REACT_APP_API_URL}/identity/signup`, requestOptions);
+            let convertedResponse  = await response.json();
+            if(!convertedResponse.success) {
+                throw new Error(convertedResponse.message);
+            }
+            console.log("User sign up successful:: ", convertedResponse.message);
+            navigate('/login');
+        }
+        catch(error) {
+            console.log("User sign up failed:: ", error);
+        }
+
         setIsLoading(false);
     }
 

@@ -5,18 +5,19 @@ export const logoutHandler = async(token) => {
             'Content-Type': 'application/json',
             'Authorization': token
         }
-      };
+    };
   
-      fetch(`${process.env.REACT_APP_API_URL}/identity/logout`, requestOptions)
-        .then(res => res.json())
-        .then(
-            (result) => {
-              const { loggedIn } = result;
-              console.log("loggedIn:: ", loggedIn);
-              return loggedIn
-            },
-            (error) => {
-                console.log("Logout not worked");
-            }
-        )
+    try {
+      let response = await fetch(`${process.env.REACT_APP_API_URL}/identity/logout`, requestOptions);
+      let convertedResponse  = await response.json();
+      if(!convertedResponse.success) {
+          throw new Error(convertedResponse.message);
+      }
+      const { loggedIn } = convertedResponse;
+      console.log("Log out successful!");
+      return loggedIn;
+    }
+    catch(error) {
+      console.log("Logout not worked::", error);
+    }
 }
