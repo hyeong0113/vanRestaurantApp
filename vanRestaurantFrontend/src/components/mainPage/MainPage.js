@@ -156,21 +156,21 @@ function MainPage() {
     // fetch current geolocation of user data
     const fetchGeoData = async() => {
         setIsDataLoading(true);
-        await fetch(`${process.env.REACT_APP_API_URL}/location/geo`, geoRequestOptions)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log("data loaded");
-                    setCurrentLocation(result.location);
-                },
-                (error) => {
-                    console.log(error);
-                    console.log("Not loaded");
-                }
-        )
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
         setIsDataLoading(false);
-    }  
-    
+    }
+
+    const successCallback = (position) => {
+        setCurrentLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+        })
+    };
+      
+    const errorCallback = (error) => {
+        console.log(error);
+    };
+      
     // Fetch restaurants list
     const fetchRestaurantsByName = async(input) => {
         setIsDataLoading(true);
