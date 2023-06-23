@@ -15,6 +15,7 @@ import { MapContext } from '../context/MapContext';
 import MainRestaurantCard from '../card/MainRestaurantCard';
 import MediumRestaurantCard from '../card/MediumRestaurantCard'
 import { logoutHandler } from '../../utilities/LogOut';
+import AlertTimeout from '../alert/AlertTimeout';
 
 const username = process.env.REACT_APP_USERNAME;
 const password = process.env.REACT_APP_PASSWORD;
@@ -199,6 +200,7 @@ function MainPage() {
             if(!convertedResponse.success) {
                 throw new Error(convertedResponse.message);
             }
+
             console.log("restaurants by location name loaded");
             let result = convertedResponse.response;
             setRestaurants(result);
@@ -281,6 +283,7 @@ function MainPage() {
                 <CircularProgress color="inherit" />
             </Backdrop>
             <Topbar />
+            <AlertTimeout />
             <div>
                 {currentLocation &&
                     <MapContext.Provider

@@ -11,18 +11,19 @@ const customTheme = createTheme({
     }
   },
   typography: {
-    h2: {
-      fontFamily: 'Manrope, sans-serif',
-    },
-    h4: {
-      fontFamily: 'Manrope, sans-serif',
-    },
-    h5: {
-      fontFamily: 'Manrope, sans-serif',
-    },
-    body1: {
-      fontFamily: 'Manrope, sans-serif',
-    }
+    fontFamily: 'Manrope, sans-serif'
+    // h2: {
+    //   fontFamily: 'Manrope, sans-serif',
+    // },
+    // h4: {
+    //   fontFamily: 'Manrope, sans-serif',
+    // },
+    // h5: {
+    //   fontFamily: 'Manrope, sans-serif',
+    // },
+    // body1: {
+    //   fontFamily: 'Manrope, sans-serif',
+    // }
   },
   palette: {
     primary: {

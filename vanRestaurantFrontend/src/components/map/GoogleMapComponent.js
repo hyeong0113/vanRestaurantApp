@@ -7,7 +7,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Search from '../search/Search';
-import OrangePin from '../../assets/orange-dot.png'
+import OrangePin from '../../assets/orange-dot.png';
 
 const useStyles = makeStyles((theme) => ({
     mapBox: {
@@ -156,7 +156,7 @@ const GoogleMapComponent = (props) => {
                     {renderMarker()}
                 </GoogleMap>
             }
-            
+
             <div className={classes.buttonContainer}>
                 <MapIconButton
                     index={0}
