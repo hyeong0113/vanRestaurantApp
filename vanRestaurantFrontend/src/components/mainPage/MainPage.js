@@ -17,18 +17,6 @@ import MediumRestaurantCard from '../card/MediumRestaurantCard'
 import { logoutHandler } from '../../utilities/LogOut';
 import AlertTimeout from '../alert/AlertTimeout';
 
-const username = process.env.REACT_APP_USERNAME;
-const password = process.env.REACT_APP_PASSWORD;
-
-const authString = btoa(`${username}:${password}`);
-
-const geoRequestOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Basic ${authString}`
-    }
-};
-
 const useStyles = makeStyles((theme) => ({
     main: {
         display: "flex",
@@ -103,6 +91,7 @@ function MainPage() {
     const [restaurants, setRestaurants] = useState(null);
     const [resultRestaurants, setResultRestaurants] = useState(null);
     const [favoriteList, setFavoriteList] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const [isRestaurantsFetched, setIsRestaurantsFetched] = useState(false);
     const [isDataLoading, setIsDataLoading] = useState(false);
@@ -112,6 +101,7 @@ function MainPage() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [selectedList, setSelectedList] = useState([]);
     const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+    const [isError, setIsError] = useState(false);
 
     const classes = useStyles();
 
@@ -212,8 +202,11 @@ function MainPage() {
             setSelectedList(tempSelectedList);
             setIsRestaurantsFetched(true);
             setIsShrink(false);
+            setIsError(false);
         }
         catch(error) {
+            setErrorMessage(error.message);
+            setIsError(true);
             console.log("Not loaded:: ", error.message);
         }
         setIsDataLoading(false);
@@ -283,7 +276,8 @@ function MainPage() {
                 <CircularProgress color="inherit" />
             </Backdrop>
             <Topbar />
-            <AlertTimeout />
+
+            <AlertTimeout isError={isError} message={errorMessage} setIsError={setIsError} />
             <div>
                 {currentLocation &&
                     <MapContext.Provider

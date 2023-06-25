@@ -6,33 +6,31 @@ import { makeStyles } from '@mui/styles';
 const useStyles = makeStyles((theme) => ({
     alertContainer: {
         position: 'fixed',
-        top: 0,
-        left: 0,
+        transform: 'translate(50%, 50%)',
         width: '50%',
-        // height: '50%',
-        display: 'flex',
-        justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FFFFFF !important',
-        zIndex: 9999
-    },
-    // alertContent: {
-    //     // padding: 20px;
-    //     border-radius: 5px;
-    //     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    // }
+        zIndex: 9999,
+        borderColor: '#D32F2F',
+        borderStyle: 'solid'
+    }
 }));
 
 const AlertTimeout = (props) => {
-    const { message } = props;
+    const { isError, message, setIsError } = props;
     const classes = useStyles();
+
+    const handleFadeOut = () => {
+        setTimeout(() => {
+            setIsError(false);
+        }, 3000);
+    }
+
     return (
         <div>
-            <Fade in={true}>
-                <Alert className={classes.alertContainer} variant="outlined" severity="error">
+            <Fade in={isError} addEndListener={handleFadeOut} easing="ease">
+                <Alert className={classes.alertContainer} severity="error">
                     <Typography>
-                        {/* {message} */}
-                        This is a test alert
+                        {message}
                     </Typography>
                 </Alert>
             </Fade>
