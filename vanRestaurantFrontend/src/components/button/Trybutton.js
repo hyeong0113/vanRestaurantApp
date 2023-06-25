@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 const TryButton = () => {
     const classes = useStyles();
     return (
-        <Button className={classes.button} variant="contained" disableElevation>
+        <Button className={classes.button} variant="contained" href="/" disableElevation>
             <Typography className={classes.text} variant="h5">
                 TRY NOW
             </Typography>
