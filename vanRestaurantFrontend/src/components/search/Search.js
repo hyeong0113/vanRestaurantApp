@@ -10,6 +10,10 @@ import { useContext } from 'react';
 import { MapContext } from '../context/MapContext';
 
 const useStyles = makeStyles((theme) => ({
+    search: {
+        display: 'flex',
+        justifyContent: 'flex-end'
+    },
     searchField: {
         paddingRight: '10px !important'
     },
@@ -55,30 +59,32 @@ const Search = (props) => {
     }    
 
     return(
-        <Grid container alignItems="center">
-            <Grid className={classes.searchSection} item>
-                <StandaloneSearchBox
-                    onLoad={ref => placeRef.current = ref}
-                    onPlacesChanged={handlePlaceChanged}
-                >                
-                    <TextField
-                        id="search"
-                        className={classes.searchField}
-                        variant="outlined"
-                        fullWidth
-                        value={place}
-                        label="Enter a location or address"
-                        onKeyDown={onKeyPressHandler}
-                        onChange={onChangeHandler}
-                        InputProps={{style}}
-                    />
-                </StandaloneSearchBox>
+        <Grid container item>
+            <Grid item lg={11}>
+                <div className={classes.search}>
+                    <StandaloneSearchBox
+                            onLoad={ref => placeRef.current = ref}
+                            onPlacesChanged={handlePlaceChanged}
+                        >                
+                            <TextField
+                                id="search"
+                                // className={classes.searchField}
+                                variant="outlined"
+                                fullWidth
+                                value={place}
+                                label="Enter a location or address"
+                                onKeyDown={onKeyPressHandler}
+                                onChange={onChangeHandler}
+                                InputProps={{style}}
+                            />
+                    </StandaloneSearchBox>
+                </div>
             </Grid>
-            <Grid className={classes.buttonSection} item>
+            <Grid item lg={1}>
                 <IconButton className={classes.button} variant="contained" onClick={onClickHandler}>
                     <SearchIcon />
                 </IconButton>
-            </Grid>
+            </Grid>            
         </Grid>
     );
 }

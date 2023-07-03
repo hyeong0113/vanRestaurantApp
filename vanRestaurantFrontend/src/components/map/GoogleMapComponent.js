@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 import { makeStyles } from '@mui/styles';
 import MapIconButton from '../button/MapIconButton';
@@ -10,8 +11,14 @@ import Search from '../search/Search';
 import OrangePin from '../../assets/orange-dot.png';
 
 const useStyles = makeStyles((theme) => ({
+    googleMap: {
+        display: 'flex',
+        justifyContent: 'center',
+        height: '100vh',
+        // width: '100%'
+    },
     mapBox: {
-        height: '100vh'
+        flex: 1
     },
     buttonContainer: {
         transform: 'translateY(-50%)',
@@ -21,16 +28,20 @@ const useStyles = makeStyles((theme) => ({
         top: theme.spacing(65),
         left: theme.spacing(2)
     },
+    button: {
+        zIndex: 1
+    },
     icon: {
         color: 'rgba(103, 69, 18, 0.89)'
     },
     iconSelected: {
         color: '#FFFFFF'
     },
-    search: {
-        position: "absolute",
-        top: theme.spacing(55),
-        left: theme.spacing(130)
+    gridItem: {
+        flex: 1,
+        zIndex: 1,
+        position: 'absolute',
+        paddingTop: '1%'
     },
 }));
 
@@ -133,55 +144,65 @@ const GoogleMapComponent = (props) => {
     }
 
     return (
-        <Box className={classes.mapBox}>
-            {isLoaded &&
-                <GoogleMap
-                    mapContainerStyle={mapContainerStyle}
-                    center={center}
-                    onLoad={onLoad}
-                    zoom={zoom}
-                    options={options}
-                >
-                    <Box
-                        sx={{
-                            width: 20,
-                            height: 20,
-                            backgroundColor: 'primary',
-                            '&:hover': {
+        <div className={classes.googleMap}>
+            <Box className={classes.mapBox}>
+                {isLoaded &&
+                    <GoogleMap
+                        mapContainerStyle={mapContainerStyle}
+                        center={center}
+                        onLoad={onLoad}
+                        zoom={zoom}
+                        options={options}
+                    >
+                        <Box
+                            sx={{
+                                width: 20,
+                                height: 20,
                                 backgroundColor: 'primary',
-                                opacity: [0.9, 0.8, 0.7],
-                            },
-                        }}
-                    />
-                    {renderMarker()}
-                </GoogleMap>
-            }
-
-            <div className={classes.buttonContainer}>
-                <MapIconButton
-                    index={0}
-                    selectedButton={selectedButton}
-                    icon={<HomeIcon className={`${classes.icon} ${selectedButton === "myLocation" ? classes.iconSelected : ''}`} />}
-                    handleButtonClick={handleButtonClick}
-                    type="myLocation" />
-                <MapIconButton
-                    index={1}
-                    selectedButton={selectedButton}
-                    icon={<LocationOnIcon className={`${classes.icon} ${selectedButton === "restaurants" ? classes.iconSelected : ''}`} />}
-                    handleButtonClick={handleButtonClick}
-                    type="restaurants" />
-                <MapIconButton
-                    index={2}
-                    selectedButton={selectedButton}
-                    icon={<FavoriteIcon className={`${classes.icon} ${selectedButton === "favorite" ? classes.iconSelected : ''}`} />}
-                    handleButtonClick={handleButtonClick}
-                    type="favorite" />
-            </div>    
-            <div className={classes.search}>
-                {isLoaded && <Search setSelectedButton={setSelectedButton} />}
-            </div>
-            
-        </Box>
+                                '&:hover': {
+                                    backgroundColor: 'primary',
+                                    opacity: [0.9, 0.8, 0.7],
+                                },
+                            }}
+                        />
+                        {renderMarker()}
+                    </GoogleMap>
+                }
+            </Box>   
+            <Grid className={classes.gridItem} container>
+                <Grid item lg={6} md={6} sx={6}>
+                    <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
+                        <Grid item>
+                            <MapIconButton
+                                index={0}
+                                selectedButton={selectedButton}
+                                icon={<HomeIcon className={`${classes.icon} ${selectedButton === "myLocation" ? classes.iconSelected : ''}`} />}
+                                handleButtonClick={handleButtonClick}
+                                type="myLocation" />
+                        </Grid>
+                        <Grid item>
+                            <MapIconButton
+                                index={1}
+                                selectedButton={selectedButton}
+                                icon={<LocationOnIcon className={`${classes.icon} ${selectedButton === "restaurants" ? classes.iconSelected : ''}`} />}
+                                handleButtonClick={handleButtonClick}
+                                type="restaurants" />
+                        </Grid>
+                        <Grid item>
+                            <MapIconButton
+                                index={2}
+                                selectedButton={selectedButton}
+                                icon={<FavoriteIcon className={`${classes.icon} ${selectedButton === "favorite" ? classes.iconSelected : ''}`} />}
+                                handleButtonClick={handleButtonClick}
+                                type="favorite" />
+                        </Grid>                        
+                    </Grid>
+                </Grid>
+                <Grid item lg={6} md={6} sx={6}>
+                    {isLoaded && <Search setSelectedButton={setSelectedButton} />}
+                </Grid>
+            </Grid>
+        </div>
     );
 }
 
