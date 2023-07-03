@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         height: '100vh',
-        // width: '100%'
     },
     mapBox: {
         flex: 1
@@ -170,7 +169,7 @@ const GoogleMapComponent = (props) => {
                 }
             </Box>   
             <Grid className={classes.gridItem} container>
-                <Grid item lg={6} md={6} sx={6}>
+                <Grid item lg={6} md={6} sx={6} xs={6}>
                     <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
                         <Grid item>
                             <MapIconButton
@@ -198,7 +197,7 @@ const GoogleMapComponent = (props) => {
                         </Grid>                        
                     </Grid>
                 </Grid>
-                <Grid item lg={6} md={6} sx={6}>
+                <Grid item lg={6} md={6} sx={6} xs={6}>
                     {isLoaded && <Search setSelectedButton={setSelectedButton} />}
                 </Grid>
             </Grid>

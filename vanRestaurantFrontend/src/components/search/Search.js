@@ -59,24 +59,28 @@ const Search = (props) => {
     }    
 
     return(
-        <Grid container item>
+        <Grid container justifyContent="flex-end">
             <Grid item lg={11}>
                 <div className={classes.search}>
                     <StandaloneSearchBox
                             onLoad={ref => placeRef.current = ref}
                             onPlacesChanged={handlePlaceChanged}
-                        >                
-                            <TextField
-                                id="search"
-                                // className={classes.searchField}
-                                variant="outlined"
-                                fullWidth
-                                value={place}
-                                label="Enter a location or address"
-                                onKeyDown={onKeyPressHandler}
-                                onChange={onChangeHandler}
-                                InputProps={{style}}
-                            />
+                    >                
+                        <TextField
+                            id="search"
+                            variant="outlined"
+                            sx={{
+                                "& .MuiInputBase-root": {
+                                    width: { sm: 200, md: 400, lg: 550 },
+
+                                }
+                            }}
+                            value={place}
+                            label="Enter a location or address"
+                            onKeyDown={onKeyPressHandler}
+                            onChange={onChangeHandler}
+                            InputProps={{style}}
+                        />
                     </StandaloneSearchBox>
                 </div>
             </Grid>
