@@ -57,8 +57,6 @@ const useStyles = makeStyles((theme) => ({
   image: {
     position: 'absolute',
     objectFit: 'cover',
-    width: 500,
-    height:500,
     right: 0
   },
   phrase: {
@@ -138,7 +136,7 @@ const Topbar = () => {
   return (
     <Grid className={classes.background} container>
       <Grid item xs={6}>
-        <Typography className={classes.title} variant="h2">
+        <Typography className={classes.title} sx={{ typography: { lg: 'h2', md: 'h4', xs:'h4' } }}>
           NearBy
         </Typography>
         <Typography className={classes.phrase} variant="h4">
@@ -174,6 +172,10 @@ const Topbar = () => {
            className={classes.image}
            alt="food image"
            src={backgroundImage}
+           sx={{
+            width: { lg: 500, md: 300, xs: 300 },
+            height: { lg: 500, md: 300, xs: 300 }
+           }}
         /> 
       </Grid>
     </Grid>

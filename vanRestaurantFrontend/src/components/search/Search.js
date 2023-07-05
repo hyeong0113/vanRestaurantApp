@@ -72,7 +72,6 @@ const Search = (props) => {
                             sx={{
                                 "& .MuiInputBase-root": {
                                     width: { sm: 200, md: 400, lg: 550 },
-
                                 }
                             }}
                             value={place}
