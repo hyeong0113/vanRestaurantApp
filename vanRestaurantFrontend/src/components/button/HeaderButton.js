@@ -103,8 +103,8 @@ const HeaderButton = ({ setIsAuthenticated, iconName, icon, handleIconStyleChang
         transformOrigin={{
           vertical: 'top',
           horizontal: 'center',
-        }}        
-      >
+        }}
+        >
         {menu.map((element, index) => (
           <MenuItem 
             key={index}

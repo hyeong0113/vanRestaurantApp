@@ -30,7 +30,6 @@ const Search = (props) => {
     const { fetchRestaurantsByName } = useContext(MapContext);
     const classes = useStyles();
     const style = {
-        width: '550px',
         background: 'rgba(255, 255, 255, 0.78)',
         border: '2px solid rgba(103, 69, 18, 0.62)',
         borderRadius: '9px'
@@ -60,18 +59,17 @@ const Search = (props) => {
 
     return(
         <Grid container justifyContent="flex-end">
-            <Grid item lg={11}>
+            <Grid item lg={11} md={6} xs={2}>
                 <div className={classes.search}>
                     <StandaloneSearchBox
                             onLoad={ref => placeRef.current = ref}
-                            onPlacesChanged={handlePlaceChanged}
-                    >                
+                            onPlacesChanged={handlePlaceChanged}>                
                         <TextField
                             id="search"
                             variant="outlined"
                             sx={{
                                 "& .MuiInputBase-root": {
-                                    width: { sm: 200, md: 400, lg: 550 },
+                                    width: { xs: '200px', sm: '300px', md: '400px', lg: '550px' },
                                 }
                             }}
                             value={place}
