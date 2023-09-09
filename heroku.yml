@@ -1,0 +1,41 @@
+version: "3.5"
+services:
+  mongodb:
+    image: "mongo"
+    ports:
+      - "27017:27017"
+    restart: always
+    networks:
+      - mern-app
+    volumes:
+      - mongo-data:/data/db
+  backend:
+    image: backend
+    build: ./vanRestaurantBackends
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      - mern-app      
+    depends_on:
+      - mongodb
+  frontend:
+    image: frontend
+    build: ./vanRestaurantFrontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: always      
+    networks:
+      - mern-app
+    stdin_open: true
+    depends_on:
+      - backend
+networks:
+  mern-app:
+    driver: bridge
+volumes:
+  mongo-data:
+    driver: local
+    
